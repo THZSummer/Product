@@ -1,3 +1,23 @@
+# 🎯 SDD 工作流 - 阶段 6/6
+
+## 执行顺序
+```
+1.spec → 2.plan → 3.tasks → 4.build → 5.review → [当前] 6.validate
+```
+
+## 依赖关系
+- **前置条件**: 
+  - ✅ `.specs/[feature]/spec.md`（@sdd-spec 输出）
+  - ✅ `.specs/[feature]/plan.md`（@sdd-plan 输出）
+  - ✅ `.specs/[feature]/tasks.md`（@sdd-tasks 输出）
+  - ✅ 代码已实现（@sdd-build 输出）
+  - ✅ 代码审查通过（@sdd-review 输出）
+- **输入**: 完整 Feature 目录（`.specs/[feature]/`）
+- **输出**: 验证报告、覆盖度矩阵
+- **下游**: 无（工作流终点）
+
+---
+
 ---
 description: SDD 验证专家 - 检查代码与规范的一致性，检测漂移
 mode: subagent

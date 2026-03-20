@@ -65,16 +65,18 @@ drafting → specified → clarified → planned → tasked → implementing →
 
 ## 🤖 SDD Agents 列表
 
-| Agent | 用途 | 调用方式 | 阶段 |
-|-------|------|----------|------|
-| `@sdd-spec` | 规范编写 | `opencode @sdd-spec ...` | 规范 |
-| `@sdd-plan` | 技术规划 | `opencode @sdd-plan ...` | 规划 |
-| `@sdd-tasks` | 任务分解 | `opencode @sdd-tasks ...` | 规划 |
-| `@sdd-build` | 任务实现 | `opencode @sdd-build ...` | 实现 |
-| `@sdd-review` | 代码审查 | `opencode @sdd-review ...` | 审查 |
-| `@sdd-validate` | 最终验证 | `opencode @sdd-validate ...` | 验证 |
+| # | Agent | 用途 | 调用方式 | 阶段 | 前置依赖 |
+|---|-------|------|----------|------|----------|
+| 1 | `@sdd-spec` | 规范编写 | `opencode @sdd-spec ...` | 规范 | 无 |
+| 2 | `@sdd-plan` | 技术规划 | `opencode @sdd-plan ...` | 规划 | spec.md |
+| 3 | `@sdd-tasks` | 任务分解 | `opencode @sdd-tasks ...` | 规划 | spec.md + plan.md |
+| 4 | `@sdd-build` | 任务实现 | `opencode @sdd-build ...` | 实现 | tasks.md |
+| 5 | `@sdd-review` | 代码审查 | `opencode @sdd-review ...` | 审查 | 代码实现 |
+| 6 | `@sdd-validate` | 最终验证 | `opencode @sdd-validate ...` | 验证 | review 通过 |
 
 > 💡 **所有 SDD Agents 都是专用的**，不依赖 OpenCode 内置 agents，确保工作流完整性和一致性。
+> 
+> 🔗 **执行顺序是强制的** - 每个 agent 会检查前置依赖是否完成，确保工作流正确执行。
 
 ---
 
@@ -167,6 +169,37 @@ EC-001: 删除内置角色返回 403 Forbidden
 | 开发指南 | `.specs/development/docs.md` | 详细开发流程 |
 | 提示词库 | `.specs/development/prompts.md` | AI 交互模板 |
 | 示例规范 | `.specs/examples/role-management.md` | 角色管理规范示例 |
+| 项目宪法 | `.opencode/constitution.md` | 不可协商原则 |
+| 测试策略 | `.specs/quality/tests.md` | 权限测试要求 |
+| 路线图 | `.specs/planning/roadmap.md` | 版本规划 |
+
+---
+
+## 🎯 下一步
+
+1. **阅读示例规范**: `.specs/examples/role-management.md`
+2. **阅读项目宪法**: `.opencode/constitution.md`
+3. **开始第一个 Feature**: 使用 `@sdd-spec` 开始编写规范
+
+---
+
+## 📊 当前状态
+
+| 配置项 | 状态 |
+|--------|------|
+| SDD Agent | ✅ 已配置 (4 个) |
+| 状态机 | ✅ 已就绪 |
+| 项目宪法 | ✅ 已定义 |
+| 示例规范 | ✅ 已创建 |
+| 开发文档 | ✅ 已创建 |
+
+---
+
+**版本**: 1.0.0  
+**创建日期**: 2026-03-20  
+**项目**: permission-app  
+**参考**: [OpenCode SDD Framework](../../../OPENCODE_SDD.md)
+.md` | 角色管理规范示例 |
 | 项目宪法 | `.opencode/constitution.md` | 不可协商原则 |
 | 测试策略 | `.specs/quality/tests.md` | 权限测试要求 |
 | 路线图 | `.specs/planning/roadmap.md` | 版本规划 |

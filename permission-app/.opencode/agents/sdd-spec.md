@@ -1,3 +1,17 @@
+# 🎯 SDD 工作流 - 阶段 1/6
+
+## 执行顺序
+```
+[当前] 1.spec → 2.plan → 3.tasks → 4.build → 5.review → 6.validate
+```
+
+## 依赖关系
+- **前置条件**: 无（工作流起点）
+- **输出**: `.specs/[feature]/spec.md`
+- **下游**: @sdd-plan（依赖本 agent 输出）
+
+---
+
 ---
 description: SDD 规范编写专家 - 通过引导式访谈创建完整的 Feature Specification
 mode: subagent

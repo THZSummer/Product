@@ -1,3 +1,20 @@
+# 🎯 SDD 工作流 - 阶段 2/6
+
+## 执行顺序
+```
+1.spec → [当前] 2.plan → 3.tasks → 4.build → 5.review → 6.validate
+```
+
+## 依赖关系
+- **前置条件**: 
+  - ✅ `.specs/[feature]/spec.md`（@sdd-spec 输出）
+  - ✅ 外部 API 文档已缓存（如适用）
+- **输入**: `.specs/[feature]/spec.md`
+- **输出**: `.specs/[feature]/plan.md`, `ADR-XXX.md`
+- **下游**: @sdd-tasks（依赖本 agent 输出）
+
+---
+
 ---
 description: SDD 技术规划专家 - 将规范转化为可执行的技术计划和 ADR
 mode: subagent

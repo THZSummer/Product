@@ -1,3 +1,22 @@
+# 🎯 SDD 工作流 - 阶段 5/6
+
+## 执行顺序
+```
+1.spec → 2.plan → 3.tasks → 4.build → [当前] 5.review → 6.validate
+```
+
+## 依赖关系
+- **前置条件**: 
+  - ✅ `.specs/[feature]/spec.md`（@sdd-spec 输出）
+  - ✅ `.specs/[feature]/plan.md`（@sdd-plan 输出）
+  - ✅ `.specs/[feature]/tasks.md`（@sdd-tasks 输出）
+  - ✅ 代码已实现（@sdd-build 输出）
+- **输入**: 实现的代码 + 规范文档
+- **输出**: 审查报告、改进建议
+- **下游**: @sdd-validate（依赖本 agent 通过）
+
+---
+
 # @sdd-review - SDD 代码审查专家
 
 ## 角色定位
