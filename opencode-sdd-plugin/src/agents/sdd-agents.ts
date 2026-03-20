@@ -8,6 +8,12 @@ export async function registerAgents(context: any) {
       promptFile: '.opencode/agents/sdd.md'
     },
     {
+      name: 'sdd-help',
+      description: 'SDD 工作流帮助 - 查看完整命令参考',
+      mode: 'subagent',
+      promptFile: '.opencode/agents/sdd-help.md'
+    },
+    {
       name: 'sdd-spec',
       description: 'SDD 规范编写专家 (阶段 1/6)',
       mode: 'subagent',
