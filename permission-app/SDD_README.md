@@ -18,22 +18,22 @@
 
 ```bash
 # 1. 编写规范
-opencode @sdd-spec 开始编写 用户登录 的规范
+opencode @sdd-spec "开始编写 用户登录 的规范"
 
 # 2. （可选）澄清模糊点
-opencode @sdd-spec 澄清 用户登录 规范
+opencode @sdd-spec "澄清 用户登录 规范中的模糊点"
 
 # 3. 技术规划
-opencode @sdd-plan 为 用户登录 创建技术计划
+opencode @sdd-plan "为 用户登录 创建技术计划"
 
 # 4. 任务分解
-opencode @sdd-tasks 将 用户登录 计划分解为任务
+opencode @sdd-tasks "将 用户登录 计划分解为任务"
 
-# 5. 实现任务
-opencode @build 实现 TASK-001
+# 5. 实现任务（使用 OpenCode 内置 build agent）
+opencode @build "实现 TASK-001"
 
 # 6. 验证
-opencode @sdd-validate 验证 用户登录 的实现
+opencode @sdd-validate "验证 用户登录 的实现"
 ```
 
 ---
@@ -184,6 +184,14 @@ EC-001: 删除内置角色返回 403 Forbidden
 | 项目宪法 | ✅ 已定义 |
 | 示例规范 | ✅ 已创建 |
 | 开发文档 | ✅ 已创建 |
+
+---
+
+**版本**: 1.0.0  
+**创建日期**: 2026-03-20  
+**项目**: permission-app  
+**参考**: [OpenCode SDD Framework](../../../OPENCODE_SDD.md)
+建 |
 
 ---
 
