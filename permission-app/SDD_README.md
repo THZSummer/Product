@@ -191,11 +191,3 @@ EC-001: 删除内置角色返回 403 Forbidden
 **创建日期**: 2026-03-20  
 **项目**: permission-app  
 **参考**: [OpenCode SDD Framework](../../../OPENCODE_SDD.md)
-建 |
-
----
-
-**版本**: 1.0.0  
-**创建日期**: 2026-03-20  
-**项目**: permission-app  
-**参考**: [OpenCode SDD Framework](../../../OPENCODE_SDD.md)
