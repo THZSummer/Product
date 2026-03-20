@@ -8,6 +8,7 @@
       "planned",
       "tasked",
       "implementing",
+      "reviewed",
       "validating",
       "completed"
     ],
@@ -17,7 +18,8 @@
       "clarified": ["planned", "specified", "drafting"],
       "planned": ["tasked", "clarified", "drafting"],
       "tasked": ["implementing", "planned", "drafting"],
-      "implementing": ["validating", "tasked"],
+      "implementing": ["reviewed", "tasked"],
+      "reviewed": ["validating", "implementing"],
       "validating": ["completed", "implementing"],
       "completed": ["drafting"]
     },
@@ -25,7 +27,8 @@
       "planned": ["specified"],
       "tasked": ["planned"],
       "implementing": ["tasked"],
-      "validating": ["implementing"],
+      "reviewed": ["implementing"],
+      "validating": ["reviewed"],
       "completed": ["validating"]
     }
   },

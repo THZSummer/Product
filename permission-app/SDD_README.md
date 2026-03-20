@@ -29,10 +29,13 @@ opencode @sdd-plan "为 用户登录 创建技术计划"
 # 4. 任务分解
 opencode @sdd-tasks "将 用户登录 计划分解为任务"
 
-# 5. 实现任务（使用 OpenCode 内置 build agent）
-opencode @build "实现 TASK-001"
+# 5. 实现任务
+opencode @sdd-build "实现 TASK-001"
 
-# 6. 验证
+# 6. 代码审查
+opencode @sdd-review "审查 用户登录 的实现"
+
+# 7. 验证
 opencode @sdd-validate "验证 用户登录 的实现"
 ```
 
@@ -46,29 +49,32 @@ drafting → specified → clarified → planned → tasked → implementing →
 
 ### 状态说明
 
-| 状态 | 说明 | 前置条件 |
-|------|------|----------|
-| `drafting` | 规范起草中 | 无 |
-| `specified` | 规范完成 | 完成所有必要章节 |
-| `clarified` | 模糊点已澄清 | 完成澄清问答 |
-| `planned` | 技术计划完成 | 外部 API 文档已缓存 |
-| `tasked` | 任务已分解 | 计划已确认 |
-| `implementing` | 实现中 | 任务已分配 |
-| `validating` | 验证中 | 所有任务完成 |
-| `completed` | 已完成 | 验证通过 |
+| 状态 | 说明 | 前置条件 | 对应 Agent |
+|------|------|----------|------------|
+| `drafting` | 规范起草中 | 无 | @sdd-spec |
+| `specified` | 规范完成 | 完成所有必要章节 | @sdd-spec |
+| `clarified` | 模糊点已澄清 | 完成澄清问答 | @sdd-spec |
+| `planned` | 技术计划完成 | 外部 API 文档已缓存 | @sdd-plan |
+| `tasked` | 任务已分解 | 计划已确认 | @sdd-tasks |
+| `implementing` | 实现中 | 任务已分配 | @sdd-build |
+| `reviewed` | 代码审查通过 | 代码审查完成 | @sdd-review |
+| `validating` | 验证中 | 所有任务完成 | @sdd-validate |
+| `completed` | 已完成 | 验证通过 | - |
 
 ---
 
-## 🤖 SDD Agent 列表
+## 🤖 SDD Agents 列表
 
-| Agent | 用途 | 调用方式 |
-|-------|------|----------|
-| `@sdd-spec` | 规范编写 | `opencode @sdd-spec ...` |
-| `@sdd-plan` | 技术规划 | `opencode @sdd-plan ...` |
-| `@sdd-tasks` | 任务分解 | `opencode @sdd-tasks ...` |
-| `@sdd-validate` | 验证实现 | `opencode @sdd-validate ...` |
-| `@build` | 实现代码 | `opencode @build ...` |
-| `@plan` | 只读分析 | `opencode @plan ...` |
+| Agent | 用途 | 调用方式 | 阶段 |
+|-------|------|----------|------|
+| `@sdd-spec` | 规范编写 | `opencode @sdd-spec ...` | 规范 |
+| `@sdd-plan` | 技术规划 | `opencode @sdd-plan ...` | 规划 |
+| `@sdd-tasks` | 任务分解 | `opencode @sdd-tasks ...` | 规划 |
+| `@sdd-build` | 任务实现 | `opencode @sdd-build ...` | 实现 |
+| `@sdd-review` | 代码审查 | `opencode @sdd-review ...` | 审查 |
+| `@sdd-validate` | 最终验证 | `opencode @sdd-validate ...` | 验证 |
+
+> 💡 **所有 SDD Agents 都是专用的**，不依赖 OpenCode 内置 agents，确保工作流完整性和一致性。
 
 ---
 

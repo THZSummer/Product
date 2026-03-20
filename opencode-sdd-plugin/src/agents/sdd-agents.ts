@@ -20,6 +20,18 @@ export async function registerAgents(context: any) {
       promptFile: '.opencode/agents/sdd-tasks.md'
     },
     {
+      name: 'sdd-build',
+      description: 'SDD 任务实现专家',
+      mode: 'subagent',
+      promptFile: '.opencode/agents/sdd-build.md'
+    },
+    {
+      name: 'sdd-review',
+      description: 'SDD 代码审查专家',
+      mode: 'subagent',
+      promptFile: '.opencode/agents/sdd-review.md'
+    },
+    {
       name: 'sdd-validate',
       description: 'SDD 验证专家',
       mode: 'subagent',
