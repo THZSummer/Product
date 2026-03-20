@@ -19,16 +19,28 @@ opencode @sdd "帮助"
 opencode @sdd-help        # 别名，效果相同
 ```
 
-### 方式 2: 直接使用子 agents
+### 方式 2: 使用序号 agents（推荐 ⭐）
 
 ```bash
-# 6 个阶段，按顺序使用
-opencode @sdd-spec "用户登录规范"
-opencode @sdd-plan "用户登录计划"
-opencode @sdd-tasks "用户登录任务"
-opencode @sdd-build "实现 TASK-001"
-opencode @sdd-review "审查用户登录"
-opencode @sdd-validate "验证用户登录"
+# 6 个阶段，按顺序使用（序号清晰）
+opencode @sdd-1-spec "用户登录规范"
+opencode @sdd-2-plan "用户登录计划"
+opencode @sdd-3-tasks "用户登录任务"
+opencode @sdd-4-build "实现 TASK-001"
+opencode @sdd-5-review "审查用户登录"
+opencode @sdd-6-validate "验证用户登录"
+```
+
+### 方式 3: 使用短名（熟手）
+
+```bash
+# 短名称（与序号 agents 等价）
+opencode @sdd-spec "用户登录规范"    # = @sdd-1-spec
+opencode @sdd-plan "用户登录计划"    # = @sdd-2-plan
+opencode @sdd-tasks "用户登录任务"   # = @sdd-3-tasks
+opencode @sdd-build "实现 TASK-001"  # = @sdd-4-build
+opencode @sdd-review "审查用户登录"  # = @sdd-5-review
+opencode @sdd-validate "验证用户登录" # = @sdd-6-validate
 ```
 
 ---
