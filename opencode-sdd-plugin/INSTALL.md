@@ -304,10 +304,14 @@ cp -r dist/* <your-project>/.opencode/plugins/sdd/
 ## 下一步
 
 1. ✅ 完成安装
-2. 📖 阅读 [SDD_QUICKSTART.md](../../permission-app/SDD_QUICKSTART.md)
-3. 🚀 开始第一个 feature
+2. 📖 阅读项目中的 SDD 文档（如果有的话）
+3. 🚀 开始第一个 feature：`@sdd 开始 [feature 名称]`
 4. 🎯 熟悉完整工作流
 
 ---
 
-**需要帮助？** 查看 [README.md](./README.md) 或提交 Issue。
+**需要帮助？** 
+
+- 在 OpenCode 中输入：`@sdd 帮助`
+- 或查看 [README.md](./README.md)
+- 或提交 Issue

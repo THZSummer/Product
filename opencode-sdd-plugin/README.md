@@ -140,8 +140,7 @@ npm run clean
 ## 📚 文档
 
 - [官方插件文档](https://opencode.ai/docs/plugins/)
-- [SDD_QUICKSTART.md](../../permission-app/SDD_QUICKSTART.md) - 快速开始
-- [SDD_README.md](../../permission-app/SDD_README.md) - 完整说明
+- **项目文档** - 安装后查看项目中的 `SDD_QUICKSTART.md` 和 `SDD_README.md`
 
 ## 🎯 完整工作流
 
