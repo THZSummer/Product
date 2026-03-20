@@ -65,6 +65,14 @@ drafting → specified → clarified → planned → tasked → implementing →
 
 ## 🤖 SDD Agents 列表
 
+### 智能入口（推荐 ⭐）
+
+| Agent | 用途 | 调用方式 | 说明 |
+|-------|------|----------|------|
+| `@sdd` | **智能路由** | `opencode @sdd ...` | 自动检测状态并路由到正确阶段 |
+
+### 子 Agents（直接使用）
+
 | # | Agent | 用途 | 调用方式 | 阶段 | 前置依赖 |
 |---|-------|------|----------|------|----------|
 | 1 | `@sdd-spec` | 规范编写 | `opencode @sdd-spec ...` | 规范 | 无 |
@@ -74,7 +82,7 @@ drafting → specified → clarified → planned → tasked → implementing →
 | 5 | `@sdd-review` | 代码审查 | `opencode @sdd-review ...` | 审查 | 代码实现 |
 | 6 | `@sdd-validate` | 最终验证 | `opencode @sdd-validate ...` | 验证 | review 通过 |
 
-> 💡 **所有 SDD Agents 都是专用的**，不依赖 OpenCode 内置 agents，确保工作流完整性和一致性。
+> 💡 **推荐使用 @sdd** - 它会自动检测当前状态，推荐下一步操作，无需记忆顺序。
 > 
 > 🔗 **执行顺序是强制的** - 每个 agent 会检查前置依赖是否完成，确保工作流正确执行。
 
@@ -227,6 +235,10 @@ EC-001: 删除内置角色返回 403 Forbidden
 ---
 
 **版本**: 1.0.0  
+**创建日期**: 2026-03-20  
+**项目**: permission-app  
+**参考**: [OpenCode SDD Framework](../../../OPENCODE_SDD.md)
+版本**: 1.0.0  
 **创建日期**: 2026-03-20  
 **项目**: permission-app  
 **参考**: [OpenCode SDD Framework](../../../OPENCODE_SDD.md)
