@@ -1,0 +1,119 @@
+# {{featureName}} - Feature Specification
+
+## 元数据
+
+| 字段 | 值 |
+|------|-----|
+| **标识符** | {{featureId}} |
+| **名称** | {{featureName}} |
+| **创建日期** | {{createdAt}} |
+| **作者** | {{author}} |
+| **优先级** | {{priority}} |
+| **状态** | {{status}} |
+
+---
+
+## 上下文
+
+### 问题陈述
+{{problemStatement}}
+
+### 目标用户
+{{targetUsers}}
+
+### 相关功能
+{{relatedFeatures}}
+
+---
+
+## 目标与非目标
+
+### Goals ✅
+{{#each goals}}
+- {{this}}
+{{/each}}
+
+### Non-Goals ❌
+{{#each nonGoals}}
+- {{this}}
+{{/each}}
+
+---
+
+## 用户故事
+
+| ID | 故事 | 优先级 |
+|----|------|--------|
+{{#each userStories}}
+| {{id}} | {{story}} | {{priority}} |
+{{/each}}
+
+---
+
+## 功能需求
+
+{{#each functionalRequirements}}
+### {{title}}
+
+| ID | 需求 | 验收标准 |
+|----|------|----------|
+{{#each items}}
+| {{id}} | {{requirement}} | {{acceptanceCriteria}} |
+{{/each}}
+
+{{/each}}
+
+---
+
+## 非功能需求
+
+| ID | 需求 | 验证方式 |
+|----|------|----------|
+{{#each nonFunctionalRequirements}}
+| {{id}} | {{requirement}} | {{validation}} |
+{{/each}}
+
+---
+
+## 技术设计
+
+### 数据模型
+{{dataModels}}
+
+### API 接口
+{{apiDesign}}
+
+### 依赖
+{{dependencies}}
+
+---
+
+## 边界情况
+
+| ID | 场景 | 处理方式 |
+|----|------|----------|
+{{#each edgeCases}}
+| {{id}} | {{scenario}} | {{handling}} |
+{{/each}}
+
+---
+
+## 开放问题
+
+| ID | 问题 | 决策者 | 状态 |
+|----|------|--------|------|
+{{#each openQuestions}}
+| {{id}} | {{question}} | {{owner}} | {{status}} |
+{{/each}}
+
+---
+
+## 附录
+
+### 参考资料
+{{references}}
+
+### 变更记录
+| 日期 | 版本 | 变更 | 作者 |
+|------|------|------|------|
+| {{createdAt}} | 1.0 | 初始版本 | {{author}} |
