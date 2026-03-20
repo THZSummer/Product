@@ -1,0 +1,36 @@
+{
+  "version": "1.0.0",
+  "hooks": {
+    "sessionStart": {
+      "enabled": false,
+      "action": "status",
+      "description": "Auto-run /sdd:status when session starts"
+    },
+    "prePlan": {
+      "enabled": true,
+      "action": "check-api-docs",
+      "description": "Block planning if external API docs are not cached",
+      "check": "Verify all external service references have cached documentation in .opencode/sdd/api-docs/"
+    },
+    "preCompact": {
+      "enabled": false,
+      "action": "save-notes",
+      "description": "Save session notes before context compaction"
+    },
+    "postImplement": {
+      "enabled": false,
+      "action": "validate",
+      "description": "Auto-run validation after all tasks complete"
+    },
+    "preImplement": {
+      "enabled": true,
+      "action": "check-tasks",
+      "description": "Verify all tasks are properly defined before implementation"
+    }
+  },
+  "notifications": {
+    "stateTransition": true,
+    "validationFailure": true,
+    "apiDocsMissing": true
+  }
+}

@@ -1,0 +1,71 @@
+# 项目配置 - Project Configuration
+
+```yaml
+# 项目基本信息
+name: "permission-app"
+version: "1.0.0"
+description: "权限管理系统"
+
+# 技术栈
+stack:
+  language: "typescript"
+  framework: "node"
+  runtime: "node"
+
+# SDD 配置
+sdd:
+  enabled: true
+  version: "1.0.0"
+  
+  # 规范目录
+  specsDir: ".specs"
+  
+  # 状态机配置
+  stateMachine:
+    enabled: true
+    enforceTransitions: true
+    
+  # 辅导模式
+  coaching:
+    mode: "auto"  # auto | beginner | intermediate | advanced
+    
+  # API 文档缓存
+  apiDocs:
+    cacheDir: ".opencode/sdd/api-docs"
+    autoFetch: true
+
+# AI Agent 配置
+agents:
+  spec: "sdd-spec"
+  plan: "sdd-plan"
+  tasks: "sdd-tasks"
+  validate: "sdd-validate"
+
+# 工作流规则
+rules:
+  # 规范必须先于实现
+  specBeforeCode: true
+  
+  # 计划必须先于任务
+  planBeforeTasks: true
+  
+  # 验证必须通过后才能标记完成
+  validateBeforeComplete: true
+  
+  # 外部 API 文档必须先缓存
+  cacheApiDocsBeforePlan: true
+  
+  # 权限相关变更需要额外审查
+  permissionChangesRequireReview: true
+
+# 输出配置
+output:
+  # 任务批量执行
+  batchSmallTasks: true
+  
+  # 自动生成验收报告
+  autoGenerateReport: true
+  
+  # 保存复盘记录
+  saveRetro: true
+```

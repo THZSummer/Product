@@ -1,0 +1,61 @@
+{
+  "version": "1.0.0",
+  "stateMachine": {
+    "states": [
+      "drafting",
+      "specified",
+      "clarified",
+      "planned",
+      "tasked",
+      "implementing",
+      "validating",
+      "completed"
+    ],
+    "transitions": {
+      "drafting": ["specified", "drafting"],
+      "specified": ["clarified", "drafting"],
+      "clarified": ["planned", "specified", "drafting"],
+      "planned": ["tasked", "clarified", "drafting"],
+      "tasked": ["implementing", "planned", "drafting"],
+      "implementing": ["validating", "tasked"],
+      "validating": ["completed", "implementing"],
+      "completed": ["drafting"]
+    },
+    "enforcedPreconditions": {
+      "planned": ["specified"],
+      "tasked": ["planned"],
+      "implementing": ["tasked"],
+      "validating": ["implementing"],
+      "completed": ["validating"]
+    }
+  },
+  "coachingProfile": {
+    "level": "auto",
+    "interventionCount": 0,
+    "lastSpecQuality": null,
+    "adaptationRules": {
+      "beginner": {
+        "maxInterventions": 10,
+        "provideExamples": true,
+        "stepByStep": true
+      },
+      "intermediate": {
+        "maxInterventions": 5,
+        "provideExamples": false,
+        "stepByStep": false
+      },
+      "advanced": {
+        "maxInterventions": 2,
+        "provideExamples": false,
+        "stepByStep": false
+      }
+    }
+  },
+  "features": {},
+  "metadata": {
+    "createdAt": "2026-03-20T14:27:00+08:00",
+    "updatedAt": "2026-03-20T14:27:00+08:00",
+    "sddVersion": "1.0.0",
+    "projectName": "permission-app"
+  }
+}
