@@ -16,6 +16,7 @@ opencode @sdd "状态"
 
 # 查看帮助
 opencode @sdd "帮助"
+opencode @sdd-help        # 别名，效果相同
 ```
 
 ### 方式 2: 直接使用子 agents
