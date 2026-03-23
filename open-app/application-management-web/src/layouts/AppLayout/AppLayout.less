@@ -1,0 +1,46 @@
+.app-layout {
+  min-height: 100vh;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+
+  .app-header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .app-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.85);
+    margin: 0;
+  }
+}
+
+.app-content {
+  margin: 16px;
+  padding: 24px;
+  background: #fff;
+  border-radius: 4px;
+  min-height: calc(100vh - 112px);
+}
+
+// 响应式适配
+@media (max-width: 1024px) {
+  .app-header {
+    padding: 0 16px;
+  }
+
+  .app-content {
+    margin: 8px;
+    padding: 16px;
+  }
+}

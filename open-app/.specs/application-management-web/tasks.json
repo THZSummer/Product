@@ -1,0 +1,381 @@
+{
+  "feature": "application-management-web",
+  "version": "1.0.0",
+  "spec_reference": "APP-MGT-WEB-001",
+  "plan_reference": "application-management-web/plan.md v1.0.1",
+  "created_date": "2026-03-23",
+  "tasks": [
+    {
+      "id": "TASK-001",
+      "name": "项目初始化与基础配置",
+      "complexity": "M",
+      "dependencies": [],
+      "wave": 1,
+      "description": "创建 Vite + React + TypeScript 项目骨架，配置开发环境和基础工具链。",
+      "files": [
+        {"path": "application-management-web/package.json", "action": "NEW"},
+        {"path": "application-management-web/tsconfig.json", "action": "NEW"},
+        {"path": "application-management-web/tsconfig.node.json", "action": "NEW"},
+        {"path": "application-management-web/vite.config.ts", "action": "NEW"},
+        {"path": "application-management-web/index.html", "action": "NEW"},
+        {"path": "application-management-web/.gitignore", "action": "NEW"},
+        {"path": "application-management-web/.eslintrc.cjs", "action": "NEW"},
+        {"path": "application-management-web/.prettierrc", "action": "NEW"},
+        {"path": "application-management-web/.env", "action": "NEW"},
+        {"path": "application-management-web/.env.development", "action": "NEW"},
+        {"path": "application-management-web/.env.production", "action": "NEW"},
+        {"path": "application-management-web/README.md", "action": "NEW"}
+      ],
+      "acceptance_criteria": [
+        "npm install 执行成功",
+        "npm run dev 启动开发服务器无错误",
+        "npm run build 构建生产版本无错误",
+        "TypeScript 类型检查通过 (npm run type-check)",
+        "ESLint 检查无错误 (npm run lint)"
+      ],
+      "verification_command": "cd application-management-web && npm install && npm run dev && npm run build && npm run type-check && npm run lint",
+      "estimated_days": 0.5
+    },
+    {
+      "id": "TASK-002",
+      "name": "类型定义层",
+      "complexity": "S",
+      "dependencies": [],
+      "wave": 1,
+      "description": "创建 TypeScript 类型定义，包括应用实体、API 请求/响应类型、枚举类型。",
+      "files": [
+        {"path": "application-management-web/src/types/application.ts", "action": "NEW"},
+        {"path": "application-management-web/src/types/api.ts", "action": "NEW"},
+        {"path": "application-management-web/src/types/index.ts", "action": "NEW"}
+      ],
+      "acceptance_criteria": [
+        "AppStatus 枚举包含 4 个状态 (draft/active/disabled/deleted)",
+        "AppType 枚举包含 3 个类型 (self_build/third_party/personal)",
+        "Application 接口包含所有必填字段",
+        "ListParams、CreateAppData、UpdateAppData 接口定义完整",
+        "API 响应类型 ApiResponse<T> 泛型定义正确",
+        "类型导出正确，无循环依赖"
+      ],
+      "verification_command": "cd application-management-web && npx tsc --noEmit --project tsconfig.json",
+      "estimated_days": 0.3
+    },
+    {
+      "id": "TASK-003",
+      "name": "HTTP 服务层与 API 封装",
+      "complexity": "M",
+      "dependencies": ["TASK-001", "TASK-002"],
+      "wave": 2,
+      "description": "创建 HTTP 客户端配置和 API 服务封装，包含请求拦截器、错误处理、MSW Mock。",
+      "files": [
+        {"path": "application-management-web/src/services/http.ts", "action": "NEW"},
+        {"path": "application-management-web/src/services/applicationApi.ts", "action": "NEW"},
+        {"path": "application-management-web/src/services/index.ts", "action": "NEW"},
+        {"path": "application-management-web/src/mocks/browser.ts", "action": "NEW"},
+        {"path": "application-management-web/src/mocks/handlers.ts", "action": "NEW"},
+        {"path": "application-management-web/src/mocks/data.ts", "action": "NEW"}
+      ],
+      "acceptance_criteria": [
+        "Axios 实例配置正确（baseURL、timeout、withCredentials）",
+        "请求拦截器添加 Authorization header",
+        "响应拦截器统一错误处理",
+        "5 个 API 方法实现完整（getList、getDetail、create、update、delete）",
+        "MSW Mock handlers 覆盖所有 API 端点",
+        "Mock 数据格式与后端 DTO 一致"
+      ],
+      "verification_command": "cd application-management-web && npx tsc --noEmit && npm run dev",
+      "estimated_days": 0.8
+    },
+    {
+      "id": "TASK-004",
+      "name": "状态管理 Store",
+      "complexity": "M",
+      "dependencies": ["TASK-002", "TASK-003"],
+      "wave": 2,
+      "description": "创建 Zustand 状态管理 store，封装应用数据状态和操作方法。",
+      "files": [
+        {"path": "application-management-web/src/stores/applicationStore.ts", "action": "NEW"},
+        {"path": "application-management-web/src/stores/index.ts", "action": "NEW"}
+      ],
+      "acceptance_criteria": [
+        "applications、total、page、pageSize 状态定义正确",
+        "filters 状态包含 keyword、status、type",
+        "currentApplication 状态用于详情页",
+        "loading、error UI 状态定义正确",
+        "fetchApplications、createApplication、updateApplication、deleteApplication 方法实现",
+        "setCurrentApplication、setFilters 方法实现",
+        "异步操作正确处理 loading 和 error 状态"
+      ],
+      "verification_command": "cd application-management-web && npx tsc --noEmit",
+      "estimated_days": 0.7
+    },
+    {
+      "id": "TASK-005",
+      "name": "公共组件 - 状态徽章与类型标签",
+      "complexity": "S",
+      "dependencies": ["TASK-002"],
+      "wave": 2,
+      "description": "创建基础展示组件：状态徽章和类型标签。",
+      "files": [
+        {"path": "application-management-web/src/components/AppStatusBadge/AppStatusBadge.tsx", "action": "NEW"},
+        {"path": "application-management-web/src/components/AppStatusBadge/index.tsx", "action": "NEW"},
+        {"path": "application-management-web/src/components/AppTypeTag/AppTypeTag.tsx", "action": "NEW"},
+        {"path": "application-management-web/src/components/AppTypeTag/index.tsx", "action": "NEW"}
+      ],
+      "acceptance_criteria": [
+        "AppStatusBadge 正确映射 4 种状态的颜色和文案",
+        "AppTypeTag 正确映射 3 种类型的颜色和文案",
+        "组件支持 Ant Design Badge 和 Tag 组件",
+        "TypeScript Props 类型定义完整",
+        "组件导出正确"
+      ],
+      "verification_command": "cd application-management-web && npx tsc --noEmit && npm run dev",
+      "estimated_days": 0.5
+    },
+    {
+      "id": "TASK-006",
+      "name": "公共组件 - 应用表格与卡片",
+      "complexity": "M",
+      "dependencies": ["TASK-002", "TASK-005"],
+      "wave": 3,
+      "description": "创建应用列表展示组件：表格组件和卡片组件。",
+      "files": [
+        {"path": "application-management-web/src/components/AppTable/AppTable.tsx", "action": "NEW"},
+        {"path": "application-management-web/src/components/AppTable/AppTable.less", "action": "NEW"},
+        {"path": "application-management-web/src/components/AppTable/index.tsx", "action": "NEW"},
+        {"path": "application-management-web/src/components/AppCard/AppCard.tsx", "action": "NEW"},
+        {"path": "application-management-web/src/components/AppCard/AppCard.less", "action": "NEW"},
+        {"path": "application-management-web/src/components/AppCard/index.tsx", "action": "NEW"}
+      ],
+      "acceptance_criteria": [
+        "AppTable 展示正确列（名称、类型、状态、创建时间、操作）",
+        "AppTable 支持分页、排序、行点击跳转",
+        "AppCard 展示应用核心信息",
+        "组件使用 AppStatusBadge 和 AppTypeTag",
+        "样式文件正确引用",
+        "响应式布局支持"
+      ],
+      "verification_command": "cd application-management-web && npx tsc --noEmit && npm run dev",
+      "estimated_days": 1.0
+    },
+    {
+      "id": "TASK-007",
+      "name": "公共组件 - 删除确认弹窗",
+      "complexity": "S",
+      "dependencies": ["TASK-002"],
+      "wave": 3,
+      "description": "创建删除确认弹窗组件。",
+      "files": [
+        {"path": "application-management-web/src/components/DeleteConfirmModal/DeleteConfirmModal.tsx", "action": "NEW"},
+        {"path": "application-management-web/src/components/DeleteConfirmModal/index.tsx", "action": "NEW"}
+      ],
+      "acceptance_criteria": [
+        "使用 Ant Design Modal 组件",
+        "Props 包含 visible、appName、onConfirm、onCancel",
+        "二次确认文案正确（包含应用名称）",
+        "删除说明展示正确（30 天回收站）",
+        "确认按钮 Loading 状态支持"
+      ],
+      "verification_command": "cd application-management-web && npx tsc --noEmit && npm run dev",
+      "estimated_days": 0.3
+    },
+    {
+      "id": "TASK-008",
+      "name": "布局组件",
+      "complexity": "S",
+      "dependencies": ["TASK-001"],
+      "wave": 3,
+      "description": "创建应用管理整体布局组件。",
+      "files": [
+        {"path": "application-management-web/src/layouts/AppLayout/AppLayout.tsx", "action": "NEW"},
+        {"path": "application-management-web/src/layouts/AppLayout/AppLayout.less", "action": "NEW"},
+        {"path": "application-management-web/src/layouts/AppLayout/index.tsx", "action": "NEW"},
+        {"path": "application-management-web/src/layouts/index.tsx", "action": "NEW"}
+      ],
+      "acceptance_criteria": [
+        "布局包含 Header 和 Content 区域",
+        "Header 展示「应用管理」标题",
+        "Header 展示「新建应用」按钮",
+        "Content 区域使用 Ant Design Layout.Content",
+        "样式支持响应式",
+        "导出正确"
+      ],
+      "verification_command": "cd application-management-web && npx tsc --noEmit && npm run dev",
+      "estimated_days": 0.5
+    },
+    {
+      "id": "TASK-009",
+      "name": "应用列表页",
+      "complexity": "L",
+      "dependencies": ["TASK-004", "TASK-006", "TASK-008"],
+      "wave": 4,
+      "description": "创建应用列表页面，整合搜索、筛选、分页功能。",
+      "files": [
+        {"path": "application-management-web/src/pages/ApplicationList/ApplicationList.tsx", "action": "NEW"},
+        {"path": "application-management-web/src/pages/ApplicationList/ApplicationList.less", "action": "NEW"},
+        {"path": "application-management-web/src/pages/ApplicationList/index.tsx", "action": "NEW"}
+      ],
+      "acceptance_criteria": [
+        "使用 AppLayout 布局",
+        "使用 AppTable 展示数据",
+        "搜索框支持按名称模糊搜索",
+        "状态筛选下拉框支持 5 个选项",
+        "分页组件与 store 联动",
+        "新建应用按钮跳转到创建页",
+        "行点击跳转到详情页",
+        "删除操作调用 DeleteConfirmModal",
+        "Loading 状态展示正确",
+        "空状态展示引导创建"
+      ],
+      "verification_command": "cd application-management-web && npm run dev",
+      "estimated_days": 1.5
+    },
+    {
+      "id": "TASK-010",
+      "name": "应用创建页",
+      "complexity": "L",
+      "dependencies": ["TASK-004", "TASK-008"],
+      "wave": 4,
+      "description": "创建应用创建表单页面。",
+      "files": [
+        {"path": "application-management-web/src/pages/ApplicationCreate/ApplicationCreate.tsx", "action": "NEW"},
+        {"path": "application-management-web/src/pages/ApplicationCreate/ApplicationCreate.less", "action": "NEW"},
+        {"path": "application-management-web/src/pages/ApplicationCreate/index.tsx", "action": "NEW"}
+      ],
+      "acceptance_criteria": [
+        "使用 AppLayout 布局",
+        "表单包含所有必填字段（名称、描述、类型）",
+        "表单包含选填字段（图标 URL、回调 URL）",
+        "必填字段验证规则正确",
+        "应用名称实时校验唯一性（调用 API）",
+        "提交成功跳转到详情页",
+        "取消按钮返回列表页",
+        "提交按钮 Loading 状态防止重复提交",
+        "错误提示清晰友好"
+      ],
+      "verification_command": "cd application-management-web && npm run dev",
+      "estimated_days": 1.5
+    },
+    {
+      "id": "TASK-011",
+      "name": "应用详情与编辑页",
+      "complexity": "M",
+      "dependencies": ["TASK-004", "TASK-007", "TASK-008"],
+      "wave": 4,
+      "description": "创建应用详情页和编辑页。",
+      "files": [
+        {"path": "application-management-web/src/pages/ApplicationDetail/ApplicationDetail.tsx", "action": "NEW"},
+        {"path": "application-management-web/src/pages/ApplicationDetail/ApplicationDetail.less", "action": "NEW"},
+        {"path": "application-management-web/src/pages/ApplicationDetail/index.tsx", "action": "NEW"},
+        {"path": "application-management-web/src/pages/ApplicationEdit/ApplicationEdit.tsx", "action": "NEW"},
+        {"path": "application-management-web/src/pages/ApplicationEdit/ApplicationEdit.less", "action": "NEW"},
+        {"path": "application-management-web/src/pages/ApplicationEdit/index.tsx", "action": "NEW"}
+      ],
+      "acceptance_criteria": [
+        "详情页展示所有应用字段",
+        "详情页「编辑」按钮跳转到编辑页",
+        "详情页「删除」按钮打开确认弹窗",
+        "详情页「返回」按钮返回列表页",
+        "编辑页表单预填充当前数据",
+        "编辑页可修改字段正确（名称、描述、图标 URL、回调 URL）",
+        "编辑页不可修改字段禁用（ID、类型、状态、所有者、时间）",
+        "编辑保存成功返回详情页",
+        "编辑取消返回详情页",
+        "非所有者隐藏编辑和删除按钮"
+      ],
+      "verification_command": "cd application-management-web && npm run dev",
+      "estimated_days": 1.5
+    },
+    {
+      "id": "TASK-012",
+      "name": "路由集成与端到端测试",
+      "complexity": "M",
+      "dependencies": ["TASK-009", "TASK-010", "TASK-011"],
+      "wave": 5,
+      "description": "配置路由、整合所有页面、进行端到端测试。",
+      "files": [
+        {"path": "application-management-web/src/routes.tsx", "action": "NEW"},
+        {"path": "application-management-web/src/App.tsx", "action": "NEW"},
+        {"path": "application-management-web/src/main.tsx", "action": "NEW"},
+        {"path": "application-management-web/src/vite-env.d.ts", "action": "NEW"},
+        {"path": "application-management-web/src/index.less", "action": "NEW"},
+        {"path": "application-management-web/public/favicon.ico", "action": "NEW"}
+      ],
+      "acceptance_criteria": [
+        "React Router 配置正确（4 个路由）",
+        "路由嵌套结构正确（AppLayout 包裹子路由）",
+        "路由参数解析正确（:appId）",
+        "根组件整合 Provider 和 Router",
+        "入口文件配置正确",
+        "全局样式引入 Ant Design CSS",
+        "端到端流程测试通过：创建 → 列表 → 详情 → 编辑 → 删除",
+        "所有验收标准（Spec Section 12）通过"
+      ],
+      "verification_command": "cd application-management-web && npm run dev",
+      "estimated_days": 1.4
+    }
+  ],
+  "summary": {
+    "total_tasks": 12,
+    "by_complexity": {
+      "S": 5,
+      "M": 5,
+      "L": 2
+    },
+    "by_wave": {
+      "1": 2,
+      "2": 3,
+      "3": 3,
+      "4": 3,
+      "5": 1
+    },
+    "total_files": 51,
+    "estimated_days": 10.5,
+    "pages": 4,
+    "components": 6,
+    "layouts": 1
+  },
+  "execution_strategy": {
+    "wave_1": {
+      "tasks": ["TASK-001", "TASK-002"],
+      "description": "并行启动：项目初始化和类型定义",
+      "parallel": true
+    },
+    "wave_2": {
+      "tasks": ["TASK-003", "TASK-004", "TASK-005"],
+      "description": "基础设施：HTTP 服务、Store、基础组件",
+      "parallel": true
+    },
+    "wave_3": {
+      "tasks": ["TASK-006", "TASK-007", "TASK-008"],
+      "description": "组件开发：表格卡片、删除弹窗、布局",
+      "parallel": true
+    },
+    "wave_4": {
+      "tasks": ["TASK-009", "TASK-010", "TASK-011"],
+      "description": "页面开发：列表页、创建页、详情/编辑页",
+      "parallel": true
+    },
+    "wave_5": {
+      "tasks": ["TASK-012"],
+      "description": "集成测试：路由配置和端到端测试",
+      "parallel": false
+    }
+  },
+  "risk_mitigation": {
+    "backend_api_not_ready": {
+      "risk": "后端 API 未就绪",
+      "mitigation": "使用 MSW Mock 进行并行开发，不阻塞进度",
+      "covered_by": ["TASK-003"]
+    },
+    "type_definition_incomplete": {
+      "risk": "TypeScript 类型定义不完整",
+      "mitigation": "严格模式，TASK-002 优先完成类型定义",
+      "covered_by": ["TASK-002"]
+    },
+    "integration_issues": {
+      "risk": "集成问题",
+      "mitigation": "Wave 5 预留充足时间进行端到端测试",
+      "covered_by": ["TASK-012"]
+    }
+  }
+}

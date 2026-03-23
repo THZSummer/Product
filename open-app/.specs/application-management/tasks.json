@@ -1,0 +1,300 @@
+{
+  "feature": "APP-MGT-001",
+  "name": "应用管理系统",
+  "version": "1.0.0",
+  "state": "tasked",
+  "createdAt": "2026-03-23",
+  "tasks": [
+    {
+      "id": "TASK-001",
+      "name": "数据库表结构设计与迁移",
+      "priority": "P0",
+      "complexity": "M",
+      "estimatedHours": 3,
+      "wave": 1,
+      "dependencies": [],
+      "status": "completed",
+      "files": {
+        "new": [
+          "application-management/src/main/resources/db/migration/V1__init_applications.sql",
+          "application-management/src/main/resources/db/migration/V2__init_application_status_logs.sql",
+          "application-management/pom.xml"
+        ],
+        "modify": []
+      }
+    },
+    {
+      "id": "TASK-002",
+      "name": "领域层 - 实体与枚举",
+      "priority": "P0",
+      "complexity": "S",
+      "estimatedHours": 2,
+      "wave": 1,
+      "dependencies": [],
+      "status": "pending",
+      "files": {
+        "new": [
+          "application-management/src/main/java/com/openapp/application/domain/Application.java",
+          "application-management/src/main/java/com/openapp/application/domain/enums/AppType.java",
+          "application-management/src/main/java/com/openapp/application/domain/enums/AppStatus.java",
+          "application-management/src/main/java/com/openapp/application/domain/StatusTransitions.java"
+        ],
+        "modify": []
+      }
+    },
+    {
+      "id": "TASK-003",
+      "name": "DTO 层 - 请求/响应对象",
+      "priority": "P0",
+      "complexity": "S",
+      "estimatedHours": 2,
+      "wave": 1,
+      "dependencies": [],
+      "status": "pending",
+      "files": {
+        "new": [
+          "application-management/src/main/java/com/openapp/application/dto/request/CreateApplicationRequest.java",
+          "application-management/src/main/java/com/openapp/application/dto/request/UpdateApplicationRequest.java",
+          "application-management/src/main/java/com/openapp/application/dto/request/ChangeStatusRequest.java",
+          "application-management/src/main/java/com/openapp/application/dto/response/CreateApplicationResponse.java",
+          "application-management/src/main/java/com/openapp/application/dto/response/UpdateApplicationResponse.java",
+          "application-management/src/main/java/com/openapp/application/dto/response/ApplicationListResponse.java",
+          "application-management/src/main/java/com/openapp/application/dto/response/ApplicationDetailResponse.java",
+          "application-management/src/main/java/com/openapp/application/dto/response/ErrorResponse.java",
+          "application-management/src/main/java/com/openapp/application/dto/response/PageResponse.java"
+        ],
+        "modify": []
+      }
+    },
+    {
+      "id": "TASK-004",
+      "name": "Mapper 层 - MyBatis 配置",
+      "priority": "P0",
+      "complexity": "S",
+      "estimatedHours": 1.5,
+      "wave": 2,
+      "dependencies": ["TASK-001", "TASK-002"],
+      "status": "pending",
+      "files": {
+        "new": [
+          "application-management/src/main/java/com/openapp/application/mapper/ApplicationMapper.java",
+          "application-management/src/main/java/com/openapp/application/mapper/ApplicationStatusLogMapper.java",
+          "application-management/src/main/resources/mapper/ApplicationMapper.xml",
+          "application-management/src/main/resources/mapper/ApplicationStatusLogMapper.xml"
+        ],
+        "modify": ["application-management/src/main/resources/application.yml"]
+      }
+    },
+    {
+      "id": "TASK-005",
+      "name": "Repository 层 - 数据访问",
+      "priority": "P0",
+      "complexity": "S",
+      "estimatedHours": 2,
+      "wave": 2,
+      "dependencies": ["TASK-001", "TASK-002", "TASK-004"],
+      "status": "pending",
+      "files": {
+        "new": [
+          "application-management/src/main/java/com/openapp/application/repository/ApplicationRepository.java",
+          "application-management/src/main/java/com/openapp/application/repository/ApplicationStatusLogRepository.java"
+        ],
+        "modify": []
+      }
+    },
+    {
+      "id": "TASK-006",
+      "name": "异常处理层",
+      "priority": "P1",
+      "complexity": "S",
+      "estimatedHours": 1.5,
+      "wave": 2,
+      "dependencies": ["TASK-002", "TASK-003"],
+      "status": "pending",
+      "files": {
+        "new": [
+          "application-management/src/main/java/com/openapp/application/exception/ApplicationErrorCode.java",
+          "application-management/src/main/java/com/openapp/application/exception/ApplicationException.java",
+          "application-management/src/main/java/com/openapp/application/exception/GlobalExceptionHandler.java"
+        ],
+        "modify": []
+      }
+    },
+    {
+      "id": "TASK-007",
+      "name": "Service 层 - 业务逻辑",
+      "priority": "P0",
+      "complexity": "M",
+      "estimatedHours": 6,
+      "wave": 3,
+      "dependencies": ["TASK-002", "TASK-004", "TASK-005", "TASK-006"],
+      "status": "pending",
+      "files": {
+        "new": [
+          "application-management/src/main/java/com/openapp/application/service/ApplicationService.java",
+          "application-management/src/main/java/com/openapp/application/service/impl/ApplicationServiceImpl.java",
+          "application-management/src/main/java/com/openapp/application/service/ApplicationStatusLogService.java",
+          "application-management/src/main/java/com/openapp/application/service/impl/ApplicationStatusLogServiceImpl.java"
+        ],
+        "modify": []
+      }
+    },
+    {
+      "id": "TASK-008",
+      "name": "Controller 层 - API 实现",
+      "priority": "P0",
+      "complexity": "M",
+      "estimatedHours": 4,
+      "wave": 3,
+      "dependencies": ["TASK-003", "TASK-006", "TASK-007"],
+      "status": "pending",
+      "files": {
+        "new": [
+          "application-management/src/main/java/com/openapp/application/controller/ApplicationController.java",
+          "application-management/src/main/java/com/openapp/application/config/WebMvcConfig.java"
+        ],
+        "modify": []
+      }
+    },
+    {
+      "id": "TASK-009",
+      "name": "安全与认证中间件",
+      "priority": "P0",
+      "complexity": "M",
+      "estimatedHours": 4,
+      "wave": 3,
+      "dependencies": ["TASK-002", "TASK-006"],
+      "status": "pending",
+      "files": {
+        "new": [
+          "application-management/src/main/java/com/openapp/application/security/JwtAuthFilter.java",
+          "application-management/src/main/java/com/openapp/application/security/JwtTokenProvider.java",
+          "application-management/src/main/java/com/openapp/application/security/ApplicationAuthAspect.java",
+          "application-management/src/main/java/com/openapp/application/security/RequireOwnerOrAdmin.java",
+          "application-management/src/main/java/com/openapp/application/config/SecurityConfig.java"
+        ],
+        "modify": []
+      }
+    },
+    {
+      "id": "TASK-010",
+      "name": "缓存层 - Redis 集成",
+      "priority": "P1",
+      "complexity": "M",
+      "estimatedHours": 3.5,
+      "wave": 3,
+      "dependencies": ["TASK-005", "TASK-007"],
+      "status": "pending",
+      "files": {
+        "new": [
+          "application-management/src/main/java/com/openapp/application/cache/ApplicationCacheService.java",
+          "application-management/src/main/java/com/openapp/application/config/CacheConfig.java"
+        ],
+        "modify": ["application-management/pom.xml", "application-management/src/main/resources/application.yml"]
+      }
+    },
+    {
+      "id": "TASK-011",
+      "name": "审计日志服务",
+      "priority": "P1",
+      "complexity": "S",
+      "estimatedHours": 2.5,
+      "wave": 3,
+      "dependencies": ["TASK-004", "TASK-005", "TASK-007"],
+      "status": "pending",
+      "files": {
+        "new": [
+          "application-management/src/main/java/com/openapp/application/service/impl/ApplicationStatusLogServiceImpl.java",
+          "application-management/src/main/java/com/openapp/application/domain/ApplicationStatusLog.java",
+          "application-management/src/main/java/com/openapp/application/dto/request/StatusChangeAudit.java"
+        ],
+        "modify": []
+      }
+    },
+    {
+      "id": "TASK-012",
+      "name": "单元测试",
+      "priority": "P0",
+      "complexity": "M",
+      "estimatedHours": 8,
+      "wave": 4,
+      "dependencies": ["TASK-007", "TASK-008", "TASK-009"],
+      "status": "pending",
+      "files": {
+        "new": [
+          "application-management/src/test/java/com/openapp/application/service/ApplicationServiceTest.java",
+          "application-management/src/test/java/com/openapp/application/service/ApplicationStatusLogServiceTest.java",
+          "application-management/src/test/java/com/openapp/application/controller/ApplicationControllerTest.java",
+          "application-management/src/test/java/com/openapp/application/security/JwtTokenProviderTest.java",
+          "application-management/src/test/java/com/openapp/application/security/ApplicationAuthAspectTest.java",
+          "application-management/src/test/java/com/openapp/application/domain/StatusTransitionsTest.java",
+          "application-management/src/test/java/com/openapp/application/repository/ApplicationRepositoryTest.java",
+          "application-management/src/test/resources/application-test.yml"
+        ],
+        "modify": []
+      }
+    },
+    {
+      "id": "TASK-013",
+      "name": "集成测试",
+      "priority": "P1",
+      "complexity": "M",
+      "estimatedHours": 6,
+      "wave": 4,
+      "dependencies": ["TASK-008", "TASK-009", "TASK-010"],
+      "status": "pending",
+      "files": {
+        "new": [
+          "application-management/src/test/java/com/openapp/application/integration/ApplicationApiIntegrationTest.java",
+          "application-management/src/test/java/com/openapp/application/integration/StatusChangeIntegrationTest.java",
+          "application-management/src/test/java/com/openapp/application/integration/AuthIntegrationTest.java"
+        ],
+        "modify": []
+      }
+    },
+    {
+      "id": "TASK-014",
+      "name": "文档与配置完善",
+      "priority": "P2",
+      "complexity": "S",
+      "estimatedHours": 3,
+      "wave": 5,
+      "dependencies": ["TASK-001", "TASK-002", "TASK-003", "TASK-004", "TASK-005", "TASK-006", "TASK-007", "TASK-008", "TASK-009", "TASK-010", "TASK-011", "TASK-012", "TASK-013"],
+      "status": "pending",
+      "files": {
+        "new": [
+          "application-management/src/main/resources/application-dev.yml",
+          "application-management/src/main/resources/application-prod.yml",
+          "application-management/README.md",
+          ".specs/application-management/api.md"
+        ],
+        "modify": [
+          "application-management/src/main/resources/application.yml",
+          ".opencode/sdd/state.json",
+          ".specs/application-management/spec.json"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "totalTasks": 14,
+    "totalEstimatedHours": 47.5,
+    "byPriority": {
+      "P0": 9,
+      "P1": 4,
+      "P2": 1
+    },
+    "byComplexity": {
+      "S": 8,
+      "M": 6,
+      "L": 0
+    },
+    "byWave": {
+      "1": 3,
+      "2": 3,
+      "3": 5,
+      "4": 2,
+      "5": 1
+    }
+  }
+}

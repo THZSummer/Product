@@ -1,0 +1,64 @@
+{
+  "identifier": "APP-MGT-001",
+  "name": "应用管理系统",
+  "version": "1.0.0",
+  "createdAt": "2026-03-23",
+  "author": "Summer",
+  "priority": "P0",
+  "state": "tasked",
+  "description": "应用管理模块，负责应用的注册、编辑、查询、删除和状态管理",
+  "goals": [
+    "G1: 应用注册（创建、填写应用信息）",
+    "G2: 应用编辑（修改应用信息）",
+    "G3: 应用查询（查看应用列表/详情）",
+    "G4: 应用删除（软删除/硬删除）",
+    "G6: 应用状态管理（启用、禁用、下线）"
+  ],
+  "nonGoals": [
+    "NG1: 应用成员管理 → APP-MEM-001",
+    "NG2: 应用凭证管理 → permission-app",
+    "NG3: 应用数据分析/统计 → 后续 Feature",
+    "NG4: 多环境管理 → 后续 Feature"
+  ],
+  "userStories": [
+    "US-001: 作为应用开发者，我想要创建应用，以便接入 open-app 平台",
+    "US-002: 作为应用开发者，我想要修改应用信息，以便更新应用配置",
+    "US-003: 作为应用开发者，我想要查看我的应用列表，以便管理我的应用",
+    "US-004: 作为应用开发者，我想要查看应用详情，以便了解应用配置",
+    "US-005: 作为应用开发者，我想要删除应用，以便清理不用的应用",
+    "US-006: 作为平台管理员，我想要启用/禁用应用，以便管理平台上的应用"
+  ],
+  "functionalRequirements": [
+    "FR-001: 应用注册",
+    "FR-002: 应用编辑",
+    "FR-003: 应用查询",
+    "FR-004: 应用删除",
+    "FR-005: 应用状态管理"
+  ],
+  "nonFunctionalRequirements": [
+    "NFR-001 ~ NFR-004: 性能需求",
+    "NFR-010 ~ NFR-014: 安全需求",
+    "NFR-020 ~ NFR-022: 可用性需求",
+    "NFR-030 ~ NFR-031: 兼容性需求"
+  ],
+  "dependencies": [
+    "permission-app (认证授权)"
+  ],
+  "dependents": [
+    "permission-app",
+    "API Gateway",
+    "事件开放模块",
+    "回调开放模块",
+    "机器人开放模块"
+  ],
+  "openQuestions": [
+    "OQ-001: 应用审核流程是否需要？",
+    "OQ-003: 软删除后 30 天是否足够？"
+  ],
+  "files": {
+    "spec": ".specs/application-management/spec.md",
+    "plan": ".specs/application-management/plan.md",
+    "tasks": ".specs/application-management/tasks.md"
+  },
+  "nextStep": "tasks"
+}
