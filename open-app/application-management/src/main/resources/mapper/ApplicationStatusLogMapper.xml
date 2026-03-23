@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.openapp.application.mapper.ApplicationStatusLogMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.openapp.application.domain.ApplicationStatusLog">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="application_id" property="applicationId" jdbcType="VARCHAR"/>
+        <result column="old_status" property="oldStatus" jdbcType="VARCHAR"/>
+        <result column="new_status" property="newStatus" jdbcType="VARCHAR"/>
+        <result column="reason" property="reason" jdbcType="VARCHAR"/>
+        <result column="changed_by" property="changedBy" jdbcType="VARCHAR"/>
+        <result column="changed_at" property="changedAt" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 基础列 -->
+    <sql id="Base_Column_List">
+        id, application_id, old_status, new_status, reason, changed_by, changed_at
+    </sql>
+
+    <!-- 根据应用 ID 查询状态变更历史 -->
+    <select id="findByApplicationId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM application_status_logs
+        WHERE application_id = #{applicationId}
+        ORDER BY changed_at DESC
+    </select>
+
+    <!-- 根据应用 ID 和时间范围查询状态变更历史 -->
+    <select id="findByApplicationIdAndTimeRange" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM application_status_logs
+        WHERE application_id = #{applicationId}
+        AND changed_at BETWEEN #{startTime} AND #{endTime}
+        ORDER BY changed_at DESC
+    </select>
+
+    <!-- 根据时间范围查询所有状态变更日志 -->
+    <select id="findByTimeRange" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM application_status_logs
+        WHERE changed_at BETWEEN #{startTime} AND #{endTime}
+        ORDER BY changed_at DESC
+    </select>
+
+    <!-- 统计应用的状态变更次数 -->
+    <select id="countByApplicationId" resultType="int">
+        SELECT COUNT(1)
+        FROM application_status_logs
+        WHERE application_id = #{applicationId}
+    </select>
+
+    <!-- 插入状态变更日志 -->
+    <insert id="insertLog" parameterType="com.openapp.application.domain.ApplicationStatusLog">
+        INSERT INTO application_status_logs (
+            id,
+            application_id,
+            old_status,
+            new_status,
+            reason,
+            changed_by,
+            changed_at
+        ) VALUES (
+            #{id},
+            #{applicationId},
+            #{oldStatus},
+            #{newStatus},
+            #{reason},
+            #{changedBy},
+            #{changedAt}
+        )
+    </insert>
+
+</mapper>

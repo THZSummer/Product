@@ -54,11 +54,55 @@
       }
     }
   },
-  "features": {},
+  "features": {
+    "APP-MGT-001": {
+      "identifier": "APP-MGT-001",
+      "name": "应用管理系统",
+      "state": "implementing",
+      "createdAt": "2026-03-23T00:00:00+08:00",
+      "updatedAt": "2026-03-23T18:00:00+08:00",
+      "author": "Summer",
+      "priority": "P0",
+      "files": {
+        "spec": ".specs/application-management/spec.md",
+        "plan": ".specs/application-management/plan.md",
+        "tasks": ".specs/application-management/tasks.md"
+      },
+      "progress": {
+        "TASK-001": "completed",
+        "TASK-002": "completed",
+        "TASK-003": "completed",
+        "TASK-004": "completed",
+        "TASK-005": "completed",
+        "TASK-006": "completed",
+        "TASK-007": "completed",
+        "TASK-008": "completed",
+        "TASK-009": "completed",
+        "TASK-010": "completed",
+        "TASK-011": "completed",
+        "TASK-012": "pending",
+        "TASK-013": "pending",
+        "TASK-014": "pending"
+      },
+      "currentTask": "TASK-011",
+      "completedTasks": ["TASK-001", "TASK-002", "TASK-003", "TASK-004", "TASK-005", "TASK-006", "TASK-007", "TASK-008", "TASK-009", "TASK-010", "TASK-011"],
+      "waveProgress": {
+        "wave1": "completed",
+        "wave2": "completed",
+        "wave3": "completed",
+        "wave4": "ready",
+        "wave5": "pending"
+      }
+    }
+  },
   "metadata": {
     "createdAt": "2026-03-20T14:27:00+08:00",
-    "updatedAt": "2026-03-20T14:27:00+08:00",
+    "updatedAt": "2026-03-23T18:15:00+08:00",
     "sddVersion": "1.0.0",
-    "projectName": "open-app"
+    "projectName": "open-app",
+    "namingConvention": {
+      "backend": "module-name (e.g., application-management)",
+      "frontend": "module-name-web (e.g., application-management-web)"
+    }
   }
 }

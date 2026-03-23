@@ -2,29 +2,94 @@
   "$schema": "https://opencode.ai/config.json",
   "plugin": ["opencode-sdd-plugin"],
   "agent": {
-    "sdd-spec": {
+    "sdd-1-spec": {
       "description": "SDD Specification Expert",
       "mode": "subagent",
+      "model": "bailian/qwen3.5-plus",
+      "prompt": "{file:.opencode/agents/sdd-1-spec.md}"
+    },
+    "sdd-2-plan": {
+      "description": "SDD Technical Planning Expert",
+      "mode": "subagent",
+      "model": "bailian/qwen3.5-plus",
+      "prompt": "{file:.opencode/agents/sdd-2-plan.md}"
+    },
+    "sdd-3-tasks": {
+      "description": "SDD Task Decomposition Expert",
+      "mode": "subagent",
+      "model": "bailian/qwen3.5-plus",
+      "prompt": "{file:.opencode/agents/sdd-3-tasks.md}"
+    },
+    "sdd-4-build": {
+      "description": "SDD Implementation Expert",
+      "mode": "subagent",
+      "model": "bailian/qwen3-coder-plus",
+      "prompt": "{file:.opencode/agents/sdd-4-build.md}"
+    },
+    "sdd-5-review": {
+      "description": "SDD Review Expert",
+      "mode": "subagent",
+      "model": "bailian/qwen3-coder-plus",
+      "prompt": "{file:.opencode/agents/sdd-5-review.md}"
+    },
+    "sdd-6-validate": {
+      "description": "SDD Validation Expert",
+      "mode": "subagent",
+      "model": "bailian/qwen3-coder-plus",
+      "prompt": "{file:.opencode/agents/sdd-6-validate.md}"
+    },
+    "sdd-spec": {
+      "description": "SDD Specification (Base)",
+      "mode": "subagent",
+      "model": "bailian/qwen3.5-plus",
       "prompt": "{file:.opencode/agents/sdd-spec.md}"
     },
     "sdd-plan": {
-      "description": "SDD Technical Planning Expert",
+      "description": "SDD Planning (Base)",
       "mode": "subagent",
+      "model": "bailian/qwen3.5-plus",
       "prompt": "{file:.opencode/agents/sdd-plan.md}"
     },
     "sdd-tasks": {
-      "description": "SDD Task Decomposition Expert",
+      "description": "SDD Tasks (Base)",
       "mode": "subagent",
+      "model": "bailian/qwen3.5-plus",
       "prompt": "{file:.opencode/agents/sdd-tasks.md}"
     },
-    "sdd-validate": {
-      "description": "SDD Validation Expert",
+    "sdd-build": {
+      "description": "SDD Build (Base)",
       "mode": "subagent",
+      "model": "bailian/qwen3-coder-plus",
+      "prompt": "{file:.opencode/agents/sdd-build.md}"
+    },
+    "sdd-review": {
+      "description": "SDD Review (Base)",
+      "mode": "subagent",
+      "model": "bailian/qwen3-coder-plus",
+      "prompt": "{file:.opencode/agents/sdd-review.md}"
+    },
+    "sdd-validate": {
+      "description": "SDD Validation (Base)",
+      "mode": "subagent",
+      "model": "bailian/qwen3-coder-plus",
       "prompt": "{file:.opencode/agents/sdd-validate.md}"
+    },
+    "sdd-help": {
+      "description": "SDD Help Assistant",
+      "mode": "subagent",
+      "model": "bailian/qwen3.5-plus",
+      "prompt": "{file:.opencode/agents/sdd-help.md}"
+    },
+    "sdd": {
+      "description": "SDD Master Coordinator",
+      "mode": "subagent",
+      "model": "bailian/qwen3.5-plus",
+      "prompt": "{file:.opencode/agents/sdd.md}"
     }
   },
   "permission": {
-    "edit": "ask",
-    "bash": "ask"
+    "*": "allow",
+    "edit": "allow",
+    "bash": "allow"
   }
 }

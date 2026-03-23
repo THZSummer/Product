@@ -1,0 +1,148 @@
+# ============================================================
+# Application Management Module Configuration
+# ============================================================
+
+spring:
+  application:
+    name: application-management
+  
+  # 数据源配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:openapp}?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root}
+    # HikariCP 连接池配置
+    hikari:
+      pool-name: HikariPool-application-management
+      minimum-idle: 5
+      maximum-pool-size: 20
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  
+  # JPA 配置
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL57Dialect
+  
+  # Flyway 数据库迁移配置
+  flyway:
+    enabled: false  # 手动执行 SQL 脚本，不使用 Flyway 自动迁移
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+  
+  # Redis 配置
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:}
+    database: ${REDIS_DATABASE:0}
+    timeout: 10000ms
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+        max-wait: -1ms
+
+# ============================================================
+# MyBatis 配置
+# ============================================================
+mybatis:
+  # Mapper XML 文件位置
+  mapper-locations: classpath:mapper/*.xml
+  # 类型别名包路径
+  type-aliases-package: com.openapp.application.domain
+  # 配置项
+  configuration:
+    # 开启驼峰命名转换
+    map-underscore-to-camel-case: true
+    # 延迟加载
+    lazy-loading-enabled: true
+    #  aggressive lazy loading
+    aggressive-lazy-loading: false
+    # 日志实现
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    # 默认枚举类型处理
+    default-enum-type-handler: org.apache.ibatis.type.EnumOrdinalTypeHandler
+
+# ============================================================
+# MyBatis-Plus 配置
+# ============================================================
+mybatis-plus:
+  # Mapper XML 文件位置
+  mapper-locations: classpath:mapper/*.xml
+  # 类型别名包路径
+  type-aliases-package: com.openapp.application.domain
+  # 全局配置
+  global-config:
+    # 数据库相关配置
+    db-config:
+      # 主键类型：ASSIGN_UUID 使用 UUID
+      id-type: ASSIGN_UUID
+      # 逻辑删除字段
+      logic-delete-field: deletedAt
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      # 表名下划线命名
+      table-underline: true
+    # 关闭 Banner
+    banner: false
+  # 配置项
+  configuration:
+    # 开启驼峰命名转换
+    map-underscore-to-camel-case: true
+    # 日志实现
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+  # 插件配置
+  plugins:
+    # 乐观锁插件
+    - com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor
+    # 分页插件
+    - com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor
+
+# ============================================================
+# 日志配置
+# ============================================================
+logging:
+  level:
+    root: INFO
+    com.openapp.application: DEBUG
+    com.openapp.application.mapper: DEBUG
+    org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+# ============================================================
+# 服务器配置
+# ============================================================
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /api/v1
+
+# ============================================================
+# JWT 配置
+# ============================================================
+app:
+  jwt:
+    secret: ${JWT_SECRET:defaultSecretKeyForApplicationManagementModule1234567890}
+    expiration: ${JWT_EXPIRATION:86400000}  # 24 hours in milliseconds
+
+# ============================================================
+# Actuator 配置
+# ============================================================
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when_authorized
