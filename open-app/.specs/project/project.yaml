@@ -2,7 +2,7 @@
 
 ```yaml
 # 项目基本信息
-name: "permission-app"
+name: "open-app"
 version: "1.0.0"
 description: "权限管理系统"
 

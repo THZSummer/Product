@@ -1,10 +1,10 @@
-# permission-app
+# open-app
 
 权限管理系统 - Permission Management System
 
 ## 📖 项目简介
 
-permission-app 是一个专注于权限管理的系统，提供细粒度的权限控制、角色管理和访问控制功能。
+open-app 是一个专注于权限管理的系统，提供细粒度的权限控制、角色管理和访问控制功能。
 
 ### 核心功能
 
@@ -46,7 +46,7 @@ npm run build
 ## 📁 项目结构
 
 ```
-permission-app/
+open-app/
 ├── src/                    # 源代码
 │   ├── auth/               # 认证授权
 │   ├── rbac/               # 角色权限控制

@@ -130,4 +130,4 @@ npm test -- --testNamePattern="hasPermission"
 
 **版本**: 1.0.0  
 **最后更新**: 2026-03-20  
-**项目**: permission-app
+**项目**: open-app

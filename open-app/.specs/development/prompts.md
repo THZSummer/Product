@@ -158,4 +158,4 @@ Feature [FEATURE_NAME] 已完成。请引导我进行复盘：
 
 **版本**: 1.0.0  
 **最后更新**: 2026-03-20  
-**项目**: permission-app
+**项目**: open-app

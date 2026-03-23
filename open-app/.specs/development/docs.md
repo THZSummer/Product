@@ -1,6 +1,6 @@
 # SDD 开发指南
 
-本指南说明如何在 permission-app 项目中使用 Specification-Driven Development (SDD) 工作流。
+本指南说明如何在 open-app 项目中使用 Specification-Driven Development (SDD) 工作流。
 
 ## 快速开始
 
@@ -42,7 +42,7 @@ drafting → specified → clarified → planned → tasked → implementing →
 ## 目录结构
 
 ```
-permission-app/
+open-app/
 ├── .opencode/
 │   ├── agents/           # SDD Agent 配置
 │   │   ├── sdd-spec.md
@@ -151,4 +151,4 @@ permission-app/
 
 **版本**: 1.0.0  
 **最后更新**: 2026-03-20  
-**项目**: permission-app
+**项目**: open-app

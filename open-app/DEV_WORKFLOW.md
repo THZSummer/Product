@@ -1,4 +1,4 @@
-# permission-app - SDD 工作流配置
+# open-app - SDD 工作流配置
 
 > **Specification-Driven Development for Permission Management System**
 > 
@@ -91,7 +91,7 @@ drafting → specified → clarified → planned → tasked → implementing →
 ## 📁 目录结构
 
 ```
-permission-app/
+open-app/
 ├── .opencode/
 │   ├── agents/              # SDD Agent 配置
 │   │   ├── sdd-spec.md
@@ -205,7 +205,7 @@ EC-001: 删除内置角色返回 403 Forbidden
 
 **版本**: 1.0.0  
 **创建日期**: 2026-03-20  
-**项目**: permission-app  
+**项目**: open-app  
 **参考**: [OpenCode SDD Framework](../../../OPENCODE_SDD.md)
 .md` | 角色管理规范示例 |
 | 项目宪法 | `.opencode/constitution.md` | 不可协商原则 |
@@ -236,9 +236,5 @@ EC-001: 删除内置角色返回 403 Forbidden
 
 **版本**: 1.0.0  
 **创建日期**: 2026-03-20  
-**项目**: permission-app  
-**参考**: [OpenCode SDD Framework](../../../OPENCODE_SDD.md)
-版本**: 1.0.0  
-**创建日期**: 2026-03-20  
-**项目**: permission-app  
+**项目**: open-app  
 **参考**: [OpenCode SDD Framework](../../../OPENCODE_SDD.md)
