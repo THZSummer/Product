@@ -122,12 +122,13 @@ public interface ApplicationRepository {
     List<Application> findAllWithDeleted();
 
     /**
-     * 查询所有应用（支持分页）
+     * 查询所有应用（支持分页、搜索）
      *
+     * @param keyword 搜索关键字（可选）
      * @param pageable 分页参数
      * @return 应用分页列表
      */
-    Page<Application> findAll(Pageable pageable);
+    Page<Application> findAll(String keyword, Pageable pageable);
 
     /**
      * 根据 ID 查询应用（包含已删除的，用于管理员）

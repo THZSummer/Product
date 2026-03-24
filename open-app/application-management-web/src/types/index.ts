@@ -19,6 +19,8 @@ export {
   type CreateApplicationResponse,
   type UpdateApplicationResponse,
   type DeleteApplicationResponse,
+  type RestoreApplicationResponse,
+  type ChangeStatusResponse,
   type ErrorResponse,
   ApiErrorCode,
 } from './api'

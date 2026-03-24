@@ -39,8 +39,14 @@ public class ApplicationDetailResponse {
 
     /**
      * 应用图标 URL
+     * 注意：如果是 Base64 格式，仅返回前缀用于标识格式，不返回完整数据以减少传输量
      */
     private String iconUrl;
+
+    /**
+     * 是否有图标（用于前端判断是否显示默认图标）
+     */
+    private Boolean hasIcon;
 
     /**
      * 应用类型
@@ -96,21 +102,39 @@ public class ApplicationDetailResponse {
      * 从实体创建响应
      */
     public static ApplicationDetailResponse fromEntity(Application application) {
-        return ApplicationDetailResponse.builder()
-                .id(application.getId())
-                .name(application.getName())
-                .description(application.getDescription())
-                .iconUrl(application.getIconUrl())
-                .type(application.getType())
-                .status(application.getStatus())
-                .ownerId(application.getOwnerId())
-                .ownerType(application.getOwnerType())
-                .callbackUrl(application.getCallbackUrl())
-                .version(application.getVersion())
-                .createdAt(application.getCreatedAt())
-                .updatedAt(application.getUpdatedAt())
-                .createdBy(application.getCreatedBy())
-                .updatedBy(application.getUpdatedBy())
-                .build();
+        ApplicationDetailResponse response = new ApplicationDetailResponse();
+        response.setId(application.getId());
+        response.setName(application.getName());
+        response.setDescription(application.getDescription());
+        
+        // 处理图标 URL：如果是 Base64 格式，仅返回前缀用于标识格式
+        String iconUrl = application.getIconUrl();
+        if (iconUrl != null && !iconUrl.isEmpty()) {
+            if (iconUrl.startsWith("data:image")) {
+                // Base64 格式，仅返回前 50 个字符作为标识
+                response.setIconUrl(iconUrl.length() > 50 ? iconUrl.substring(0, 50) + "..." : iconUrl);
+                response.setHasIcon(true);
+            } else {
+                // HTTP/HTTPS URL，完整返回
+                response.setIconUrl(iconUrl);
+                response.setHasIcon(true);
+            }
+        } else {
+            response.setIconUrl(null);
+            response.setHasIcon(false);
+        }
+        
+        response.setType(application.getType());
+        response.setStatus(application.getStatus());
+        response.setOwnerId(application.getOwnerId());
+        response.setOwnerType(application.getOwnerType());
+        response.setCallbackUrl(application.getCallbackUrl());
+        response.setVersion(application.getVersion());
+        response.setCreatedAt(application.getCreatedAt());
+        response.setUpdatedAt(application.getUpdatedAt());
+        response.setCreatedBy(application.getCreatedBy());
+        response.setUpdatedBy(application.getUpdatedBy());
+        
+        return response;
     }
 }

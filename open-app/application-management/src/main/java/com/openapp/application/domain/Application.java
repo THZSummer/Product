@@ -3,6 +3,7 @@ package com.openapp.application.domain;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
 import com.openapp.application.domain.enums.AppStatus;
@@ -113,10 +114,11 @@ public class Application {
     private String updatedBy;
 
     /**
-     * 删除标记 - 软删除用的时间戳
+     * 删除标记 - 软删除标记 (0:未删除，1:已删除)
      */
+    @TableLogic
     @TableField("deleted_at")
-    private LocalDateTime deletedAt;
+    private Integer deletedAt;
 
     /**
      * 删除人 ID
@@ -256,11 +258,11 @@ public class Application {
         this.updatedBy = updatedBy;
     }
 
-    public LocalDateTime getDeletedAt() {
+    public Integer getDeletedAt() {
         return deletedAt;
     }
 
-    public void setDeletedAt(LocalDateTime deletedAt) {
+    public void setDeletedAt(Integer deletedAt) {
         this.deletedAt = deletedAt;
     }
 
@@ -278,7 +280,7 @@ public class Application {
      * @return 如果已删除返回 true，否则返回 false
      */
     public boolean isDeleted() {
-        return this.deletedAt != null;
+        return this.deletedAt != null && this.deletedAt == 1;
     }
 
     /**
@@ -287,7 +289,7 @@ public class Application {
      * @param deletedBy 删除人 ID
      */
     public void softDelete(String deletedBy) {
-        this.deletedAt = LocalDateTime.now();
+        this.deletedAt = 1;
         this.deletedBy = deletedBy;
     }
 
@@ -295,7 +297,7 @@ public class Application {
      * 恢复软删除的记录
      */
     public void restore() {
-        this.deletedAt = null;
+        this.deletedAt = 0;
         this.deletedBy = null;
         // 恢复后状态从 DELETED 变为 DRAFT，但这里应根据需求变更状态
         // 按照任务设计，恢复到 DRAFT 状态

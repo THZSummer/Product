@@ -19,7 +19,7 @@ export interface PaginationData<T = unknown> {
   items: T[]
   /** 总条数 */
   total: number
-  /** 当前页码 */
+  /** 当前页码（从 1 开始） */
   page: number
   /** 每页条数 */
   pageSize: number
@@ -58,15 +58,27 @@ export interface UpdateApplicationResponse extends ApiResponse<Application> {}
 export interface DeleteApplicationResponse extends ApiResponse<null> {}
 
 /**
- * 错误响应
+ * 恢复应用 API 响应
+ */
+export interface RestoreApplicationResponse extends ApiResponse<null> {}
+
+/**
+ * 变更状态 API 响应
+ */
+export interface ChangeStatusResponse extends ApiResponse<null> {}
+
+/**
+ * 错误响应（HTTP 错误时返回）
  */
 export interface ErrorResponse {
   /** 错误码 */
-  code: number
+  code: string | number
   /** 错误消息 */
   message: string
   /** 错误详情 */
-  details?: string
+  details?: Array<Record<string, unknown>>
+  /** 时间戳 */
+  timestamp?: string
 }
 
 /**

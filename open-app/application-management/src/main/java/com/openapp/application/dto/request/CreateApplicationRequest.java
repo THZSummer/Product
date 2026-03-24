@@ -39,8 +39,8 @@ public class CreateApplicationRequest {
      * 应用图标 URL
      */
     @Pattern(
-        regexp = "^https?://[\\w\\-._~:/?#\\[\\]@!$&'()*+,;=%]+$",
-        message = "图标 URL 格式不正确"
+        regexp = "^(https?://[\\w\\-._~:/?#\\[\\]@!$&'()*+,;=%]+|data:image/(png|jpeg|jpg|gif|svg\\+xml);base64,[A-Za-z0-9+/=]+|)$",
+        message = "图标 URL 格式不正确，必须是 HTTP/HTTPS URL 或 Base64 格式"
     )
     private String iconUrl;
 

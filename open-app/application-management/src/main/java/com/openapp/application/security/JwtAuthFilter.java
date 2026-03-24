@@ -91,6 +91,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String path = request.getServletPath();
         return path.startsWith("/actuator/") || 
                path.equals("/health") || 
-               path.equals("/info");
+               path.equals("/info") ||
+               path.startsWith("/auth/"); // 认证接口不需要 Token
     }
 }

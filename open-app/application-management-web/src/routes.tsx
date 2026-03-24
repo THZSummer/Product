@@ -4,6 +4,14 @@ import ApplicationList from '@pages/ApplicationList'
 import ApplicationCreate from '@pages/ApplicationCreate'
 import ApplicationDetail from '@pages/ApplicationDetail'
 import ApplicationEdit from '@pages/ApplicationEdit'
+import LoginPage from '@pages/Login'
+import { authApi } from './services/authApi'
+
+// 登录守卫组件
+const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const isAuthenticated = authApi.isAuthenticated()
+  return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />
+}
 
 /**
  * 路由配置
@@ -12,17 +20,21 @@ import ApplicationEdit from '@pages/ApplicationEdit'
 const AppRoutes: React.FC = () => {
   return (
     <Routes>
-      <Route path="/apps" element={<AppLayout />}>
-        {/* 重定向：根路径跳转到列表页 */}
+      {/* 登录页 */}
+      <Route path="/login" element={<LoginPage />} />
+
+      {/* 需要认证的应用管理路由 */}
+      <Route
+        path="/apps"
+        element={
+          <PrivateRoute>
+            <AppLayout />
+          </PrivateRoute>
+        }
+      >
         <Route index element={<ApplicationList />} />
-
-        {/* 创建应用页 */}
         <Route path="create" element={<ApplicationCreate />} />
-
-        {/* 应用详情页 */}
         <Route path=":appId" element={<ApplicationDetail />} />
-
-        {/* 编辑应用页 */}
         <Route path=":appId/edit" element={<ApplicationEdit />} />
       </Route>
 

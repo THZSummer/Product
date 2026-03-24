@@ -100,9 +100,11 @@ const AppTable: React.FC<AppTableProps> = ({
       width: 120,
       render: (type: AppType) => <AppTypeTag type={type} size="small" />,
       filters: [
-        { text: '自建应用', value: 'self_build' },
-        { text: '第三方应用', value: 'third_party' },
-        { text: '个人应用', value: 'personal' },
+        { text: 'Web 应用', value: 'WEB' },
+        { text: '移动应用', value: 'MOBILE' },
+        { text: '桌面应用', value: 'DESKTOP' },
+        { text: 'API 服务', value: 'API' },
+        { text: '其他', value: 'OTHER' },
       ] as ColumnFilterItem[],
       onFilter: (value: unknown, record: Application) => {
         return record.type === value

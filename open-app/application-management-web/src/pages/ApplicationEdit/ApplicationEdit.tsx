@@ -268,9 +268,11 @@ const ApplicationEdit: React.FC = () => {
               rules={[{ required: true, message: '请选择应用类型!' }]}
             >
               <Radio.Group disabled={currentApplication?.status !== 'draft'}>
-                <Radio value="self_build">自建应用</Radio>
-                <Radio value="third_party">第三方应用</Radio>
-                <Radio value="personal">个人应用</Radio>
+                <Radio value="WEB">Web 应用</Radio>
+                <Radio value="MOBILE">移动应用</Radio>
+                <Radio value="DESKTOP">桌面应用</Radio>
+                <Radio value="API">API 服务</Radio>
+                <Radio value="OTHER">其他</Radio>
               </Radio.Group>
             </Form.Item>
 

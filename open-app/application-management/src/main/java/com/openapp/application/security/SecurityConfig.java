@@ -48,7 +48,7 @@ public class SecurityConfig {
             // 配置授权规则
             .authorizeHttpRequests(auth -> auth
                 // 公开端点
-                .requestMatchers("/actuator/**", "/health", "/info").permitAll()
+                .requestMatchers("/actuator/**", "/health", "/info", "/auth/**").permitAll()
                 // API 端点需要认证
                 .requestMatchers("/api/**").authenticated()
                 // 其他请求需要认证
