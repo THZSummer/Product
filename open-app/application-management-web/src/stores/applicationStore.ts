@@ -65,7 +65,7 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
   applications: [],
   total: 0,
   page: 1,
-  pageSize: 20,
+  pageSize: 10,
   filters: {},
   loading: {
     list: false,
@@ -90,8 +90,6 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
         ...state,
         applications: response.data.items,
         total: response.data.total,
-        page: response.data.page,
-        pageSize: response.data.pageSize,
         loading: { ...state.loading, list: false },
       }))
     } catch (error) {

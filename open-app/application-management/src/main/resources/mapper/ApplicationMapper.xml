@@ -8,10 +8,8 @@
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="description" property="description" jdbcType="VARCHAR"/>
         <result column="icon_url" property="iconUrl" jdbcType="VARCHAR"/>
-        <result column="type" property="type" jdbcType="VARCHAR" 
-                typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"/>
-        <result column="status" property="status" jdbcType="VARCHAR" 
-                typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
         <result column="owner_id" property="ownerId" jdbcType="VARCHAR"/>
         <result column="owner_type" property="ownerType" jdbcType="VARCHAR"/>
         <result column="callback_url" property="callbackUrl" jdbcType="VARCHAR"/>
@@ -20,7 +18,7 @@
         <result column="created_by" property="createdBy" jdbcType="VARCHAR"/>
         <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP"/>
         <result column="updated_by" property="updatedBy" jdbcType="VARCHAR"/>
-        <result column="deleted_at" property="deletedAt" jdbcType="TIMESTAMP"/>
+        <result column="deleted_at" property="deletedAt" jdbcType="INTEGER"/>
         <result column="deleted_by" property="deletedBy" jdbcType="VARCHAR"/>
     </resultMap>
 
@@ -42,7 +40,6 @@
         <include refid="Base_Column_List"/>
         FROM applications
         WHERE id = #{id}
-        AND deleted_at IS NULL
     </select>
 
     <!-- 根据所有者 ID 查询应用列表 -->
@@ -51,7 +48,6 @@
         <include refid="Base_Column_List"/>
         FROM applications
         WHERE owner_id = #{ownerId}
-        AND deleted_at IS NULL
         ORDER BY created_at DESC
     </select>
 
@@ -61,7 +57,6 @@
         <include refid="Base_Column_List"/>
         FROM applications
         WHERE status = #{status}
-        AND deleted_at IS NULL
         ORDER BY created_at DESC
     </select>
 
@@ -72,7 +67,6 @@
         FROM applications
         WHERE owner_id = #{ownerId}
         AND status = #{status}
-        AND deleted_at IS NULL
         ORDER BY created_at DESC
     </select>
 
@@ -83,7 +77,6 @@
         FROM applications
         WHERE owner_id = #{ownerId}
         AND name = #{name}
-        AND deleted_at IS NULL
     </select>
 
     <!-- 检查名称是否已存在（排除指定 ID） -->
@@ -93,29 +86,26 @@
         WHERE owner_id = #{ownerId}
         AND name = #{name}
         AND id != #{excludeId}
-        AND deleted_at IS NULL
     </select>
 
     <!-- 软删除应用 -->
     <update id="softDelete">
         UPDATE applications
-        SET deleted_at = NOW(),
+        SET deleted_at = 1,
             deleted_by = #{deletedBy},
             updated_at = NOW(),
             updated_by = #{deletedBy}
         WHERE id = #{id}
-        AND deleted_at IS NULL
     </update>
 
     <!-- 恢复已软删除的应用 -->
     <update id="restore">
         UPDATE applications
-        SET deleted_at = NULL,
+        SET deleted_at = 0,
             deleted_by = NULL,
             status = 'draft',
             updated_at = NOW()
         WHERE id = #{id}
-        AND deleted_at IS NOT NULL
     </update>
 
     <!-- 更新应用（包含乐观锁版本控制） -->
@@ -130,13 +120,14 @@
             <if test="ownerId != null">owner_id = #{ownerId},</if>
             <if test="ownerType != null">owner_type = #{ownerType},</if>
             <if test="callbackUrl != null">callback_url = #{callbackUrl},</if>
+            <if test="deletedAt != null">deleted_at = #{deletedAt},</if>
+            <if test="deletedBy != null">deleted_by = #{deletedBy},</if>
             updated_at = NOW(),
             updated_by = #{updatedBy},
             version = version + 1
         </set>
         WHERE id = #{id}
         AND version = #{version}
-        AND deleted_at IS NULL
     </update>
 
     <!-- 查询所有应用（包含已删除的，用于管理员） -->

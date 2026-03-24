@@ -93,14 +93,17 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     public Page<ApplicationDetailResponse> listApplications(String ownerId, AppStatus status, 
-                                                            Pageable pageable, String currentUserId) {
-        log.debug("Listing applications: ownerId={}, status={}, page={}, size={}", 
-            ownerId, status, pageable.getPageNumber(), pageable.getPageSize());
+                                                            String keyword, Pageable pageable, String currentUserId) {
+        log.debug("Listing applications: ownerId={}, status={}, keyword={}, page={}, size={}", 
+            ownerId, status, keyword, pageable.getPageNumber(), pageable.getPageSize());
 
         Page<Application> page;
 
         // 根据参数查询
-        if (ownerId != null && !ownerId.isEmpty()) {
+        if (keyword != null && !keyword.isEmpty()) {
+            // 搜索模式：按关键字搜索名称或描述
+            page = applicationRepository.findAll(keyword, pageable);
+        } else if (ownerId != null && !ownerId.isEmpty()) {
             // 查询指定所有者的应用
             if (status != null) {
                 page = applicationRepository.findByOwnerIdAndStatus(ownerId, status, pageable);
@@ -109,7 +112,7 @@ public class ApplicationServiceImpl implements ApplicationService {
             }
         } else {
             // 查询所有应用（管理员功能）
-            page = applicationRepository.findAll(pageable);
+            page = applicationRepository.findAll(null, pageable);
         }
 
         // 权限过滤：非管理员只能查看自己的应用

@@ -39,15 +39,16 @@ public interface ApplicationService {
     ApplicationDetailResponse getApplication(String id, String currentUserId);
 
     /**
-     * 分页查询应用列表
+     * 获取应用列表（支持分页、筛选、搜索）
      *
-     * @param ownerId 所有者 ID（可选，为空则查询所有）
+     * @param ownerId 所有者 ID（可选）
      * @param status 状态筛选（可选）
+     * @param keyword 搜索关键字（可选，支持名称和描述模糊匹配）
      * @param pageable 分页参数
      * @param currentUserId 当前用户 ID（用于权限过滤）
      * @return 应用分页列表
      */
-    Page<ApplicationDetailResponse> listApplications(String ownerId, AppStatus status, Pageable pageable, String currentUserId);
+    Page<ApplicationDetailResponse> listApplications(String ownerId, AppStatus status, String keyword, Pageable pageable, String currentUserId);
 
     /**
      * 更新应用

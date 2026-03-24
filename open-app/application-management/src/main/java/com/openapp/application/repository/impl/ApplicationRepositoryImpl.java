@@ -10,6 +10,7 @@ import com.openapp.application.mapper.ApplicationMapper;
 import com.openapp.application.repository.ApplicationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -195,23 +196,32 @@ public class ApplicationRepositoryImpl implements ApplicationRepository {
     }
 
     @Override
-    public org.springframework.data.domain.Page<Application> findAll(Pageable pageable) {
-        log.debug("Finding all applications, page: {}, size: {}", pageable.getPageNumber(), pageable.getPageSize());
+    public org.springframework.data.domain.Page<Application> findAll(String keyword, Pageable pageable) {
+        log.debug("Finding all applications, keyword={}, page: {}, size: {}", keyword, pageable.getPageNumber(), pageable.getPageSize());
         
-        // 转换为 MyBatis-Plus 的 Page
-        Page<Application> page = new Page<>(pageable.getPageNumber() + 1, pageable.getPageSize());
+        // 使用 MyBatis-Plus 分页查询
+        Page<Application> mpPage = new Page<>(pageable.getPageNumber() + 1, pageable.getPageSize());
         
-        // 构建查询条件（排除软删除）
+        // 构建查询条件（@TableLogic 会自动添加软删除条件）
         LambdaQueryWrapper<Application> wrapper = new LambdaQueryWrapper<>();
-        wrapper.isNull(Application::getDeletedAt)
-               .orderByDesc(Application::getCreatedAt);
+        wrapper.orderByDesc(Application::getCreatedAt);
         
-        Page<Application> result = applicationMapper.selectPage(page, wrapper);
+        // 添加搜索条件（名称或描述模糊匹配）
+        if (keyword != null && !keyword.isEmpty()) {
+            wrapper.and(w -> w
+                .like(Application::getName, keyword)
+                .or()
+                .like(Application::getDescription, keyword)
+            );
+        }
+        
+        // 执行分页查询
+        Page<Application> result = applicationMapper.selectPage(mpPage, wrapper);
         
         // 转换为 Spring Data Page
         return new org.springframework.data.domain.PageImpl<>(
             result.getRecords(),
-            pageable,
+            PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()),
             result.getTotal()
         );
     }

@@ -5,9 +5,11 @@ import { AppTypeLabels } from '@/types'
 
 // 定义类型对应的颜色
 const typeColors: Record<AppType, string> = {
-  self_build: 'blue',      // 自建应用 - 蓝色
-  third_party: 'purple',   // 第三方应用 - 紫色
-  personal: 'cyan',        // 个人应用 - 青色
+  WEB: 'blue',        // Web 应用 - 蓝色
+  MOBILE: 'green',    // 移动应用 - 绿色
+  DESKTOP: 'purple',  // 桌面应用 - 紫色
+  API: 'orange',      // API 服务 - 橙色
+  OTHER: 'default',   // 其他 - 默认色
 }
 
 export interface AppTypeTagProps {

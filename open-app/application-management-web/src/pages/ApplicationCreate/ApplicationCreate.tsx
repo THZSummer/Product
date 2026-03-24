@@ -41,17 +41,27 @@ const ApplicationCreate: React.FC = () => {
   // 处理表单提交
   const onFinish = async (values: CreateAppData) => {
     try {
-      // 创建应用数据，包含图标URL和回调URL
+      // 创建应用数据
       let processedValues = { ...values };
 
-      // 如果图标URL无效，则过滤掉
-      if (processedValues.iconUrl && !isValidUrl(processedValues.iconUrl)) {
-        delete processedValues.iconUrl
+      // 如果上传了图片，使用上传的图片（Base64），忽略手动输入的 URL
+      if (iconFile && previewUrl) {
+        processedValues.iconUrl = previewUrl;
+      } else if (!iconFile && !previewUrl && processedValues.iconUrl) {
+        // 只输入了 URL，保留
+        if (!isValidUrl(processedValues.iconUrl)) {
+          message.error('图标 URL 格式不正确，请输入有效的 URL 地址');
+          return;
+        }
+      } else {
+        // 既没有上传图片也没有输入 URL，移除 iconUrl 字段
+        delete processedValues.iconUrl;
       }
 
-      // 如果回调URL无效，也过滤掉
+      // 如果回调 URL 无效，提示错误
       if (processedValues.callbackUrl && !isValidUrl(processedValues.callbackUrl)) {
-        delete processedValues.callbackUrl
+        message.error('回调 URL 格式不正确，请输入有效的 URL 地址');
+        return;
       }
 
       const result = await createApplication(processedValues)
@@ -61,12 +71,16 @@ const ApplicationCreate: React.FC = () => {
         // 创建成功后跳转到应用详情页
         navigate(`/apps/${result.id}`)
       } else {
-        // 如果创建失败会在store中处理错误显示
+        // 如果创建失败会在 store 中处理错误显示
         message.error('应用创建失败，请重试')
       }
     } catch (error) {
       console.error('Failed to create application:', error)
-      message.error('应用创建失败，请重试')
+      // 显示具体错误信息
+      const errorMessage = (error as any)?.response?.data?.message || 
+                          (error as Error)?.message || 
+                          '应用创建失败，请重试';
+      message.error(errorMessage)
     }
   }
 
@@ -144,7 +158,7 @@ const ApplicationCreate: React.FC = () => {
             initialValues={{
               name: '',
               description: '',
-              type: 'self_build',
+              type: 'WEB',
               iconUrl: '',
               callbackUrl: ''
             }}
@@ -181,9 +195,11 @@ const ApplicationCreate: React.FC = () => {
               rules={[{ required: true, message: '请选择应用类型!' }]}
             >
               <Radio.Group>
-                <Radio value="self_build">自建应用</Radio>
-                <Radio value="third_party">第三方应用</Radio>
-                <Radio value="personal">个人应用</Radio>
+                <Radio value="WEB">Web 应用</Radio>
+                <Radio value="MOBILE">移动应用</Radio>
+                <Radio value="DESKTOP">桌面应用</Radio>
+                <Radio value="API">API 服务</Radio>
+                <Radio value="OTHER">其他</Radio>
               </Radio.Group>
             </Form.Item>
 

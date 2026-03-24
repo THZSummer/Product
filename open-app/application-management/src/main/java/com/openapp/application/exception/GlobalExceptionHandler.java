@@ -1,5 +1,6 @@
 package com.openapp.application.exception;
 
+import com.openapp.application.dto.response.ApiResponse;
 import com.openapp.application.dto.response.ErrorResponse;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;

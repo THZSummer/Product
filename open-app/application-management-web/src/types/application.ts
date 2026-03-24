@@ -18,12 +18,16 @@ export enum AppStatus {
  * 定义应用的所属类型
  */
 export enum AppType {
-  /** 自建应用：企业自主开发的应用 */
-  SELF_BUILD = 'self_build',
-  /** 第三方应用：第三方开发的应用 */
-  THIRD_PARTY = 'third_party',
-  /** 个人应用：个人开发者创建的应用 */
-  PERSONAL = 'personal',
+  /** Web 应用程序 */
+  WEB = 'WEB',
+  /** 移动应用程序 (iOS/Android) */
+  MOBILE = 'MOBILE',
+  /** 桌面应用程序 */
+  DESKTOP = 'DESKTOP',
+  /** API 服务 */
+  API = 'API',
+  /** 其他类型应用 */
+  OTHER = 'OTHER',
 }
 
 /**
@@ -113,9 +117,11 @@ export interface UpdateAppData {
  * 应用类型中文映射
  */
 export const AppTypeLabels: Record<AppType, string> = {
-  [AppType.SELF_BUILD]: '自建应用',
-  [AppType.THIRD_PARTY]: '第三方应用',
-  [AppType.PERSONAL]: '个人应用',
+  [AppType.WEB]: 'Web 应用',
+  [AppType.MOBILE]: '移动应用',
+  [AppType.DESKTOP]: '桌面应用',
+  [AppType.API]: 'API 服务',
+  [AppType.OTHER]: '其他',
 }
 
 /**

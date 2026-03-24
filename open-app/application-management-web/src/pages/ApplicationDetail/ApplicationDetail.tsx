@@ -78,7 +78,7 @@ const ApplicationDetail: React.FC = () => {
   const isDraft = currentApplication?.status === AppStatus.DRAFT
 
   // 定义默认值  
-  const getDefaultAppType = (): AppType => AppType.SELF_BUILD
+  const getDefaultAppType = (): AppType => AppType.WEB
   const getDefaultAppStatus = (): AppStatus => AppStatus.DRAFT
 
   // 副标题区域

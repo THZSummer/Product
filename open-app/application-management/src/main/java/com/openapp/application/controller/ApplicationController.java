@@ -4,16 +4,19 @@ import com.openapp.application.domain.enums.AppStatus;
 import com.openapp.application.dto.request.ChangeStatusRequest;
 import com.openapp.application.dto.request.CreateApplicationRequest;
 import com.openapp.application.dto.request.UpdateApplicationRequest;
+import com.openapp.application.dto.response.ApiResponse;
 import com.openapp.application.dto.response.ApplicationDetailResponse;
 import com.openapp.application.dto.response.CreateApplicationResponse;
+import com.openapp.application.dto.response.PageResponse;
 import com.openapp.application.dto.response.UpdateApplicationResponse;
 import com.openapp.application.service.ApplicationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -47,14 +50,14 @@ public class ApplicationController {
      * POST /api/v1/applications
      */
     @PostMapping
-    public ResponseEntity<CreateApplicationResponse> createApplication(
+    public ResponseEntity<ApiResponse<CreateApplicationResponse>> createApplication(
             @Valid @RequestBody CreateApplicationRequest request,
             @RequestParam String currentUserId) {
         log.info("Received create application request: name={}", request.getName());
         
         CreateApplicationResponse response = applicationService.createApplication(request, currentUserId);
         
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("创建成功", response));
     }
 
     /**
@@ -62,32 +65,44 @@ public class ApplicationController {
      * GET /api/v1/applications/{id}
      */
     @GetMapping("/{id}")
-    public ResponseEntity<ApplicationDetailResponse> getApplication(
+    public ResponseEntity<ApiResponse<ApplicationDetailResponse>> getApplication(
             @PathVariable String id,
             @RequestParam String currentUserId) {
         log.debug("Received get application request: id={}", id);
         
         ApplicationDetailResponse response = applicationService.getApplication(id, currentUserId);
         
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     /**
-     * 获取应用列表（支持分页、筛选）
+     * 获取应用列表（支持分页、筛选、搜索）
      * GET /api/v1/applications
      */
     @GetMapping
-    public ResponseEntity<Page<ApplicationDetailResponse>> listApplications(
+    public ResponseEntity<ApiResponse<PageResponse<ApplicationDetailResponse>>> listApplications(
             @RequestParam(required = false) String ownerId,
             @RequestParam(required = false) AppStatus status,
-            @PageableDefault(page = 0, size = 20) Pageable pageable,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false, defaultValue = "1") int page,
+            @RequestParam(required = false, defaultValue = "10") int pageSize,
             @RequestParam String currentUserId) {
-        log.debug("Received list applications request: ownerId={}, status={}, page={}, size={}", 
-            ownerId, status, pageable.getPageNumber(), pageable.getPageSize());
+        log.debug("Received list applications request: ownerId={}, status={}, keyword={}, page={}, size={}", 
+            ownerId, status, keyword, page, pageSize);
         
-        Page<ApplicationDetailResponse> page = applicationService.listApplications(ownerId, status, pageable, currentUserId);
+        // 创建 Pageable（页码从 1 开始转为从 0 开始）
+        Pageable pageable = PageRequest.of(page - 1, pageSize, Sort.by(Sort.Direction.DESC, "createdAt"));
         
-        return ResponseEntity.ok(page);
+        // Spring Page 转换为 PageResponse（页码从 0 开始转为从 1 开始）
+        Page<ApplicationDetailResponse> resultPage = applicationService.listApplications(ownerId, status, keyword, pageable, currentUserId);
+        PageResponse<ApplicationDetailResponse> pageResponse = PageResponse.of(
+                resultPage.getContent(),
+                resultPage.getTotalElements(),
+                page,  // 使用请求的页码
+                pageSize
+        );
+        
+        return ResponseEntity.ok(ApiResponse.success(pageResponse));
     }
 
     /**
@@ -95,7 +110,7 @@ public class ApplicationController {
      * PUT /api/v1/applications/{id}
      */
     @PutMapping("/{id}")
-    public ResponseEntity<UpdateApplicationResponse> updateApplication(
+    public ResponseEntity<ApiResponse<UpdateApplicationResponse>> updateApplication(
             @PathVariable String id,
             @Valid @RequestBody UpdateApplicationRequest request,
             @RequestParam String currentUserId) {
@@ -103,7 +118,7 @@ public class ApplicationController {
         
         UpdateApplicationResponse response = applicationService.updateApplication(id, request, currentUserId);
         
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ApiResponse.success("更新成功", response));
     }
 
     /**
@@ -111,14 +126,14 @@ public class ApplicationController {
      * DELETE /api/v1/applications/{id}
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteApplication(
+    public ResponseEntity<ApiResponse<Void>> deleteApplication(
             @PathVariable String id,
             @RequestParam String currentUserId) {
         log.info("Received delete application request: id={}", id);
         
         applicationService.deleteApplication(id, currentUserId);
         
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(ApiResponse.success("删除成功", null));
     }
 
     /**
@@ -126,14 +141,14 @@ public class ApplicationController {
      * POST /api/v1/applications/{id}/restore
      */
     @PostMapping("/{id}/restore")
-    public ResponseEntity<Void> restoreApplication(
+    public ResponseEntity<ApiResponse<Void>> restoreApplication(
             @PathVariable String id,
             @RequestParam String currentUserId) {
         log.info("Received restore application request: id={}", id);
         
         applicationService.restoreApplication(id, currentUserId);
         
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(ApiResponse.success("恢复成功", null));
     }
 
     /**
@@ -141,7 +156,7 @@ public class ApplicationController {
      * PATCH /api/v1/applications/{id}/status
      */
     @PatchMapping("/{id}/status")
-    public ResponseEntity<Void> changeStatus(
+    public ResponseEntity<ApiResponse<Void>> changeStatus(
             @PathVariable String id,
             @Valid @RequestBody ChangeStatusRequest request,
             @RequestParam String currentUserId) {
@@ -149,6 +164,6 @@ public class ApplicationController {
         
         applicationService.changeStatus(id, request, currentUserId);
         
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(ApiResponse.success("状态变更成功", null));
     }
 }
