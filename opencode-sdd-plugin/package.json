@@ -5,7 +5,9 @@
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "npm run build:agents && npm run build:ts",
+    "build:agents": "node build-agents.cjs",
+    "build:ts": "tsc",
     "dev": "tsc --watch",
     "clean": "rimraf dist"
   },
