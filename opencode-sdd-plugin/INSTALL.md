@@ -1,12 +1,62 @@
 # 🚀 OpenCode SDD Plugin 安装指南
 
-## 构建状态
+## 📝 配置说明
 
-✅ 构建成功！
+### 模型配置（`opencode.json`）
+
+所有 Agent 的**模型**配置在 `opencode.json` 中，便于用户根据需求调整：
+
+```json
+{
+  "agent": {
+    "sdd-1-spec": {
+      "model": "bailian/qwen3.5-plus"  // 修改这里
+    }
+  }
+}
+```
+
+**默认模型分配**：
+- **规范/规划/任务** (阶段 1-3): `qwen3.5-plus` - 适合文本分析
+- **实现/审查/验证** (阶段 4-6): `qwen3-coder-plus` - 适合代码任务
+
+### Temperature 配置（agent md 文件）
+
+**temperature** 保留在各 agent 的 md 文件 frontmatter 中，用户一般无需修改：
+
+| Agent | Temperature | 说明 |
+|-------|-------------|------|
+| spec/plan/tasks | 0.1-0.3 | 较低温度，输出更稳定 |
+| build/review | 0.2-0.3 | 平衡创造性与准确性 |
+| validate/help | 0.1-0.3 | 较低温度，确保准确性 |
 
 ---
 
-## 快速安装
+## ✅ 快速开始
+
+### 一键安装（推荐）
+
+```powershell
+powershell -ExecutionPolicy Bypass -File "install.ps1" <目标项目目录>
+```
+
+### 手动安装
+
+```bash
+# 1. 构建
+npm install
+npm run build
+
+# 2. 复制 dist/ 到目标项目
+cp -r dist/* <target-project>/.opencode/plugins/sdd/
+
+# 3. 复制 agents
+cp dist/templates/agents/* <target-project>/.opencode/agents/
+```
+
+---
+
+## 详细安装说明
 
 ### 步骤 1: 构建插件
 
