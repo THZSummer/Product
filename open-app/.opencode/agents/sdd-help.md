@@ -1,3 +1,13 @@
+---
+description: SDD 工作流帮助助手 - 提供完整的命令参考和使用指南
+mode: subagent
+temperature: 0.3
+permission:
+  edit: deny
+  bash: deny
+  webfetch: deny
+---
+
 # @sdd-help - SDD 工作流帮助
 
 ## 🎯 角色定位
