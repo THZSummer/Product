@@ -1,16 +1,17 @@
-// SDD 命令定义
+// SDD 命令定义 - 带流程防跳过验证
+import { StateMachine } from '../state/machine.js';
 export const sddCommand = {
     name: 'sdd',
-    description: '📋 Specification-Driven Development 工作流',
+    description: '📋 Specification-Driven Development 工作流（带流程守护）',
     category: 'Development',
     usage: `
 /sdd init                    初始化 SDD 工作流
 /sdd specify <feature>       创建 Feature Specification
 /sdd clarify <feature>       澄清规范中的模糊点
-/sdd plan <feature>          生成技术计划
-/sdd tasks <feature>         分解任务
-/sdd implement <task>        实现任务
-/sdd validate <feature>      验证实现
+/sdd plan <feature>          生成技术计划（需 spec.md）
+/sdd tasks <feature>         分解任务（需 plan.md）
+/sdd implement <task>        实现任务（需 tasks.md）
+/sdd validate <feature>      验证实现（需 review 通过）
 /sdd status [feature]        查看状态
 /sdd retro <feature>         复盘
   `,
@@ -25,6 +26,7 @@ export const sddCommand = {
     ],
     async handler(ctx, args) {
         const [subcommand, ...rest] = args._ || [];
+        const stateMachine = new StateMachine();
         if (!subcommand) {
             return showHelp();
         }
@@ -36,13 +38,13 @@ export const sddCommand = {
             case 'clarify':
                 return await handleClarify(ctx, rest.join(' '));
             case 'plan':
-                return await handlePlan(ctx, rest.join(' '));
+                return await handlePlan(ctx, rest.join(' '), stateMachine);
             case 'tasks':
-                return await handleTasks(ctx, rest.join(' '));
+                return await handleTasks(ctx, rest.join(' '), stateMachine);
             case 'implement':
-                return await handleImplement(ctx, rest.join(' '));
+                return await handleImplement(ctx, rest.join(' '), stateMachine);
             case 'validate':
-                return await handleValidate(ctx, rest.join(' '));
+                return await handleValidate(ctx, rest.join(' '), stateMachine);
             case 'status':
                 return await handleStatus(ctx, rest.join(' '));
             case 'retro':
@@ -104,25 +106,87 @@ async function handleClarify(ctx, feature) {
         return '❌ 请提供 Feature 名称';
     return `🔍 **澄清规范：${feature}**\n\n正在分析规范中的模糊点...`;
 }
-async function handlePlan(ctx, feature) {
+async function handlePlan(ctx, feature, stateMachine) {
+    if (!feature)
+        return '❌ 请提供 Feature 名称\n\n用法：/sdd specify <feature 名称>';
+    // 前置验证：检查 spec.md 是否存在
+    const featureId = feature.toLowerCase().replace(/\s+/g, '-').slice(0, 50);
+    await stateMachine.load();
+    const validation = await stateMachine.validateStageTransition(featureId, 'planned');
+    if (!validation.allowed) {
+        return `❌ **无法开始技术规划**\n\n` +
+            `**原因**: ${validation.reason}\n\n` +
+            `**当前状态**: ${validation.current || '未知'}\n\n` +
+            `**缺失的前置阶段**:\n` +
+            (validation.missingStages || []).map(s => `  - ${s.name}`).join('\n') + '\n\n' +
+            `👉 请先完成前置阶段后再运行此命令`;
+    }
+    return `📐 **生成技术计划：${feature}**\n\n` +
+        `✅ 前置验证通过：spec.md 已存在\n\n` +
+        `1. 检查外部 API 文档缓存\n` +
+        `2. 调用 @sdd-plan agent\n\n` +
+        `请稍候...`;
+}
+async function handleTasks(ctx, feature, stateMachine) {
     if (!feature)
         return '❌ 请提供 Feature 名称';
-    return `📐 **生成技术计划：${feature}**\n\n1. 检查规范完成状态 ✓\n2. 检查外部 API 文档缓存\n3. 调用 @sdd-plan agent\n\n请稍候...`;
+    // 前置验证：检查 plan.md 是否存在
+    const featureId = feature.toLowerCase().replace(/\s+/g, '-').slice(0, 50);
+    await stateMachine.load();
+    const validation = await stateMachine.validateStageTransition(featureId, 'tasked');
+    if (!validation.allowed) {
+        return `❌ **无法开始任务分解**\n\n` +
+            `**原因**: ${validation.reason}\n\n` +
+            `**当前状态**: ${validation.current || '未知'}\n\n` +
+            `**缺失的前置阶段**:\n` +
+            (validation.missingStages || []).map(s => `  - ${s.name}`).join('\n') + '\n\n' +
+            `👉 请先完成前置阶段后再运行此命令`;
+    }
+    return `📋 **分解任务：${feature}**\n\n` +
+        `✅ 前置验证通过：plan.md 已存在\n\n` +
+        `1. 调用 @sdd-tasks agent\n\n` +
+        `请稍候...`;
 }
-async function handleTasks(ctx, feature) {
-    if (!feature)
-        return '❌ 请提供 Feature 名称';
-    return `📋 **分解任务：${feature}**\n\n1. 检查技术计划完成状态 ✓\n2. 调用 @sdd-tasks agent\n\n请稍候...`;
-}
-async function handleImplement(ctx, task) {
+async function handleImplement(ctx, task, stateMachine) {
     if (!task)
         return '❌ 请提供任务 ID\n\n用法：/sdd implement <TASK-XXX>';
-    return `🔨 **实现任务：${task}**\n\n1. 检查任务依赖 ✓\n2. 调用 @build agent\n\n请稍候...`;
+    // 前置验证：检查 tasks.md 是否存在
+    const featureId = task.toLowerCase().replace(/task-\d+/i, '').replace(/-/g, '-').slice(0, 50);
+    await stateMachine.load();
+    const validation = await stateMachine.validateStageTransition(featureId, 'implementing');
+    if (!validation.allowed) {
+        return `❌ **无法开始任务实现**\n\n` +
+            `**原因**: ${validation.reason}\n\n` +
+            `**当前状态**: ${validation.current || '未知'}\n\n` +
+            `**缺失的前置阶段**:\n` +
+            (validation.missingStages || []).map(s => `  - ${s.name}`).join('\n') + '\n\n' +
+            `👉 请先完成前置阶段后再运行此命令`;
+    }
+    return `🔨 **实现任务：${task}**\n\n` +
+        `✅ 前置验证通过：tasks.md 已存在\n\n` +
+        `1. 检查任务依赖\n` +
+        `2. 调用 @sdd-build agent\n\n` +
+        `请稍候...`;
 }
-async function handleValidate(ctx, feature) {
+async function handleValidate(ctx, feature, stateMachine) {
     if (!feature)
         return '❌ 请提供 Feature 名称';
-    return `✅ **验证实现：${feature}**\n\n1. 检查所有任务完成状态 ✓\n2. 调用 @sdd-validate agent\n\n请稍候...`;
+    // 前置验证：检查 review 是否完成
+    const featureId = feature.toLowerCase().replace(/\s+/g, '-').slice(0, 50);
+    await stateMachine.load();
+    const validation = await stateMachine.validateStageTransition(featureId, 'validated');
+    if (!validation.allowed) {
+        return `❌ **无法开始最终验证**\n\n` +
+            `**原因**: ${validation.reason}\n\n` +
+            `**当前状态**: ${validation.current || '未知'}\n\n` +
+            `**缺失的前置阶段**:\n` +
+            (validation.missingStages || []).map(s => `  - ${s.name}`).join('\n') + '\n\n' +
+            `👉 请先完成前置阶段后再运行此命令`;
+    }
+    return `✅ **验证实现：${feature}**\n\n` +
+        `✅ 前置验证通过：review 已完成\n\n` +
+        `1. 调用 @sdd-validate agent\n\n` +
+        `请稍候...`;
 }
 async function handleStatus(ctx, feature) {
     return `📊 **SDD 状态**
