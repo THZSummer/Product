@@ -72,6 +72,31 @@ permission:
 
 ## 工作流程
 
+### ⚠️ 前置条件检查（强制执行）
+
+在开始任何工作前，**必须**执行以下检查：
+
+```bash
+# 1. 检查 spec.md 是否存在
+if [ ! -f ".specs/[feature]/spec.md" ]; then
+  echo "❌ 错误：spec.md 不存在，请先运行 @sdd-spec [feature]"
+  exit 1
+fi
+
+# 2. 检查 plan.md 是否存在
+if [ ! -f ".specs/[feature]/plan.md" ]; then
+  echo "❌ 错误：plan.md 不存在，请先运行 @sdd-plan [feature]"
+  echo "⚠️  SDD 工作流不允许跳过 Plan 阶段！"
+  exit 1
+fi
+```
+
+**重要规则**：如果任何前置文件缺失，**必须拒绝执行**并告知用户先完成缺失的阶段。
+
+---
+
+### 正常执行流程
+
 1. 阅读技术计划，识别所有需要的工作项
 2. 为每个工作项创建任务
 3. 分析任务依赖关系

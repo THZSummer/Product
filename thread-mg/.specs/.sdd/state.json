@@ -1,47 +1,118 @@
 {
-  "feature": "README-update",
+  "feature": "script-refactor",
   "state": "validated",
+  "description": "修复测试脚本设计不一致问题，建立统一的脚本开发标准",
+  "workflowCompliance": {
+    "issue": "测试脚本存在代码重复、设计不一致问题",
+    "detectedAt": "2026-03-27T15:30:00Z",
+    "resolution": "创建公共库 lib.sh，重构所有脚本使用统一标准",
+    "rootCause": "缺少公共库和开发规范"
+  },
   "progress": {
     "spec": {
       "status": "completed",
-      "file": ".specs/README-update/spec.md",
-      "completedAt": "2026-03-27T10:10:00Z"
+      "file": ".specs/script-refactor/spec.md",
+      "completedAt": "2026-03-27T15:50:00Z"
     },
     "plan": {
       "status": "completed",
-      "file": ".specs/README-update/plan.md",
-      "completedAt": "2026-03-27T10:15:00Z"
+      "file": ".specs/script-refactor/plan.md",
+      "completedAt": "2026-03-27T15:50:00Z"
     },
     "tasks": {
       "status": "completed",
-      "file": ".specs/README-update/tasks.md",
-      "completedAt": "2026-03-27T10:20:00Z"
+      "file": ".specs/script-refactor/tasks.md",
+      "completedAt": "2026-03-27T15:50:00Z"
     },
     "build": {
       "status": "completed",
       "files": [
-        "README.md",
-        "docs/validation/README.md",
-        "docs/implementation/README.md",
-        "docs/scenarios/README.md",
-        "docs/threads/README.md"
+        "scripts/lib.sh",
+        "scripts/test-phase2.sh",
+        "scripts/run-benchmark.sh",
+        "docs/development/SCRIPT-STANDARDS.md",
+        "README.md"
       ],
-      "completedAt": "2026-03-27T10:45:00Z"
+      "deletedFiles": [
+        "scripts/test-full.sh",
+        "scripts/test-watch.sh"
+      ],
+      "completedAt": "2026-03-27T15:59:00Z"
     },
     "review": {
       "status": "completed",
-      "completedAt": "2026-03-27T10:50:00Z"
+      "completedAt": "2026-03-27T16:00:00Z"
     },
     "validate": {
       "status": "completed",
-      "completedAt": "2026-03-27T10:55:00Z"
+      "completedAt": "2026-03-27T16:00:00Z"
     }
   },
   "summary": {
-    "totalTasks": 6,
-    "completedTasks": 6,
-    "documentsCreated": 5,
-    "totalLines": 2500
+    "totalTasks": 8,
+    "completedTasks": 8,
+    "filesCreated": 4,
+    "filesModified": 3,
+    "filesDeleted": 2,
+    "linesAdded": 388,
+    "linesRemoved": 120,
+    "completion": "100%"
   },
-  "lastUpdated": "2026-03-27T10:55:00Z"
+  "refactorDetails": {
+    "publicLibrary": {
+      "file": "scripts/lib.sh",
+      "lines": 115,
+      "features": [
+        "颜色定义 (7 个变量)",
+        "日志函数 (4 个函数)",
+        "工具函数 (7 个函数)"
+      ]
+    },
+    "refactoredScripts": [
+      {
+        "file": "scripts/test-phase2.sh",
+        "lines": 574,
+        "changes": [
+          "删除旧颜色定义",
+          "删除旧日志函数",
+          "添加长参数支持",
+          "使用公共库函数"
+        ]
+      },
+      {
+        "file": "scripts/run-benchmark.sh",
+        "lines": 327,
+        "changes": [
+          "删除旧颜色定义",
+          "删除旧日志函数",
+          "使用公共库函数"
+        ]
+      }
+    ],
+    "deletedScripts": [
+      "scripts/test-full.sh",
+      "scripts/test-watch.sh"
+    ],
+    "documentation": [
+      "docs/development/SCRIPT-STANDARDS.md",
+      "README.md (更新)"
+    ]
+  },
+  "validationResults": {
+    "syntaxCheck": {
+      "lib.sh": "passed",
+      "test-phase2.sh": "passed",
+      "run-benchmark.sh": "passed"
+    },
+    "codeQuality": {
+      "noOldColorDefinitions": true,
+      "noOldLogFunctions": true,
+      "longArgumentsSupported": true
+    },
+    "fileCleanup": {
+      "test-full.sh": "deleted",
+      "test-watch.sh": "deleted"
+    }
+  },
+  "lastUpdated": "2026-03-27T16:00:00Z"
 }

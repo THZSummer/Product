@@ -21,9 +21,14 @@
 
 set -e  # 遇到错误立即退出
 
+# ============================================================================
+# 导入公共库
+# ============================================================================
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+. "$SCRIPT_DIR/lib.sh"
+
 # 脚本目录和项目根目录
 # 使用 POSIX 兼容方式获取脚本路径
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 # 默认配置
@@ -35,24 +40,17 @@ CONFIG_FILE="$DEFAULT_CONFIG"
 OUTPUT_FORMATS="$DEFAULT_OUTPUT"
 VERBOSE=false
 
-# 颜色定义 (用于输出)
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
-
 # ----------------------------------------------------------------------------
 # 函数：显示帮助信息
 # ----------------------------------------------------------------------------
 show_help() {
     cat << EOF
-${BLUE}Thread Management Benchmark 运行脚本${NC}
+${BOLD}Thread Management Benchmark 运行脚本${NC}
 
-${GREEN}用法:${NC}
+${BOLD}用法:${NC}
   $0 [选项]
 
-${GREEN}选项:${NC}
+${BOLD}选项:${NC}
   -s, --scenario <name>    指定测试场景名称
                            可选：cpu-bound, io-bound, high-concurrency, 
                                 mixed-load, recursive, async-pipeline
@@ -74,7 +72,7 @@ ${GREEN}选项:${NC}
   
   -h, --help               显示此帮助信息
 
-${GREEN}示例:${NC}
+${BOLD}示例:${NC}
   # 运行所有测试
   $0
   
@@ -87,30 +85,11 @@ ${GREEN}示例:${NC}
   # 运行特定场景并启用详细输出
   $0 -s io-bound -t platform -v
 
-${GREEN}输出目录:${NC}
+${BOLD}输出目录:${NC}
   原始数据：results/raw/
   测试报告：results/reports/
 
 EOF
-}
-
-# ----------------------------------------------------------------------------
-# 函数：打印日志
-# ----------------------------------------------------------------------------
-log_info() {
-    echo -e "${BLUE}[INFO]${NC} $1"
-}
-
-log_success() {
-    echo -e "${GREEN}[SUCCESS]${NC} $1"
-}
-
-log_warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $1"
-}
-
-log_error() {
-    echo -e "${RED}[ERROR]${NC} $1" >&2
 }
 
 # ----------------------------------------------------------------------------

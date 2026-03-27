@@ -49,12 +49,44 @@ permission:
 
 ## 工作流程
 
+### ⚠️ 前置条件检查（强制执行）
+
+在开始任何工作前，**必须**执行以下检查：
+
+```bash
+# 1. 检查 spec.md 是否存在
+if [ ! -f ".specs/[feature]/spec.md" ]; then
+  echo "❌ 错误：spec.md 不存在，请先运行 @sdd-spec [feature]"
+  exit 1
+fi
+
+# 2. 检查 plan.md 是否存在
+if [ ! -f ".specs/[feature]/plan.md" ]; then
+  echo "❌ 错误：plan.md 不存在，请先运行 @sdd-plan [feature]"
+  echo "⚠️  SDD 工作流不允许跳过 Plan 阶段！"
+  exit 1
+fi
+
+# 3. 检查 tasks.md 是否存在
+if [ ! -f ".specs/[feature]/tasks.md" ]; then
+  echo "❌ 错误：tasks.md 不存在，请先运行 @sdd-tasks [feature]"
+  echo "⚠️  SDD 工作流不允许跳过 Tasks 阶段！"
+  exit 1
+fi
+```
+
+**重要规则**：如果任何前置文件缺失，**必须拒绝执行**并告知用户先完成缺失的阶段。
+
+---
+
+### 正常执行流程
+
 ```bash
 # 用户调用
 @sdd-build "实现 TASK-001: 用户登录 API"
 
-# 你的执行步骤
-1. 读取 `.specs/user-login/tasks.md`
+# 你的执行步骤（在前置检查通过后）
+1. 读取 `.specs/[feature]/tasks.md`
 2. 找到 TASK-001 的详细描述
 3. 检查前置任务状态
 4. 实现代码

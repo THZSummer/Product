@@ -27,10 +27,13 @@ benchmark:
 # ----------------------------------------------------------------------------
 # 启用的测试场景
 # ----------------------------------------------------------------------------
-# 可选值: cpu-bound, io-bound, high-concurrency, mixed-load, recursive, async-pipeline
+# 可选值：cpu-bound, io-bound, high-concurrency, mixed-load, recursive, async-pipeline
 scenarios:
   - cpu-bound          # CPU 密集型：计算密集型任务
   - io-bound           # I/O 密集型：文件/网络 I/O 任务
+  - high-concurrency   # 高并发短任务：大量短时任务
+  - mixed-load         # 混合负载：CPU+I/O 混合
+  - recursive          # 递归分治：排序、数值计算
 
 # ----------------------------------------------------------------------------
 # 启用的线程策略
@@ -39,6 +42,7 @@ scenarios:
 strategies:
   - platform           # 平台线程：传统 OS 线程 (1:1 映射)
   - virtual            # 虚拟线程：轻量级用户态线程 (M:N 映射)
+  - pool               # 线程池：可配置的 ThreadPoolExecutor
 
 # ----------------------------------------------------------------------------
 # 启用的报告器

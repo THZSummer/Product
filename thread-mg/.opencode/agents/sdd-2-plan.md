@@ -52,7 +52,23 @@ permission:
 
 ## 工作流程
 
-### 1. 外部 API 检查（前置条件）
+### ⚠️ 前置条件检查（强制执行）
+
+在开始任何工作前，**必须**执行以下检查：
+
+```bash
+# 1. 检查 spec.md 是否存在
+if [ ! -f ".specs/[feature]/spec.md" ]; then
+  echo "❌ 错误：spec.md 不存在，请先运行 @sdd-spec [feature]"
+  exit 1
+fi
+```
+
+**重要规则**：如果 spec.md 缺失，**必须拒绝执行**并告知用户先完成 Spec 阶段。
+
+---
+
+### 2. 外部 API 检查（前置条件）
 在开始规划前，检查 spec 中是否引用了外部服务：
 - 扫描 spec 中的 API 提及
 - 检查 `.opencode/sdd/api-docs/` 是否有缓存
