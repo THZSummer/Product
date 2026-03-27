@@ -22,8 +22,8 @@ description: SDD 任务实现专家 - 根据任务分解实现具体代码
 mode: subagent
 temperature: 0.3
 permission:
-  edit: ask
-  bash: ask
+  edit: allow
+  bash: allow
   webfetch: allow
 ---
 
