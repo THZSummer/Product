@@ -1,0 +1,60 @@
+{
+  "timestamp": "2026-03-27T06:41:34.450195952Z",
+  "environment": {
+    "javaVersion": "21.0.10",
+    "osName": "Linux",
+    "osVersion": "6.8.0-106-generic",
+    "cpuCores": 8,
+    "maxHeapMemory": 1974
+  },
+  "results": [
+    {
+      "scenarioName": "cpu-bound",
+      "strategyName": "platform-threads",
+      "warmupIterations": 3,
+      "benchmarkIterations": 5,
+      "averageThroughput": 10370.053093081702,
+      "p50Latency": 0.0030732579999999997,
+      "p95Latency": 0.004389023,
+      "p99Latency": 0.004389023,
+      "standardDeviation": 457.5981079877052,
+      "timestamp": "2026-03-27T06:41:29.781755311Z"
+    },
+    {
+      "scenarioName": "cpu-bound",
+      "strategyName": "virtual-threads",
+      "warmupIterations": 3,
+      "benchmarkIterations": 5,
+      "averageThroughput": 10615.748346143559,
+      "p50Latency": 3.70616E-4,
+      "p95Latency": 0.003685331,
+      "p99Latency": 0.003685331,
+      "standardDeviation": 231.62791501927703,
+      "timestamp": "2026-03-27T06:41:30.536924642Z"
+    },
+    {
+      "scenarioName": "io-bound",
+      "strategyName": "platform-threads",
+      "warmupIterations": 3,
+      "benchmarkIterations": 5,
+      "averageThroughput": 2132.072348236304,
+      "p50Latency": 0.001457492,
+      "p95Latency": 0.001866208,
+      "p99Latency": 0.001866208,
+      "standardDeviation": 1.2888559439597462,
+      "timestamp": "2026-03-27T06:41:34.303507284Z"
+    },
+    {
+      "scenarioName": "io-bound",
+      "strategyName": "virtual-threads",
+      "warmupIterations": 3,
+      "benchmarkIterations": 5,
+      "averageThroughput": 68424.13285121042,
+      "p50Latency": 1.98316E-4,
+      "p95Latency": 4.19816E-4,
+      "p99Latency": 4.19816E-4,
+      "standardDeviation": 7236.558056918038,
+      "timestamp": "2026-03-27T06:41:34.441320206Z"
+    }
+  ]
+}
