@@ -4,9 +4,9 @@ mode: subagent
 model: bailian/qwen3.5-plus
 temperature: 0.5
 permission:
-  edit: deny
-  bash: deny
-  webfetch: deny
+  edit: allow
+  bash: allow
+  webfetch: allow
 ---
 
 # @sdd - SDD 工作流智能入口

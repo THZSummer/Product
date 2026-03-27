@@ -22,7 +22,7 @@ description: SDD 技术规划专家 - 将规范转化为可执行的技术计划
 mode: subagent
 temperature: 0.2
 permission:
-  edit: ask
+  edit: allow
   bash: allow
   webfetch: allow
 ---

@@ -22,9 +22,9 @@ description: SDD 验证专家 - 检查代码与规范的一致性，检测漂移
 mode: subagent
 temperature: 0.1
 permission:
-  edit: deny
+  edit: allow
   bash: allow
-  webfetch: deny
+  webfetch: allow
 ---
 
 # @sdd-validate - SDD 验证专家（阶段 6/6）

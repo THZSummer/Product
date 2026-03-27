@@ -22,8 +22,8 @@ description: SDD 规范编写专家 - 通过引导式访谈创建完整的 Featu
 mode: subagent
 temperature: 0.3
 permission:
-  edit: ask
-  bash: ask
+  edit: allow
+  bash: allow
   webfetch: allow
 ---
 

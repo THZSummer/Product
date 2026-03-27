@@ -3,9 +3,9 @@ description: SDD 任务分解专家 - 将技术计划分解为可并行执行的
 mode: subagent
 temperature: 0.1
 permission:
-  edit: ask
+  edit: allow
   bash: allow
-  webfetch: deny
+  webfetch: allow
 ---
 
 # 🎯 SDD 工作流 - 阶段 3/6
