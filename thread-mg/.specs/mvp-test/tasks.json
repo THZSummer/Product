@@ -1,0 +1,429 @@
+{
+  "feature": "mvp-test",
+  "featureName": "MVP 基准测试框架",
+  "testPlanVersion": "1.0",
+  "createdAt": "2026-03-27",
+  "totalTasks": 15,
+  "totalTestCases": 130,
+  "estimatedDays": 10.5,
+  "tasks": [
+    {
+      "id": "TASK-001",
+      "name": "核心接口测试实现",
+      "description": "实现 Scenario 和 ThreadStrategy 接口的单元测试",
+      "complexity": "M",
+      "wave": 1,
+      "dependencies": [],
+      "priority": "P0",
+      "files": [
+        "src/test/java/com/threadmg/benchmark/core/ScenarioTest.java",
+        "src/test/java/com/threadmg/benchmark/core/ThreadStrategyTest.java",
+        "src/test/java/com/threadmg/benchmark/core/MockScenario.java",
+        "src/test/java/com/threadmg/benchmark/core/MockThreadStrategy.java"
+      ],
+      "acceptanceCriteria": [
+        "Scenario 接口测试覆盖率 ≥ 85%",
+        "ThreadStrategy 接口测试覆盖率 ≥ 85%",
+        "所有测试用例通过",
+        "包含边界条件测试"
+      ],
+      "verificationCommand": "mvn test -Dtest=ScenarioTest,ThreadStrategyTest",
+      "estimatedHours": 6
+    },
+    {
+      "id": "TASK-002",
+      "name": "数据模型测试实现",
+      "description": "实现 BenchmarkResult、ScenarioResult 数据模型的测试",
+      "complexity": "S",
+      "wave": 1,
+      "dependencies": [],
+      "priority": "P0",
+      "files": [
+        "src/test/java/com/threadmg/benchmark/core/BenchmarkResultTest.java",
+        "src/test/java/com/threadmg/benchmark/core/ScenarioResultTest.java"
+      ],
+      "acceptanceCriteria": [
+        "所有 getter 方法测试通过",
+        "计算方法测试通过",
+        "百分位计算测试通过",
+        "测试覆盖率 ≥ 90%"
+      ],
+      "verificationCommand": "mvn test -Dtest=BenchmarkResultTest,ScenarioResultTest",
+      "estimatedHours": 4
+    },
+    {
+      "id": "TASK-003",
+      "name": "配置管理测试实现",
+      "description": "实现 BenchmarkConfig 的测试",
+      "complexity": "S",
+      "wave": 1,
+      "dependencies": [],
+      "priority": "P1",
+      "files": [
+        "src/test/java/com/threadmg/benchmark/config/BenchmarkConfigTest.java"
+      ],
+      "acceptanceCriteria": [
+        "Builder 模式测试通过",
+        "默认配置值验证通过",
+        "配置校验逻辑测试通过",
+        "不可变性测试通过"
+      ],
+      "verificationCommand": "mvn test -Dtest=BenchmarkConfigTest",
+      "estimatedHours": 3
+    },
+    {
+      "id": "TASK-004",
+      "name": "CPU 场景测试实现",
+      "description": "实现 CpuBoundScenario 的单元测试和集成测试",
+      "complexity": "M",
+      "wave": 2,
+      "dependencies": ["TASK-001", "TASK-002"],
+      "priority": "P0",
+      "files": [
+        "src/test/java/com/threadmg/scenarios/cpu/CpuBoundScenarioTest.java",
+        "src/test/java/com/threadmg/scenarios/cpu/MatrixMultiplicationTaskTest.java"
+      ],
+      "acceptanceCriteria": [
+        "矩阵乘法计算结果正确性验证",
+        "单任务执行测试通过",
+        "多任务并发执行测试通过",
+        "与平台线程配合测试通过",
+        "与虚拟线程配合测试通过"
+      ],
+      "verificationCommand": "mvn test -Dtest=CpuBoundScenarioTest",
+      "estimatedHours": 6
+    },
+    {
+      "id": "TASK-005",
+      "name": "I/O 场景测试实现",
+      "description": "实现 IoBoundScenario 的单元测试和集成测试",
+      "complexity": "M",
+      "wave": 2,
+      "dependencies": ["TASK-001", "TASK-002"],
+      "priority": "P0",
+      "files": [
+        "src/test/java/com/threadmg/scenarios/io/IoBoundScenarioTest.java",
+        "src/test/java/com/threadmg/scenarios/io/SimulatedIoTaskTest.java"
+      ],
+      "acceptanceCriteria": [
+        "内存 I/O 操作测试通过",
+        "单任务执行测试通过",
+        "多任务并发执行测试通过",
+        "与平台线程配合测试通过",
+        "与虚拟线程配合测试通过"
+      ],
+      "verificationCommand": "mvn test -Dtest=IoBoundScenarioTest",
+      "estimatedHours": 6
+    },
+    {
+      "id": "TASK-006",
+      "name": "平台线程策略测试实现",
+      "description": "实现 PlatformThreadStrategy 的测试",
+      "complexity": "M",
+      "wave": 2,
+      "dependencies": ["TASK-001"],
+      "priority": "P0",
+      "files": [
+        "src/test/java/com/threadmg/threads/platform/PlatformThreadStrategyTest.java"
+      ],
+      "acceptanceCriteria": [
+        "执行器创建测试通过",
+        "线程数配置验证通过",
+        "关闭行为测试通过",
+        "资源清理验证通过",
+        "并发执行能力测试通过"
+      ],
+      "verificationCommand": "mvn test -Dtest=PlatformThreadStrategyTest",
+      "estimatedHours": 5
+    },
+    {
+      "id": "TASK-007",
+      "name": "虚拟线程策略测试实现",
+      "description": "实现 VirtualThreadStrategy 的测试",
+      "complexity": "M",
+      "wave": 2,
+      "dependencies": ["TASK-001"],
+      "priority": "P0",
+      "files": [
+        "src/test/java/com/threadmg/threads/virtual/VirtualThreadStrategyTest.java"
+      ],
+      "acceptanceCriteria": [
+        "虚拟线程执行器创建测试通过",
+        "Java 21+ 版本检查测试通过",
+        "高并发能力测试通过",
+        "线程身份验证",
+        "资源清理验证通过"
+      ],
+      "verificationCommand": "mvn test -Dtest=VirtualThreadStrategyTest",
+      "estimatedHours": 5
+    },
+    {
+      "id": "TASK-008",
+      "name": "运行器测试实现",
+      "description": "实现 BenchmarkRunner 的测试",
+      "complexity": "M",
+      "wave": 3,
+      "dependencies": ["TASK-004", "TASK-005", "TASK-006", "TASK-007"],
+      "priority": "P1",
+      "files": [
+        "src/test/java/com/threadmg/benchmark/core/BenchmarkRunnerTest.java"
+      ],
+      "acceptanceCriteria": [
+        "基本执行流程测试通过",
+        "预热阶段测试通过",
+        "多次迭代执行测试通过",
+        "结果聚合正确性验证",
+        "资源清理验证通过"
+      ],
+      "verificationCommand": "mvn test -Dtest=BenchmarkRunnerTest",
+      "estimatedHours": 8
+    },
+    {
+      "id": "TASK-009",
+      "name": "指标收集器测试实现",
+      "description": "实现 MetricCollector 的测试",
+      "complexity": "M",
+      "wave": 3,
+      "dependencies": ["TASK-002"],
+      "priority": "P1",
+      "files": [
+        "src/test/java/com/threadmg/benchmark/metrics/MetricCollectorTest.java"
+      ],
+      "acceptanceCriteria": [
+        "吞吐量计算误差 < 1%",
+        "平均延迟计算测试通过",
+        "P50/P95/P99 百分位计算测试通过",
+        "多轮结果聚合测试通过",
+        "空结果处理测试通过"
+      ],
+      "verificationCommand": "mvn test -Dtest=MetricCollectorTest",
+      "estimatedHours": 6
+    },
+    {
+      "id": "TASK-010",
+      "name": "控制台报告测试实现",
+      "description": "实现 ConsoleReporter 的测试",
+      "complexity": "S",
+      "wave": 4,
+      "dependencies": ["TASK-008", "TASK-009"],
+      "priority": "P2",
+      "files": [
+        "src/test/java/com/threadmg/reporters/ConsoleReporterTest.java"
+      ],
+      "acceptanceCriteria": [
+        "控制台输出格式正确",
+        "所有关键指标都输出",
+        "与真实结果配合测试通过"
+      ],
+      "verificationCommand": "mvn test -Dtest=ConsoleReporterTest",
+      "estimatedHours": 3
+    },
+    {
+      "id": "TASK-011",
+      "name": "Markdown 报告测试实现",
+      "description": "实现 MarkdownReporter 的测试",
+      "complexity": "M",
+      "wave": 4,
+      "dependencies": ["TASK-008", "TASK-009"],
+      "priority": "P2",
+      "files": [
+        "src/test/java/com/threadmg/reporters/MarkdownReporterTest.java"
+      ],
+      "acceptanceCriteria": [
+        "Markdown 文件生成成功",
+        "表格格式正确",
+        "所有指标包含在报告中",
+        "多结果报告测试通过",
+        "文件保存到正确目录"
+      ],
+      "verificationCommand": "mvn test -Dtest=MarkdownReporterTest",
+      "estimatedHours": 4
+    },
+    {
+      "id": "TASK-012",
+      "name": "端到端测试实现",
+      "description": "实现完整的端到端测试",
+      "complexity": "M",
+      "wave": 5,
+      "dependencies": ["TASK-008", "TASK-010", "TASK-011"],
+      "priority": "P1",
+      "files": [
+        "src/test/java/com/threadmg/e2e/BenchmarkE2ETest.java",
+        "src/test/java/com/threadmg/e2e/ReportGenerationE2ETest.java"
+      ],
+      "acceptanceCriteria": [
+        "完整 CPU 场景基准测试流程通过",
+        "完整 I/O 场景基准测试流程通过",
+        "所有场景×策略组合测试通过",
+        "报告生成流程测试通过",
+        "BenchmarkApp 入口测试通过"
+      ],
+      "verificationCommand": "mvn test -Dtest=*E2ETest",
+      "estimatedHours": 8
+    },
+    {
+      "id": "TASK-013",
+      "name": "性能验证测试实现",
+      "description": "实现性能验证测试",
+      "complexity": "M",
+      "wave": 5,
+      "dependencies": ["TASK-012"],
+      "priority": "P2",
+      "files": [
+        "src/test/java/com/threadmg/performance/FrameworkOverheadTest.java",
+        "src/test/java/com/threadmg/performance/ResourceUsageTest.java",
+        "src/test/java/com/threadmg/performance/VirtualThreadAdvantageTest.java"
+      ],
+      "acceptanceCriteria": [
+        "框架开销 ≤ 5%",
+        "单次测试时长 ≤ 60 秒",
+        "内存占用 ≤ 256MB",
+        "虚拟线程优势 ≥ 20% (I/O 场景)",
+        "结果稳定性方差 < 10%"
+      ],
+      "verificationCommand": "mvn test -Dtest=*PerformanceTest",
+      "estimatedHours": 8
+    },
+    {
+      "id": "TASK-014",
+      "name": "边界情况测试实现",
+      "description": "实现边界情况和异常处理测试",
+      "complexity": "S",
+      "wave": 3,
+      "dependencies": ["TASK-001"],
+      "priority": "P1",
+      "files": [
+        "src/test/java/com/threadmg/benchmark/core/BoundaryConditionsTest.java"
+      ],
+      "acceptanceCriteria": [
+        "0 任务数处理测试通过",
+        "负数任务数异常抛出测试通过",
+        "大任务数处理测试通过",
+        "超时处理测试通过",
+        "并发修改安全测试通过",
+        "Java 版本检查测试通过",
+        "中断处理测试通过"
+      ],
+      "verificationCommand": "mvn test -Dtest=BoundaryConditionsTest",
+      "estimatedHours": 5
+    },
+    {
+      "id": "TASK-015",
+      "name": "测试基础设施配置",
+      "description": "配置测试基础设施",
+      "complexity": "M",
+      "wave": 1,
+      "dependencies": [],
+      "priority": "P0",
+      "files": [
+        "pom.xml",
+        ".gitignore"
+      ],
+      "acceptanceCriteria": [
+        "JUnit 5 依赖配置正确",
+        "AssertJ 依赖配置正确",
+        "JaCoCo 插件配置正确",
+        "Maven Surefire 配置正确",
+        "测试目录结构正确"
+      ],
+      "verificationCommand": "mvn test-compile && mvn jacoco:check",
+      "estimatedHours": 4
+    }
+  ],
+  "coverageTargets": {
+    "overall": {
+      "lineCoverage": 0.80,
+      "branchCoverage": 0.75,
+      "classCoverage": 1.00
+    },
+    "byModule": {
+      "core": {
+        "lineCoverage": 0.85,
+        "branchCoverage": 0.80
+      },
+      "scenarios": {
+        "lineCoverage": 0.85,
+        "branchCoverage": 0.80
+      },
+      "threads": {
+        "lineCoverage": 0.85,
+        "branchCoverage": 0.80
+      },
+      "metrics": {
+        "lineCoverage": 0.90,
+        "branchCoverage": 0.85
+      },
+      "reporters": {
+        "lineCoverage": 0.80,
+        "branchCoverage": 0.75
+      },
+      "config": {
+        "lineCoverage": 0.85,
+        "branchCoverage": 0.80
+      }
+    }
+  },
+  "testTypes": {
+    "unit": {
+      "count": 8,
+      "percentage": 0.70,
+      "framework": "JUnit 5"
+    },
+    "integration": {
+      "count": 4,
+      "percentage": 0.20,
+      "framework": "JUnit 5"
+    },
+    "e2e": {
+      "count": 1,
+      "percentage": 0.07,
+      "framework": "JUnit 5"
+    },
+    "performance": {
+      "count": 1,
+      "percentage": 0.03,
+      "framework": "Custom + JFR"
+    }
+  },
+  "tools": {
+    "testFramework": "JUnit 5.10+",
+    "assertionLibrary": "AssertJ 3.24+",
+    "mockFramework": "Mockito 5.7+",
+    "coverageTool": "JaCoCo 0.8.11+",
+    "buildTool": "Maven 3.9+",
+    "performanceMonitor": "JFR (Built-in)",
+    "ci": "GitHub Actions"
+  },
+  "waves": [
+    {
+      "wave": 1,
+      "tasks": ["TASK-001", "TASK-002", "TASK-003", "TASK-015"],
+      "days": "1-2",
+      "description": "核心接口和配置"
+    },
+    {
+      "wave": 2,
+      "tasks": ["TASK-004", "TASK-005", "TASK-006", "TASK-007"],
+      "days": "3-4",
+      "description": "场景和策略实现测试"
+    },
+    {
+      "wave": 3,
+      "tasks": ["TASK-008", "TASK-009", "TASK-014"],
+      "days": "5-6",
+      "description": "运行器和指标测试"
+    },
+    {
+      "wave": 4,
+      "tasks": ["TASK-010", "TASK-011"],
+      "days": "7-8",
+      "description": "报告生成测试"
+    },
+    {
+      "wave": 5,
+      "tasks": ["TASK-012", "TASK-013"],
+      "days": "9-10",
+      "description": "端到端和性能测试"
+    }
+  ]
+}

@@ -279,6 +279,113 @@ validation:
 
 ---
 
+## 🚀 MVP 简化方案
+
+### MVP 目标
+
+快速构建**最小可行产品**，在 1-2 周内打通核心流程，验证技术方案的可行性。
+
+### MVP 范围
+
+| 维度 | MVP 方案 | 完整版 |
+|------|---------|--------|
+| **场景数量** | 2 个（CPU 密集型 + I/O 密集型） | 6 个 |
+| **线程策略** | 2-3 种（平台线程 + 虚拟线程 + 可选线程池） | 6 种 |
+| **开发周期** | 1-2 周 | 6-8 周 |
+| **代码规模** | ~500 行 | ~3000 行 |
+| **核心目标** | 验证框架设计，跑通基准测试流程 | 全面性能对比分析 |
+
+### MVP 技术方案
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    MVP 测试工具架构                      │
+├─────────────────────────────────────────────────────────┤
+│  场景层                                                  │
+│  ├── CpuBoundScenario (CPU 密集型：矩阵计算/素数筛选)    │
+│  └── IoBoundScenario (I/O 密集型：文件读写/网络模拟)     │
+├─────────────────────────────────────────────────────────┤
+│  策略层                                                  │
+│  ├── PlatformThreadStrategy (平台线程)                  │
+│  ├── VirtualThreadStrategy (虚拟线程)                   │
+│  └── ThreadPoolStrategy (线程池 - 可选)                 │
+├─────────────────────────────────────────────────────────┤
+│  框架层                                                  │
+│  ├── BenchmarkRunner (运行器)                           │
+│  ├── MetricCollector (指标收集：吞吐量/延迟)             │
+│  └── ConsoleReporter (控制台报告)                        │
+└─────────────────────────────────────────────────────────┘
+```
+
+### MVP 交付物
+
+- [ ] 可运行的基准测试框架
+- [ ] 2 个测试场景实现
+- [ ] 2-3 种线程策略实现
+- [ ] 控制台输出测试结果
+- [ ] 简单的性能对比报告
+
+### 从 MVP 到完整版的演进路径
+
+```
+MVP (1-2 周)
+    │
+    ▼
+┌───────────────────┐
+│ 核心框架打通      │
+│ 2 场景 + 3 策略     │
+│ 基础指标收集      │
+└─────────┬─────────┘
+          │
+          ▼
+Phase 2 (3-4 周)
+    │
+    ▼
+┌───────────────────┐
+│ 扩展场景          │
+│ +4 个测试场景      │
+│ +3 种线程策略      │
+│ 完善指标体系      │
+└─────────┬─────────┘
+          │
+          ▼
+Phase 3 (5-6 周)
+    │
+    ▼
+┌───────────────────┐
+│ 报告系统          │
+│ Markdown/HTML 报告 │
+│ 可视化图表        │
+│ 历史数据对比      │
+└─────────┬─────────┘
+          │
+          ▼
+Phase 4 (7-8 周)
+    │
+    ▼
+┌───────────────────┐
+│ 完善与优化        │
+│ 性能回归检测      │
+│ CI/CD 集成        │
+│ 文档完善          │
+└───────────────────┘
+```
+
+### MVP 优先级
+
+| 优先级 | 任务 | 说明 |
+|:------:|------|------|
+| P0 | 基准测试框架核心 | Benchmark/Scenario/Strategy 接口 |
+| P0 | 平台线程策略 | 最基础的实现 |
+| P0 | 虚拟线程策略 | Java 21 核心特性 |
+| P1 | CPU 密集型场景 | 计算密集型测试 |
+| P1 | I/O 密集型场景 | I/O 密集型测试 |
+| P2 | 线程池策略 | 可选增强 |
+| P2 | 控制台报告 | 基础输出 |
+| P3 | Markdown 报告 | 格式美化 |
+
+---
+
 ## 🔧 开发工作流
 
 本项目采用 **SDD (Specification-Driven Development)** 工作流：
@@ -342,6 +449,10 @@ validate         validation-report.md    results/reports/
 
 ## 📈 当前状态
 
+### 项目阶段
+
+> **当前阶段**: 🎯 MVP 开发中（目标：1-2 周完成）
+
 ### 已完成 ✅
 - [x] 项目初始化
 - [x] SDD 工作流配置
@@ -349,17 +460,54 @@ validate         validation-report.md    results/reports/
 - [x] 工程结构矩阵定义
 - [x] 验证方案设计
 - [x] README 文档更新
+- [x] MVP 方案规划
+- [x] 基准测试脚本 (`scripts/run-benchmark.sh`)
+- [x] 基准测试配置文件 (`config/benchmark/benchmark.yaml`)
+- [x] BenchmarkConfig YAML 加载支持
+- [x] Markdown 报告器 (`MarkdownReporter`)
+- [x] HTML 报告器 (`HtmlReporter`)
+- [x] JSON 报告器 (`JsonReporter`)
+- [x] 控制台报告器 (`ConsoleReporter`)
 
 ### 进行中 🔄
-- [ ] 基准测试框架搭建
-- [ ] 第一个测试场景实现
+- [x] MVP 核心框架搭建
+  - [x] Benchmark 接口定义
+  - [x] Scenario 接口定义
+  - [x] ThreadStrategy 接口定义
+  - [x] BenchmarkRunner 实现
+- [x] 测试场景实现
+  - [x] CPU 密集型场景 (`CpuBoundScenario`)
+  - [x] I/O 密集型场景 (`IoBoundScenario`)
 
 ### 计划中 📋
-- [ ] 平台线程基准实现
-- [ ] 虚拟线程基准实现
-- [ ] CPU 密集型场景实现
-- [ ] I/O 密集型场景实现
-- [ ] 性能对比分析
+
+#### MVP 阶段（P0/P1 优先级）
+- [x] 平台线程基准实现 (`PlatformThreadStrategy`)
+- [x] 虚拟线程基准实现 (`VirtualThreadStrategy`)
+- [x] CPU 密集型场景实现
+- [x] I/O 密集型场景实现
+- [x] 基础指标收集（吞吐量/延迟）
+- [x] 控制台报告输出
+- [x] Markdown 报告输出
+
+#### Phase 2 扩展
+- [ ] 线程池策略实现
+- [ ] 高并发短任务场景
+- [ ] 混合负载场景
+
+#### Phase 3 报告系统
+- [x] Markdown 报告生成
+- [x] HTML 报告生成
+- [x] JSON 报告生成
+- [ ] 可视化图表
+
+#### Phase 4 完善
+- [ ] 性能回归检测
+- [ ] CI/CD 集成
+- [ ] 完整文档
+- [ ] Fork/Join 策略
+- [ ] CompletableFuture 策略
+- [ ] Reactive Streams 策略
 
 ---
 
@@ -425,17 +573,68 @@ public class MyThreadStrategy implements ThreadStrategy {
 ### 运行基准测试
 
 ```bash
-# 运行所有测试
+# 运行所有测试（使用默认配置）
 ./scripts/run-benchmark.sh
 
-# 运行特定场景
-mvn test -Dscenario=cpu-bound
+# 运行特定场景和策略
+./scripts/run-benchmark.sh --scenario cpu-bound --strategy virtual
 
-# 生成报告
-./scripts/generate-report.sh
+# 使用自定义配置文件
+./scripts/run-benchmark.sh --config config/benchmark/benchmark.yaml
 
-# 运行验证
-./scripts/validate.sh
+# 指定输出格式（支持多种格式）
+./scripts/run-benchmark.sh --output console,markdown,html,json
+
+# 查看完整帮助信息
+./scripts/run-benchmark.sh --help
+```
+
+### 配置文件
+
+基准测试配置文件位于 `config/benchmark/benchmark.yaml`，支持以下配置项：
+
+```yaml
+benchmark:
+  warmupIterations: 3        # 预热轮次
+  benchmarkIterations: 5     # 正式测试轮次
+  taskCount: 1000            # 每轮任务数
+  timeoutMillis: 60000       # 超时时间 (毫秒)
+  verbose: true              # 详细输出
+
+scenarios:
+  - cpu-bound                # CPU 密集型
+  - io-bound                 # I/O 密集型
+
+strategies:
+  - platform                 # 平台线程
+  - virtual                  # 虚拟线程
+
+reporters:
+  - console                  # 控制台输出
+  - markdown                 # Markdown 报告
+  - html                     # HTML 报告
+  - json                     # JSON 报告
+```
+
+### 生成报告
+
+测试完成后，报告会自动生成到 `results/reports/` 目录：
+
+- **Markdown**: `benchmark-report-YYYYMMDD-HHmmss.md`
+- **HTML**: `benchmark-report-YYYYMMDD-HHmmss.html`
+- **JSON**: `benchmark-report-YYYYMMDD-HHmmss.json`
+
+### 运行验证
+
+```bash
+# 运行所有单元测试
+mvn test
+
+# 运行特定测试类
+mvn test -Dtest=BenchmarkConfigTest
+
+# 查看代码覆盖率
+mvn test jacoco:report
 ```
 
 ---
