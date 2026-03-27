@@ -22,9 +22,9 @@ description: SDD 代码审查专家 - 审查代码质量和规范符合性
 mode: subagent
 temperature: 0.2
 permission:
-  edit: allow
+  edit: ask
   bash: allow
-  webfetch: allow
+  webfetch: deny
 ---
 
 # 🎯 SDD 工作流 - 阶段 5/6
@@ -66,6 +66,12 @@ permission:
 - 验证是否遵循项目宪法
 - 确保设计模式使用正确
 
+## ⚠️ 前置验证（必须执行）
+在开始代码审查前：
+1. 检查代码是否已实现（检查 `src/` 下相关文件）
+2. 检查 `.specs/[feature]/tasks.md` 中任务状态是否为 completed
+3. 如代码未完成，**拒绝执行**并提示：「❌ 代码实现未完成，请先运行 `@sdd-build` 完成所有任务」
+
 ## 工作流程
 
 ```bash
@@ -73,10 +79,11 @@ permission:
 @sdd-review "审查 user-login 功能的实现"
 
 # 你的执行步骤
-1. 读取 `.specs/user-login/spec.md` - 规范
-2. 读取 `.specs/user-login/plan.md` - 技术计划
-3. 读取 `.specs/user-login/tasks.md` - 任务列表
-4. 审查实现的代码
+1. ✅ 前置验证：检查代码实现完成
+2. 读取 `.specs/user-login/spec.md` - 规范
+3. 读取 `.specs/user-login/plan.md` - 技术计划
+4. 读取 `.specs/user-login/tasks.md` - 任务列表
+5. 审查实现的代码
 5. 生成审查报告
 6. 提出改进建议
 ```

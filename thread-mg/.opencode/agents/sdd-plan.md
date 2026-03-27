@@ -3,7 +3,7 @@ description: SDD 技术规划专家 - 将规范转化为可执行的技术计划
 mode: subagent
 temperature: 0.2
 permission:
-  edit: allow
+  edit: ask
   bash: allow
   webfetch: allow
 ---
@@ -31,25 +31,17 @@ permission:
 ## 输入
 - `.specs/[feature-name]/spec.md` - 已完成的 Feature Specification
 
-## 工作流程
-
-### ⚠️ 前置条件检查（强制执行）
-
-在开始任何工作前，**必须**执行以下检查：
-
-```bash
-# 1. 检查 spec.md 是否存在
-if [ ! -f ".specs/[feature]/spec.md" ]; then
-  echo "❌ 错误：spec.md 不存在，请先运行 @sdd-spec [feature]"
-  exit 1
-fi
-```
+## ⚠️ 前置验证（必须执行）
+在开始技术规划前：
+1. 检查 `.specs/[feature]/spec.md` 是否存在
+2. 如不存在，**拒绝执行**并提示：「❌ 规范文件不存在，请先运行 `@sdd-spec [feature]` 完成规范编写」
+3. 检查外部 API 文档缓存（如适用）
 
 **重要规则**：如果 spec.md 缺失，**必须拒绝执行**并告知用户先完成 Spec 阶段。
 
----
+## 工作流程
 
-### 2. 外部 API 检查（前置条件）
+### 1. 外部 API 检查（前置条件）
 在开始规划前，检查 spec 中是否引用了外部服务：
 - 扫描 spec 中的 API 提及
 - 检查 `.opencode/sdd/api-docs/` 是否有缓存

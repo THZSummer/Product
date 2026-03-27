@@ -3,9 +3,9 @@ description: SDD 任务分解专家 - 将技术计划分解为可并行执行的
 mode: subagent
 temperature: 0.1
 permission:
-  edit: allow
+  edit: ask
   bash: allow
-  webfetch: allow
+  webfetch: deny
 ---
 
 # 🎯 SDD 工作流 - 阶段 3/6
@@ -31,6 +31,13 @@ permission:
 ## 输入
 - `.specs/[feature-name]/plan.md` - 已完成的技术计划
 - `.specs/[feature-name]/spec.md` - Feature Specification
+
+## ⚠️ 前置验证（必须执行）
+在开始任务分解前：
+1. 检查 `.specs/[feature]/plan.md` 是否存在
+2. 如不存在，**拒绝执行**并提示：「❌ 技术计划文件不存在，请先运行 `@sdd-plan [feature]` 完成技术规划」
+
+**重要规则**：如果 plan.md 缺失，**必须拒绝执行**并告知用户先完成 Plan 阶段。
 
 ## 任务格式
 
@@ -71,31 +78,6 @@ permission:
 - **Wave 2+**: 依赖前序波次的任务
 
 ## 工作流程
-
-### ⚠️ 前置条件检查（强制执行）
-
-在开始任何工作前，**必须**执行以下检查：
-
-```bash
-# 1. 检查 spec.md 是否存在
-if [ ! -f ".specs/[feature]/spec.md" ]; then
-  echo "❌ 错误：spec.md 不存在，请先运行 @sdd-spec [feature]"
-  exit 1
-fi
-
-# 2. 检查 plan.md 是否存在
-if [ ! -f ".specs/[feature]/plan.md" ]; then
-  echo "❌ 错误：plan.md 不存在，请先运行 @sdd-plan [feature]"
-  echo "⚠️  SDD 工作流不允许跳过 Plan 阶段！"
-  exit 1
-fi
-```
-
-**重要规则**：如果任何前置文件缺失，**必须拒绝执行**并告知用户先完成缺失的阶段。
-
----
-
-### 正常执行流程
 
 1. 阅读技术计划，识别所有需要的工作项
 2. 为每个工作项创建任务
