@@ -1,0 +1,47 @@
+{
+  "feature": "README-update",
+  "state": "validated",
+  "progress": {
+    "spec": {
+      "status": "completed",
+      "file": ".specs/README-update/spec.md",
+      "completedAt": "2026-03-27T10:10:00Z"
+    },
+    "plan": {
+      "status": "completed",
+      "file": ".specs/README-update/plan.md",
+      "completedAt": "2026-03-27T10:15:00Z"
+    },
+    "tasks": {
+      "status": "completed",
+      "file": ".specs/README-update/tasks.md",
+      "completedAt": "2026-03-27T10:20:00Z"
+    },
+    "build": {
+      "status": "completed",
+      "files": [
+        "README.md",
+        "docs/validation/README.md",
+        "docs/implementation/README.md",
+        "docs/scenarios/README.md",
+        "docs/threads/README.md"
+      ],
+      "completedAt": "2026-03-27T10:45:00Z"
+    },
+    "review": {
+      "status": "completed",
+      "completedAt": "2026-03-27T10:50:00Z"
+    },
+    "validate": {
+      "status": "completed",
+      "completedAt": "2026-03-27T10:55:00Z"
+    }
+  },
+  "summary": {
+    "totalTasks": 6,
+    "completedTasks": 6,
+    "documentsCreated": 5,
+    "totalLines": 2500
+  },
+  "lastUpdated": "2026-03-27T10:55:00Z"
+}
