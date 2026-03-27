@@ -31,6 +31,14 @@ permission:
 ## 输入
 - `.specs/[feature-name]/spec.md` - 已完成的 Feature Specification
 
+## ⚠️ 前置验证（必须执行）
+在开始技术规划前：
+1. 检查 `.specs/[feature]/spec.md` 是否存在
+2. 如不存在，**拒绝执行**并提示：「❌ 规范文件不存在，请先运行 `@sdd-spec [feature]` 完成规范编写」
+3. 检查外部 API 文档缓存（如适用）
+
+**重要规则**：如果 spec.md 缺失，**必须拒绝执行**并告知用户先完成 Spec 阶段。
+
 ## 工作流程
 
 ### 1. 外部 API 检查（前置条件）

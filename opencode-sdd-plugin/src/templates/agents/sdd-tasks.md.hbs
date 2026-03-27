@@ -32,6 +32,13 @@ permission:
 - `.specs/[feature-name]/plan.md` - 已完成的技术计划
 - `.specs/[feature-name]/spec.md` - Feature Specification
 
+## ⚠️ 前置验证（必须执行）
+在开始任务分解前：
+1. 检查 `.specs/[feature]/plan.md` 是否存在
+2. 如不存在，**拒绝执行**并提示：「❌ 技术计划文件不存在，请先运行 `@sdd-plan [feature]` 完成技术规划」
+
+**重要规则**：如果 plan.md 缺失，**必须拒绝执行**并告知用户先完成 Plan 阶段。
+
 ## 任务格式
 
 每个任务必须包含：
