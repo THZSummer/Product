@@ -478,6 +478,9 @@ validate         validation-report.md    results/reports/
 - [x] 测试场景实现
   - [x] CPU 密集型场景 (`CpuBoundScenario`)
   - [x] I/O 密集型场景 (`IoBoundScenario`)
+  - [x] 高并发短任务场景 (`HighConcurrencyScenario`)
+  - [x] 混合负载场景 (`MixedLoadScenario`)
+  - [x] 递归分治场景 (`RecursiveScenario`)
 
 ### 计划中 📋
 
@@ -491,9 +494,10 @@ validate         validation-report.md    results/reports/
 - [x] Markdown 报告输出
 
 #### Phase 2 扩展
-- [ ] 线程池策略实现
-- [ ] 高并发短任务场景
-- [ ] 混合负载场景
+- [x] 线程池策略实现 (`ThreadPoolStrategy`)
+- [x] 高并发短任务场景 (`HighConcurrencyScenario`)
+- [x] 混合负载场景 (`MixedLoadScenario`)
+- [x] 递归分治场景 (`RecursiveScenario`)
 
 #### Phase 3 报告系统
 - [x] Markdown 报告生成
@@ -587,6 +591,9 @@ public class MyThreadStrategy implements ThreadStrategy {
 
 # 查看完整帮助信息
 ./scripts/run-benchmark.sh --help
+
+# 也可以使用 sh 运行（POSIX 兼容）
+sh scripts/run-benchmark.sh --help
 ```
 
 ### 配置文件
@@ -626,6 +633,52 @@ reporters:
 
 ### 运行验证
 
+#### 使用测试脚本（推荐）
+
+本项目提供便捷的测试脚本，支持增量测试、完整测试和覆盖率报告：
+
+```bash
+# 增量测试（默认，只测试 Phase 2 变更的代码）
+./scripts/test-phase2.sh
+
+# 完整测试套件
+./scripts/test-phase2.sh -full
+
+# 生成覆盖率报告
+./scripts/test-phase2.sh -coverage
+
+# 组合使用
+./scripts/test-phase2.sh -full -coverage
+
+# 监听模式（文件变更自动测试）
+./scripts/test-phase2.sh -watch
+
+# 查看详细帮助
+./scripts/test-phase2.sh --help
+
+# 注意：test-phase2.sh 需要 bash 环境
+bash scripts/test-phase2.sh --help
+```
+
+**参数说明**:
+| 参数 | 长参数 | 说明 |
+|------|--------|------|
+| `-f` | `--full` | 运行完整测试套件 |
+| `-i` | `--incremental` | 只测试 Phase 2 新增/修改的类 (默认) |
+| `-c` | `--coverage` | 生成覆盖率报告 |
+| `-r` | `--report` | 生成详细测试报告 |
+| `-w` | `--watch` | 监听模式，文件变更自动测试 |
+| `-v` | `--verbose` | 显示详细输出 |
+| `-h` | `--help` | 显示帮助信息 |
+
+**Phase 2 测试类**:
+- `ThreadPoolStrategyTest` - 线程池策略测试（19 个测试）
+- `HighConcurrencyScenarioTest` - 高并发场景测试（23 个测试）
+- `MixedLoadScenarioTest` - 混合负载场景测试（22 个测试）
+- `RecursiveScenarioTest` - 递归分治场景测试（22 个测试）
+
+#### 使用 Maven 命令
+
 ```bash
 # 运行所有单元测试
 mvn test
@@ -633,8 +686,15 @@ mvn test
 # 运行特定测试类
 mvn test -Dtest=BenchmarkConfigTest
 
+# 运行 Phase 2 测试
+mvn test -Dtest=ThreadPoolStrategyTest,HighConcurrencyScenarioTest,MixedLoadScenarioTest,RecursiveScenarioTest
+
 # 查看代码覆盖率
 mvn test jacoco:report
+
+# 覆盖率报告位置
+# HTML: target/site/jacoco/index.html
+# XML:  target/site/jacoco/jacoco.xml
 ```
 
 ---
