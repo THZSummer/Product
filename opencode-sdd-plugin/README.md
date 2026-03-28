@@ -33,7 +33,8 @@ opencode-sdd-plugin/
 │   └── templates/agents/       # 生成的 agent 定义（14 个.md）
 │
 ├── build-agents.cjs            # Agent 生成脚本
-├── install.ps1                 # 安装脚本
+├── install.ps1                 # 安装脚本 (Windows)
+├── install.sh                  # 安装脚本 (Linux/macOS)
 ├── package.json
 └── tsconfig.json
 ```
@@ -42,6 +43,17 @@ opencode-sdd-plugin/
 
 ### 一键安装（推荐）
 
+**Linux/macOS:**
+```bash
+bash install.sh <目标项目目录>
+# 或 (确保脚本可执行)
+chmod +x install.sh
+./install.sh <目标项目目录>
+```
+
+⚠️ **注意**: 必须使用 `bash`，不要用 `sh install.sh`！
+
+**Windows:**
 ```powershell
 powershell -ExecutionPolicy Bypass -File "install.ps1" <目标项目目录>
 ```
