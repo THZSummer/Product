@@ -21,3 +21,7 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+
+# OpenCode SDD Plugin 安装文件（不应提交）
+.opencode/
+/opencode.json

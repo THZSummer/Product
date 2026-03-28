@@ -1,43 +1,45 @@
-# opencode-sdd-plugin
+# OpenCode SDD Plugin
 
-OpenCode Specification-Driven Development (SDD) 插件
+规范驱动开发 (Specification-Driven Development) 插件，为 OpenCode 提供结构化的 6 阶段工作流。
 
 ## 📁 项目结构
 
 ```
 opencode-sdd-plugin/
-├── src/                        # 源码目录
+├── src/                        # 源码目录（开发者维护）
 │   ├── index.ts                # 插件入口
 │   ├── agents/                 # Agent 注册代码
 │   ├── commands/               # 命令定义
 │   ├── state/                  # 状态机
 │   └── templates/              # 模板文件（源码一部分）
 │       ├── agents/             # Agent 模板
-│       │   ├── sdd-spec.md.hbs
-│       │   ├── sdd-plan.md.hbs
-│       │   ├── sdd-tasks.md.hbs
-│       │   ├── sdd-build.md.hbs
-│       │   ├── sdd-review.md.hbs
-│       │   ├── sdd-validate.md.hbs
-│       │   ├── sdd.md.hbs
-│       │   └── sdd-help.md.hbs
 │       └── config/             # 配置模板
-│           └── opencode.json.hbs
 │
 ├── dist/                       # 构建产物（完整可部署）
 │   ├── opencode.json           # 配置模板
-│   ├── index.js
-│   ├── agents/
-│   ├── commands/
-│   ├── state/
+│   ├── index.js                # 编译后入口
+│   ├── agents/                 # 编译后 Agent 代码
+│   ├── commands/               # 编译后命令
+│   ├── state/                  # 编译后状态机
 │   └── templates/agents/       # 生成的 agent 定义（14 个.md）
+│
+├── .opencode/                  # 安装文件（本地测试用，不应提交）
+│   └── plugins/sdd/            # 插件安装目录
 │
 ├── build-agents.cjs            # Agent 生成脚本
 ├── install.ps1                 # 安装脚本 (Windows)
 ├── install.sh                  # 安装脚本 (Linux/macOS)
 ├── package.json
-└── tsconfig.json
+├── tsconfig.json
+└── .gitignore
 ```
+
+**目录说明：**
+| 目录 | 用途 | 是否提交 |
+|------|------|----------|
+| `src/` | 源码 | ✅ 是 |
+| `dist/` | 构建产物 | ✅ 是 |
+| `.opencode/` | 本地安装测试 | ❌ 否 |
 
 ## 🚀 安装
 
@@ -72,7 +74,108 @@ cp -r dist/* <target-project>/.opencode/plugins/sdd/
 cp dist/templates/agents/* <target-project>/.opencode/agents/
 ```
 
-## 🔨 开发
+## 🎯 使用方法
+
+### 智能入口
+
+使用 `@sdd` 作为统一入口，自动根据当前状态路由到正确阶段：
+
+```bash
+@sdd 开始 用户登录功能
+@sdd 继续
+@sdd 状态
+```
+
+### 分阶段执行
+
+直接调用特定阶段 Agent：
+
+```bash
+@sdd-1-spec "用户需要登录和注册功能"
+@sdd-2-plan "基于规范制定开发计划"
+@sdd-3-tasks "拆解为具体任务"
+@sdd-4-build "实现代码"
+@sdd-5-review "代码审查"
+@sdd-6-validate "验证功能"
+```
+
+### 流程守护规则
+
+`/sdd` 命令提供流程守护，防止跳过阶段：
+
+| 命令 | 说明 |
+|------|------|
+| `/sdd init` | 初始化 SDD 工作流 |
+| `/sdd specify <feature>` | 创建规范（阶段 1） |
+| `/sdd status` | 查看当前状态 |
+| `/sdd reset` | 重置工作流 |
+
+> ⚠️ **防跳过机制**: 状态机确保必须按顺序完成各阶段，无法跳过。
+
+## 📊 6 阶段工作流详解
+
+| 阶段 | Agent | 输入 | 输出 | 默认模型 |
+|------|-------|------|------|----------|
+| **1. 规范** | `@sdd-1-spec` | 用户需求 | `SDD_SPEC.md` | qwen3.5-plus |
+| **2. 规划** | `@sdd-2-plan` | 规范文档 | `SDD_PLAN.md` | qwen3.5-plus |
+| **3. 任务** | `@sdd-3-tasks` | 计划文档 | `SDD_TASKS.md` | qwen3.5-plus |
+| **4. 实现** | `@sdd-4-build` | 任务清单 | 源代码 | qwen3-coder-plus |
+| **5. 审查** | `@sdd-5-review` | 实现代码 | 审查报告 | qwen3-coder-plus |
+| **6. 验证** | `@sdd-6-validate` | 审查报告 | 验证结果 | qwen3-coder-plus |
+
+**工作流说明：**
+1. **规范阶段**: 将模糊需求转化为结构化技术规范
+2. **规划阶段**: 制定技术方案和实现路径
+3. **任务阶段**: 拆解为可执行的具体任务
+4. **实现阶段**: 编写代码实现功能
+5. **审查阶段**: 代码质量检查和改进建议
+6. **验证阶段**: 确保功能符合规范
+
+## ⚙️ 配置文件说明
+
+插件行为由 `.opencode/plugins/sdd/opencode.json` 配置：
+
+```json
+{
+  "agents": {
+    "sdd": {
+      "model": "qwen3.5-plus"
+    },
+    "sdd-1-spec": {
+      "model": "qwen3.5-plus"
+    },
+    "sdd-2-plan": {
+      "model": "qwen3.5-plus"
+    },
+    "sdd-3-tasks": {
+      "model": "qwen3.5-plus"
+    },
+    "sdd-4-build": {
+      "model": "qwen3-coder-plus"
+    },
+    "sdd-5-review": {
+      "model": "qwen3-coder-plus"
+    },
+    "sdd-6-validate": {
+      "model": "qwen3-coder-plus"
+    }
+  },
+  "mode": "agent"
+}
+```
+
+**配置项说明：**
+
+| 配置项 | 说明 | 可选值 |
+|--------|------|--------|
+| `model` | 指定 Agent 使用的模型 | `qwen3.5-plus`, `qwen3-coder-plus` 等 |
+| `mode` | Agent 运行模式 | `agent` (默认), `chat` |
+
+**模型选择建议：**
+- **qwen3.5-plus**: 适合规范、规划、任务等思考型任务
+- **qwen3-coder-plus**: 适合编码、审查、验证等技术型任务
+
+## 🔨 开发命令
 
 ```bash
 # 安装依赖
@@ -89,154 +192,27 @@ npm run dev
 
 # 清理构建产物
 npm run clean
+
+# 本地测试
+npm run test
 ```
-
-## 📚 使用
-
-```bash
-# 智能入口
-@sdd 开始 用户登录
-
-# 各阶段 agent
-@sdd-1-spec "规范"
-@sdd-2-plan "计划"
-@sdd-3-tasks "任务"
-@sdd-4-build "实现"
-@sdd-5-review "审查"
-@sdd-6-validate "验证"
-```
-
-## 🎯 Agent 列表
-
-| Agent | 阶段 | 默认模型 |
-|-------|------|----------|
-| @sdd | 入口 | qwen3.5-plus |
-| @sdd-1-spec | 1/6 规范 | qwen3.5-plus |
-| @sdd-2-plan | 2/6 规划 | qwen3.5-plus |
-| @sdd-3-tasks | 3/6 任务 | qwen3.5-plus |
-| @sdd-4-build | 4/6 实现 | qwen3-coder-plus |
-| @sdd-5-review | 5/6 审查 | qwen3-coder-plus |
-| @sdd-6-validate | 6/6 验证 | qwen3-coder-plus |
-
-> 💡 **模型配置**: 所有 Agent 的模型配置在 `opencode.json` 中，用户可根据需要修改。
-
-## 📝 模板说明
-
-**源模板**（9 个，位于 `src/templates/`）：
-
-**`agents/`** (8 个):
-- `sdd-{spec,plan,tasks,build,review,validate}.md.hbs` - 6 个阶段模板
-- `sdd.md.hbs` - 智能入口
-- `sdd-help.md.hbs` - 帮助文档
-
-**`config/`** (1 个):
-- `opencode.json.hbs` - 配置模板
-
-**构建产物**（`dist/` 包含所有部署需要的文件）：
-- `opencode.json` - 配置（从 `config/` 复制）
-- `templates/agents/*.md` - 14 个 agent 定义（从 `agents/` 生成）
-- `*.js`, `*.d.ts` - TypeScript 编译产物
-
-**生成文件**（14 个，位于 `dist/templates/agents/`）：
-- 6 个带序号版：`sdd-{1-6}-{spec,plan,...}.md`
-- 6 个短名版：`sdd-{spec,plan,...}.md`
-- 2 个特殊：`sdd.md`, `sdd-help.md`
-
-构建脚本自动从 8 个源模板生成 14 个 agent 文件，无需手动维护重复内容。
-
-## 🏗️ 架构说明
-
-### 插件结构（符合 OpenCode 官方规范）
-
-```typescript
-export const SDDPlugin = async ({ 
-  project,    // 项目信息
-  client,     // OpenCode SDK 客户端
-  $,          // Bun Shell API
-  directory,  // 工作目录
-  worktree    // Git worktree 路径
-}) => {
-  return {
-    // Hooks
-    "session.created": async (input) => { ... },
-    "file.edited": async (input) => { ... },
-    
-    // 自定义工具
-    tool: {
-      sdd_init: { ... },
-      sdd_specify: { ... }
-    }
-  };
-};
-```
-
-### 可用 Hooks
-
-| Hook | 用途 | 状态 |
-|------|------|------|
-| `session.created` | 会话创建 | ✅ 已实现 |
-| `file.edited` | 文件编辑（追踪规范） | ✅ 已实现 |
-| `session.idle` | 会话空闲（阶段完成通知） | ⏳ Phase 2 |
-| `experimental.session.compacting` | 会话压缩上下文注入 | ⏳ Phase 2 |
-| `tui.command.execute` | TUI 命令执行 | ⏳ Phase 2 |
-| `tui.toast.show` | 显示 Toast 通知 | ⏳ Phase 2 |
-
-### 自定义工具
-
-| 工具 | 说明 | 参数 |
-|------|------|------|
-| `sdd_init` | 初始化 SDD 工作流 | - |
-| `sdd_specify` | 创建规范 | `feature: string` |
-| `sdd_status` | 查看状态 | - |
-
-## 🔄 开发计划
-
-### Phase 1: 基础功能 ✅ 完成 (v1.1.0)
-
-- [x] 6 阶段 SDD 工作流 (spec → plan → tasks → build → review → validate)
-- [x] 14 个 Agent (6 阶段 ×2 命名 + 入口 + 帮助)
-- [x] 状态机防跳过机制
-- [x] `/sdd` 命令系统 (智能路由 + 流程守护)
-- [x] 跨平台安装脚本 (Windows + Linux/macOS)
-- [x] 插件框架 + 命令定义
-- [x] 状态机 + Agent 调用集成
-- [x] 权限配置统一 + 模板格式统一
-
-### Phase 2: 增强功能 ⏳ 计划中 (v1.2.0)
-
-基于 [OpenCode 官方文档](https://opencode.ai/docs) 最新能力：
-
-- [ ] **Agent Skills 系统** - `.opencode/skills/*/SKILL.md` 定义可重用行为
-- [ ] **TUI 集成** - Plugin Events 支持，阶段完成通知
-- [ ] **会话压缩增强** - `experimental.session.compacting` 注入 SDD 上下文
-- [ ] **MCP 集成** - [context7](https://mcp.context7.com/mcp) 文档搜索, [gh_grep](https://mcp.grep.app) 代码示例
-- [ ] **Structured Output** - JSON Schema 确保规范文件结构一致
-
-### Phase 3: 高级功能 ⏳ 规划中
-
-- [ ] 前后端对齐检查 Agent
-- [ ] 多 Feature 并发支持
-- [ ] 一键回滚 + 批量操作
-- [ ] 导出报告 + Git 集成
-
-## 🔗 参考链接
-
-- [OpenCode 官方文档](https://opencode.ai/docs)
-- [OpenCode Plugin 开发](https://opencode.ai/docs/plugins)
-- [OpenCode Agent 系统](https://opencode.ai/docs/agents)
-- [OpenCode Agent Skills](https://opencode.ai/docs/skills)
-- [OpenCode MCP 集成](https://opencode.ai/docs/mcp-servers)
-- [OpenCode SDK](https://opencode.ai/docs/sdk)
 
 ## 📋 版本历史
-
-详见 [CHANGELOG.md](./CHANGELOG.md)
 
 | 版本 | 日期 | 说明 |
 |------|------|------|
 | v1.2.0 | 规划中 | Phase 2: Skills + TUI + MCP + Structured Output |
 | v1.1.0 | 2026-03-25 | 权限配置统一 + 模板格式统一 |
 | v1.0.0 | 2026-03-20 | 首发版本：6 阶段工作流 + 14 个 Agent |
+
+详细变更记录请参见 [CHANGELOG.md](./CHANGELOG.md)
+
+## 🔗 参考链接
+
+- [OpenCode 官方文档](https://opencode.ai/docs)
+- [OpenCode Plugin 开发](https://opencode.ai/docs/plugins)
+- [OpenCode Agent 系统](https://opencode.ai/docs/agents)
+- [OpenCode MCP 集成](https://opencode.ai/docs/mcp-servers)
 
 ## 📄 许可证
 
