@@ -1,6 +1,6 @@
 ---
 description: SDD Master Coordinator - 智能路由助手，自动选择正确的阶段 agent（带流程守护）
-mode: subagent
+mode: primary
 model: bailian/qwen3.5-plus
 temperature: 0.5
 permission:
