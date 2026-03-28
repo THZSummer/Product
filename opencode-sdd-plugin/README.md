@@ -176,9 +176,10 @@ export const SDDPlugin = async ({
 |------|------|------|
 | `session.created` | 会话创建 | ✅ 已实现 |
 | `file.edited` | 文件编辑（追踪规范） | ✅ 已实现 |
-| `tool.execute.before` | 工具执行前 | ⏳ 预留 |
-| `tool.execute.after` | 工具执行后 | ⏳ 预留 |
-| `tui.command.execute` | TUI 命令执行 | ⏳ 预留 |
+| `session.idle` | 会话空闲（阶段完成通知） | ⏳ Phase 2 |
+| `experimental.session.compacting` | 会话压缩上下文注入 | ⏳ Phase 2 |
+| `tui.command.execute` | TUI 命令执行 | ⏳ Phase 2 |
+| `tui.toast.show` | 显示 Toast 通知 | ⏳ Phase 2 |
 
 ### 自定义工具
 
@@ -190,35 +191,52 @@ export const SDDPlugin = async ({
 
 ## 🔄 开发计划
 
-### Phase 1: 基础功能 ✅ 完成
-- [x] 插件框架
-- [x] 命令定义
-- [x] 状态机
-- [x] Agent 调用集成
-- [x] 权限配置统一
-- [x] 模板格式统一
+### Phase 1: 基础功能 ✅ 完成 (v1.1.0)
 
-### Phase 2: 增强功能 ⏳ 计划中
-- [ ] 交互式引导
-- [ ] 状态面板
-- [ ] 自动检查前置条件
-- [ ] 进度追踪
-- [ ] 状态机持久化
+- [x] 6 阶段 SDD 工作流 (spec → plan → tasks → build → review → validate)
+- [x] 14 个 Agent (6 阶段 ×2 命名 + 入口 + 帮助)
+- [x] 状态机防跳过机制
+- [x] `/sdd` 命令系统 (智能路由 + 流程守护)
+- [x] 跨平台安装脚本 (Windows + Linux/macOS)
+- [x] 插件框架 + 命令定义
+- [x] 状态机 + Agent 调用集成
+- [x] 权限配置统一 + 模板格式统一
+
+### Phase 2: 增强功能 ⏳ 计划中 (v1.2.0)
+
+基于 [OpenCode 官方文档](https://opencode.ai/docs) 最新能力：
+
+- [ ] **Agent Skills 系统** - `.opencode/skills/*/SKILL.md` 定义可重用行为
+- [ ] **TUI 集成** - Plugin Events 支持，阶段完成通知
+- [ ] **会话压缩增强** - `experimental.session.compacting` 注入 SDD 上下文
+- [ ] **MCP 集成** - [context7](https://mcp.context7.com/mcp) 文档搜索, [gh_grep](https://mcp.grep.app) 代码示例
+- [ ] **Structured Output** - JSON Schema 确保规范文件结构一致
 
 ### Phase 3: 高级功能 ⏳ 规划中
+
 - [ ] 前后端对齐检查 Agent
 - [ ] 多 Feature 并发支持
-- [ ] 一键回滚
-- [ ] 批量操作
-- [ ] 导出报告
-- [ ] Git 集成
+- [ ] 一键回滚 + 批量操作
+- [ ] 导出报告 + Git 集成
+
+## 🔗 参考链接
+
+- [OpenCode 官方文档](https://opencode.ai/docs)
+- [OpenCode Plugin 开发](https://opencode.ai/docs/plugins)
+- [OpenCode Agent 系统](https://opencode.ai/docs/agents)
+- [OpenCode Agent Skills](https://opencode.ai/docs/skills)
+- [OpenCode MCP 集成](https://opencode.ai/docs/mcp-servers)
+- [OpenCode SDK](https://opencode.ai/docs/sdk)
 
 ## 📋 版本历史
 
 详见 [CHANGELOG.md](./CHANGELOG.md)
 
-- **v1.1.0** (2026-03-25) - 权限配置统一 + 模板格式统一
-- **v1.0.0** (2026-03-20) - 首发版本
+| 版本 | 日期 | 说明 |
+|------|------|------|
+| v1.2.0 | 规划中 | Phase 2: Skills + TUI + MCP + Structured Output |
+| v1.1.0 | 2026-03-25 | 权限配置统一 + 模板格式统一 |
+| v1.0.0 | 2026-03-20 | 首发版本：6 阶段工作流 + 14 个 Agent |
 
 ## 📄 许可证
 
