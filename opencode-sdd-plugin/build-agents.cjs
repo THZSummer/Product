@@ -68,7 +68,11 @@ function generateNumberedAgent(template, num, short, desc) {
   // 移除 model（配置在 opencode.json 中），保留 temperature
   frontMatter = frontMatter.replace(/^model:.*$\r?\n?/gm, '');
 
-  return `# 🎯 SDD 工作流 - 阶段 ${num}/6
+  return `---
+${frontMatter}
+---
+
+# 🎯 SDD 工作流 - 阶段 ${num}/6
 
 ## 执行顺序
 \`\`\`
@@ -87,9 +91,7 @@ function generateNumberedAgent(template, num, short, desc) {
 > 💡 **提示**: 也可以用 \`@sdd-${short}\`（两者等价）
 
 ---
----
-${frontMatter}
----
+
 ${content}
 `;
 }
