@@ -28,6 +28,16 @@ export declare const SDDPlugin: ({ project, client, $, directory, worktree }: {
             args: {};
             execute(args: any, context: any): Promise<string>;
         };
+        sdd_roadmap: {
+            description: string;
+            args: {
+                scope: {
+                    type: string;
+                    description: string;
+                };
+            };
+            execute(args: any, context: any): Promise<string>;
+        };
     };
 }>;
 export default SDDPlugin;

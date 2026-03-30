@@ -1,3 +1,13 @@
+---
+description: SDD 验证专家 - 检查代码与规范的一致性，检测漂移
+mode: subagent
+temperature: 0.1
+permission:
+  edit: deny
+  bash: allow
+  webfetch: deny
+---
+
 # 🎯 SDD 工作流 - 阶段 6/6
 
 ## 执行顺序
@@ -17,15 +27,7 @@
 > 💡 **提示**: 也可以用 `@sdd-validate`（两者等价）
 
 ---
----
-description: SDD 验证专家 - 检查代码与规范的一致性，检测漂移
-mode: subagent
-temperature: 0.1
-permission:
-  edit: deny
-  bash: allow
-  webfetch: deny
----
+
 
 # @sdd-validate - SDD 验证专家（阶段 6/6）
 

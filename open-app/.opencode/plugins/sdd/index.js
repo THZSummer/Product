@@ -85,6 +85,22 @@ export const SDDPlugin = async ({ project, client, $, directory, worktree }) => 
                         return "No SDD state found. Run sdd_init first.";
                     }
                 }
+            },
+            // 创建 Roadmap 规划
+            sdd_roadmap: {
+                description: "Create a multi-version Roadmap plan",
+                args: {
+                    scope: {
+                        type: "string",
+                        description: "Roadmap scope (e.g., '2026 Q2', 'Phase 3', 'v1.3.0')"
+                    }
+                },
+                async execute(args, context) {
+                    const scope = args.scope;
+                    // 创建 roadmap 目录
+                    await context.$ `mkdir -p .specs/roadmap`;
+                    return `🗓️ Creating roadmap for: ${scope}`;
+                }
             }
         }
     };

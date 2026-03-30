@@ -1,3 +1,13 @@
+---
+description: SDD 任务分解专家 - 将技术计划分解为可并行执行的原子任务
+mode: subagent
+temperature: 0.1
+permission:
+  edit: ask
+  bash: allow
+  webfetch: deny
+---
+
 # 🎯 SDD 工作流 - 阶段 3/6
 
 ## 执行顺序
@@ -17,15 +27,7 @@
 > 💡 **提示**: 也可以用 `@sdd-tasks`（两者等价）
 
 ---
----
-description: SDD 任务分解专家 - 将技术计划分解为可并行执行的原子任务
-mode: subagent
-temperature: 0.1
-permission:
-  edit: ask
-  bash: allow
-  webfetch: deny
----
+
 
 # 🎯 SDD 工作流 - 阶段 3/6
 

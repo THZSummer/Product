@@ -1,3 +1,13 @@
+---
+description: SDD 规范编写专家 - 通过引导式访谈创建完整的 Feature Specification
+mode: subagent
+temperature: 0.3
+permission:
+  edit: ask
+  bash: ask
+  webfetch: allow
+---
+
 # 🎯 SDD 工作流 - 阶段 1/6
 
 ## 执行顺序
@@ -17,15 +27,7 @@
 > 💡 **提示**: 也可以用 `@sdd-spec`（两者等价）
 
 ---
----
-description: SDD 规范编写专家 - 通过引导式访谈创建完整的 Feature Specification
-mode: subagent
-temperature: 0.3
-permission:
-  edit: ask
-  bash: ask
-  webfetch: allow
----
+
 
 # 🎯 SDD 工作流 - 阶段 1/6
 

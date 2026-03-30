@@ -1,3 +1,13 @@
+---
+description: SDD 代码审查专家 - 审查代码质量和规范符合性
+mode: subagent
+temperature: 0.2
+permission:
+  edit: ask
+  bash: allow
+  webfetch: deny
+---
+
 # 🎯 SDD 工作流 - 阶段 5/6
 
 ## 执行顺序
@@ -17,15 +27,7 @@
 > 💡 **提示**: 也可以用 `@sdd-review`（两者等价）
 
 ---
----
-description: SDD 代码审查专家 - 审查代码质量和规范符合性
-mode: subagent
-temperature: 0.2
-permission:
-  edit: ask
-  bash: allow
-  webfetch: deny
----
+
 
 # 🎯 SDD 工作流 - 阶段 5/6
 

@@ -36,6 +36,17 @@
 
 ### 一键安装（推荐）
 
+**Linux/macOS:**
+```bash
+bash install.sh <目标项目目录>
+# 或 (确保脚本可执行)
+chmod +x install.sh
+./install.sh <目标项目目录>
+```
+
+⚠️ **注意**: 必须使用 `bash`，不要用 `sh install.sh`！
+
+**Windows:**
 ```powershell
 powershell -ExecutionPolicy Bypass -File "install.ps1" <目标项目目录>
 ```
