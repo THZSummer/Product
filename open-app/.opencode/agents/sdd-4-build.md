@@ -1,3 +1,13 @@
+---
+description: SDD 任务实现专家 - 根据任务分解实现具体代码
+mode: subagent
+temperature: 0.3
+permission:
+  edit: ask
+  bash: ask
+  webfetch: allow
+---
+
 # 🎯 SDD 工作流 - 阶段 4/6
 
 ## 执行顺序
@@ -17,15 +27,7 @@
 > 💡 **提示**: 也可以用 `@sdd-build`（两者等价）
 
 ---
----
-description: SDD 任务实现专家 - 根据任务分解实现具体代码
-mode: subagent
-temperature: 0.3
-permission:
-  edit: ask
-  bash: ask
-  webfetch: allow
----
+
 
 # 🎯 SDD 工作流 - 阶段 4/6
 

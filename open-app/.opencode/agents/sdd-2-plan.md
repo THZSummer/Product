@@ -1,3 +1,13 @@
+---
+description: SDD 技术规划专家 - 将规范转化为可执行的技术计划和 ADR
+mode: subagent
+temperature: 0.2
+permission:
+  edit: ask
+  bash: allow
+  webfetch: allow
+---
+
 # 🎯 SDD 工作流 - 阶段 2/6
 
 ## 执行顺序
@@ -17,15 +27,7 @@
 > 💡 **提示**: 也可以用 `@sdd-plan`（两者等价）
 
 ---
----
-description: SDD 技术规划专家 - 将规范转化为可执行的技术计划和 ADR
-mode: subagent
-temperature: 0.2
-permission:
-  edit: ask
-  bash: allow
-  webfetch: allow
----
+
 
 # 🎯 SDD 工作流 - 阶段 2/6
 
