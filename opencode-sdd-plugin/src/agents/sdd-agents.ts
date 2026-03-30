@@ -91,6 +91,13 @@ export async function registerAgents(context: any) {
       description: 'SDD 验证专家 (阶段 6/6) - 同 sdd-6-validate',
       mode: 'subagent',
       promptFile: '.opencode/agents/sdd-validate.md'
+    },
+    // 扩展功能: Roadmap 规划
+    {
+      name: 'sdd-roadmap',
+      description: 'SDD Roadmap 规划专家 - 多版本路线图规划',
+      mode: 'subagent',
+      promptFile: '.opencode/agents/sdd-roadmap.md'
     }
   ];
 

@@ -31,6 +31,18 @@ permission:
 | **@sdd 帮助** | 查看帮助 | `@sdd 帮助` |
 | **@sdd-help** | 查看帮助（别名） | `@sdd-help` |
 
+### 规划辅助 Agent（整体规划）
+
+| 命令 | 说明 | 示例 |
+|------|------|------|
+| **@sdd-roadmap [范围]** | 多版本 Roadmap 规划 | `@sdd-roadmap "2026 Q2"` |
+
+`sdd-roadmap` 用于：
+- 制定多版本迭代路线图
+- 使用 RICE 模型评估功能优先级
+- 分析功能间依赖关系
+- 规划版本发布时间表
+
 ### 阶段跳转
 
 | 命令 | 阶段 | 说明 |
@@ -52,6 +64,7 @@ permission:
 | `@sdd-build` | 任务实现 | `@sdd-build "实现 TASK-001"` |
 | `@sdd-review` | 代码审查 | `@sdd-review "审查用户登录"` |
 | `@sdd-validate` | 最终验证 | `@sdd-validate "验证用户登录"` |
+| `@sdd-roadmap` | Roadmap 规划 | `@sdd-roadmap "制定 Phase 3 规划"` |
 
 ---
 
