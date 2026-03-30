@@ -292,10 +292,16 @@ npm run test
 
 | 版本 | 日期 | 说明 |
 |------|------|------|
-| v1.2.0 | 规划中 | Phase 2: Skills + TUI + MCP + Structured Output |
+| v1.2.0 | 2026-04-30 (计划) | Phase 2: Skills + TUI + MCP + Structured Output |
 | v1.1.1 | 2026-03-30 | 新增 @sdd-roadmap Agent (15 个 Agent) |
 | v1.1.0 | 2026-03-25 | 权限配置统一 + 模板格式统一 |
 | v1.0.0 | 2026-03-20 | 首发版本：6 阶段工作流 + 14 个 Agent |
+
+**未来版本规划:**
+- **v1.3.0** (2026-06-15): Phase 3 - 图形化状态面板 + Git Hooks + 多 Feature 并发管理
+- **v2.0.0** (2026-09-30): Phase 4 - 企业级权限管理 + 插件市场 + 数据分析
+
+📊 **详细 Roadmap**: 查看 [`.specs/ROADMAP.md`](./.specs/ROADMAP.md)
 
 详细变更记录请参见 [CHANGELOG.md](./CHANGELOG.md)
 
