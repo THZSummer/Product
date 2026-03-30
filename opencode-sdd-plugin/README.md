@@ -21,7 +21,7 @@ opencode-sdd-plugin/
 │   ├── agents/                 # 编译后 Agent 代码
 │   ├── commands/               # 编译后命令
 │   ├── state/                  # 编译后状态机
-│   └── templates/agents/       # 生成的 agent 定义（14 个.md）
+│   └── templates/agents/       # 生成的 agent 定义（15 个.md）
 │
 ├── .opencode/                  # 安装文件（本地测试用，不应提交）
 │   └── plugins/sdd/            # 插件安装目录
@@ -81,23 +81,71 @@ cp dist/templates/agents/* <target-project>/.opencode/agents/
 使用 `@sdd` 作为统一入口，自动根据当前状态路由到正确阶段：
 
 ```bash
-@sdd 开始 用户登录功能
-@sdd 继续
-@sdd 状态
+@sd 开始 用户登录功能
+@sd 继续
+@sd 状态
 ```
 
-### 分阶段执行
+### 核心工作流 Agent（阶段性执行）
 
 直接调用特定阶段 Agent：
 
 ```bash
 @sdd-1-spec "用户需要登录和注册功能"
-@sdd-2-plan "基于规范制定开发计划"
+@sdd-2-plan "基于规范制定开发计划" 
 @sdd-3-tasks "拆解为具体任务"
 @sdd-4-build "实现代码"
 @sdd-5-review "代码审查"
 @sdd-6-validate "验证功能"
 ```
+
+### 规划辅助 Agent（整体规划支持）
+
+提供跨版本、跨功能的整体规划支持：
+
+```bash
+@sdd-roadmap "为整个项目创建 roadmap 规划"
+@sdd-roadmap "Q2 上线，2 个人，做什么功能好"
+@sdd-roadmap "基于现有 spec 规划版本"
+```
+
+`sdd-roadmap` Agent 支持:
+- **多版本规划**: 创建包含多个迭代版本的详细路线图
+- **功能优先级排序**: 使用 RICE 模型 (Reach, Impact, Confidence, Effort) 评估功能优先级
+- **依赖关系分析**: 识别功能开发的依赖关系，优化开发顺序
+- **时间表规划**: 基于资源和复杂度预测版本发布周期
+- **智能 Feature 整理**: 从用户零散输入中提取和推荐相关功能
+
+#### 📊 完整 Agent 关系图
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                   SDD 完整规划体系                           │
+├─────────────────────────────────────────────────────────────┤
+│  横向规划 (战略层)                                           │
+│  @sdd-roadmap → .specs/roadmap/ROADMAP.md                  │
+│  (多 Feature 多版本规划，可选)                                │
+│                           ↓                                  │
+│  纵向开发 (战术层) - 单 Feature 6 阶段工作流                    │
+│  @sdd-spec → @sdd-plan → @sdd-tasks → @sdd-build           │
+│  (需求)    (技术方案)  (任务分解)  (实现)                    │
+│                           ↓                                  │
+│  @sdd-review → @sdd-validate                                │
+│  (审查)      (验证)                                          │
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### 📋 Agent 对比表
+
+| Agent | 层次 | 输入 | 输出 | 必需 |
+|-------|------|------|------|------|
+| `@sdd-roadmap` | 战略层 | 零散想法/约束 | 多版本 Roadmap | ❌ 可选 |
+| `@sdd-1-spec` | 战术层 | 用户需求 | spec.md | ✅ 必需 |
+| `@sdd-2-plan` | 战术层 | spec.md | plan.md | ✅ 必需 |
+| `@sdd-3-tasks` | 战术层 | plan.md | tasks.md | ✅ 必需 |
+| `@sdd-4-build` | 执行层 | tasks.md | 源代码 | ✅ 必需 |
+| `@sdd-5-review` | 执行层 | 代码 | 审查报告 | ✅ 必需 |
+| `@sdd-6-validate` | 执行层 | 审查报告 | 验证结果 | ✅ 必需 |
 
 ### 流程守护规则
 
@@ -130,6 +178,49 @@ cp dist/templates/agents/* <target-project>/.opencode/agents/
 4. **实现阶段**: 编写代码实现功能
 5. **审查阶段**: 代码质量检查和改进建议
 6. **验证阶段**: 确保功能符合规范
+
+## 💡 使用场景
+
+### 场景 1: 新项目启动（推荐 Roadmap）
+
+```bash
+# 1. 制定整体规划
+@sdd-roadmap "新项目，Q2 上线，2 个人，做什么好"
+# 输出：.specs/roadmap/ROADMAP-2026.md
+
+# 2. 从 Roadmap 选择优先 Feature
+@sdd-1-spec "用户登录"
+
+# 3. 继续 6 阶段流程
+@sdd-2-plan "用户登录"
+@sdd-3-tasks "用户登录"
+@sdd-4-build "实现 TASK-001"
+```
+
+### 场景 2: 已有明确需求（跳过 Roadmap）
+
+```bash
+@sdd-1-spec "用户登录"
+@sdd-2-plan "用户登录"
+@sdd-3-tasks "用户登录"
+@sdd-4-build "实现 TASK-001"
+```
+
+### 场景 3: 多版本规划（基于现有项目）
+
+```bash
+@sdd-roadmap "基于现有 spec 规划版本"
+# 扫描 .specs/ 已有 Feature，输出版本分组建议
+```
+
+### 场景 4: 使用智能入口
+
+```bash
+@sdd 开始 用户登录      # 自动路由到 spec 阶段
+@sdd 继续              # 继续当前工作
+@sdd 状态              # 查看进度
+@sdd 帮助              # 查看完整命令
+```
 
 ## ⚙️ 配置文件说明
 
@@ -202,6 +293,7 @@ npm run test
 | 版本 | 日期 | 说明 |
 |------|------|------|
 | v1.2.0 | 规划中 | Phase 2: Skills + TUI + MCP + Structured Output |
+| v1.1.1 | 2026-03-30 | 新增 @sdd-roadmap Agent (15 个 Agent) |
 | v1.1.0 | 2026-03-25 | 权限配置统一 + 模板格式统一 |
 | v1.0.0 | 2026-03-20 | 首发版本：6 阶段工作流 + 14 个 Agent |
 
