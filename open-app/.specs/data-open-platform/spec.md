@@ -6,7 +6,7 @@
 |------|------|
 | **标识符** | `DATA-OPEN-001` |
 | **名称** | 数据开放平台 |
-| **版本** | 1.0.21 |
+| **版本** | 1.0.22 |
 | **创建日期** | 2026-03-30 |
 | **作者** | Summer |
 | **优先级** | P0 |
@@ -1361,6 +1361,7 @@ Response: 500 Internal Server Error
 | **1.0.19** | **2026-03-30** | **Summer** | **数据模型时间字段统一：所有 TIMESTAMP → DATETIME(3)** |
 | **1.0.20** | **2026-03-30** | **Summer** | **补充审计字段：api_audit_logs.created_by、user_authorizations.created_by/updated_by** |
 | **1.0.21** | **2026-03-30** | **Summer** | **列表查询字段优化：description/approval_comment 从 TEXT 改为 VARCHAR** |
+| **1.0.22** | **2026-03-30** | **Summer** | **数据模型主键统一：所有 VARCHAR(64) 主键和外键改为 BIGINT(20) 支持雪花 ID** |
 
 ---
 
