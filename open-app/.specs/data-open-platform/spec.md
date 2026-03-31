@@ -957,7 +957,7 @@ CREATE TABLE user_authorizations (
 
 **API 规范**: 
 - 所有接口遵循 RESTful 设计规范
-- 响应格式统一为 JSON 结构 `{data, code, message}`
+- 响应格式统一为 JSON 结构 `{data, code, messageZh, messageEn}`
 - 认证方式：
   - **生产者通道**：企业内部系统身份账号凭证（Cookie/JWT/OAuth2）
   - **消费者通道**：企业公共系统账号身份凭证（Cookie/JWT/OAuth2）
@@ -995,7 +995,8 @@ Response: 201 Created
     "createdBy": 123456
   },
   "code": 0,
-  "message": "创建成功，待审批"
+  "messageZh": "创建成功，待审批",
+    "messageEn": "Created successfully, pending approval"
 }
 ```
 
@@ -1023,7 +1024,8 @@ Response: 200 OK
     "status": "active"
   },
   "code": 0,
-  "message": "配置成功"
+  "messageZh": "配置成功",
+    "messageEn": "Configured successfully",
 }
 ```
 
@@ -1051,7 +1053,8 @@ Response: 201 Created
     "createdAt": "2026-03-30T10:00:00.123Z"
   },
   "code": 0,
-  "message": "申请已提交，待审批"
+  "messageZh": "申请已提交，待审批",
+    "messageEn": "Application submitted, pending approval",
 }
 ```
 
@@ -1076,7 +1079,8 @@ Response: 200 OK
     "pageSize": 50
   },
   "code": 0,
-  "message": "success"
+  "messageZh": "成功",
+    "messageEn": "success"
 }
 ```
 
@@ -1104,7 +1108,8 @@ Response: 201 Created
     "authUrl": "https://open-app.example.com/authorize?code=auth_abc123"
   },
   "code": 0,
-  "message": "授权请求已生成，请用户确认"
+  "messageZh": "授权请求已生成，请用户确认",
+    "messageEn": "Authorization request generated, please confirm",
 }
 ```
 
@@ -1116,7 +1121,8 @@ Response: 401 Unauthorized
 {
   "data": null,
   "code": "API_INVALID_CREDENTIAL",
-  "message": "无效的企业凭证，请检查认证方式是否正确",
+  "messageZh": "无效的企业凭证，请检查认证方式是否正确",
+    "messageEn": "Invalid enterprise credential, please check authentication",
   "details": {
     "errorType": "authentication",
     "authType": "enterprise/public"
@@ -1128,7 +1134,8 @@ Response: 403 Forbidden
 {
   "data": null,
   "code": "API_PERMISSION_DENIED",
-  "message": "当前凭证无权访问指定的字段或操作",
+  "messageZh": "当前凭证无权访问指定的字段或操作",
+    "messageEn": "Current credential has no permission to access specified field or operation",
   "details": {
     "requiredPermission": "dataset:read:salary",
     "resource": "/api/v1/datasets/987654321/data"
@@ -1140,7 +1147,8 @@ Response: 429 Too Many Requests
 {
   "data": null,
   "code": "API_RATE_LIMIT_EXCEEDED",
-  "message": "API 调用频率超限",
+  "messageZh": "API 调用频率超限",
+    "messageEn": "API rate limit exceeded",
   "details": {
     "limit": 1000,
     "remaining": 0,
@@ -1154,7 +1162,8 @@ Response: 404 Not Found
 {
   "data": null,
   "code": "API_DATASET_NOT_FOUND",
-  "message": "指定的数据集不存在",
+  "messageZh": "指定的数据集不存在",
+    "messageEn": "Specified dataset not found",
   "details": {
     "datasetId": 987654321
   }
@@ -1165,7 +1174,8 @@ Response: 401 Unauthorized
 {
   "data": null,
   "code": "API_AUTH_CODE_INVALID",
-  "message": "授权码无效或已过期",
+  "messageZh": "授权码无效或已过期",
+    "messageEn": "Authorization code invalid or expired",
   "details": {
     "authCode": "auth_abc123...",
     "status": "expired|used|revoked"
@@ -1177,7 +1187,8 @@ Response: 500 Internal Server Error
 {
   "data": null,
   "code": "API_INTERNAL_ERROR",
-  "message": "服务器内部错误",
+  "messageZh": "服务器内部错误",
+    "messageEn": "Internal server error",
   "details": {
     "traceId": "trace_xxxxxxxxxxxx",
     "retrySafe": true
