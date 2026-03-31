@@ -793,6 +793,26 @@
 
 ## 6. 数据模型
 
+**设计原则**: 规范化、可扩展、高性能，支持雪花 ID 和毫秒级时间戳
+
+**数据库规范**:
+- **字符集**: utf8mb4（支持 Emoji 和多语言）
+- **排序规则**: utf8mb4_general_ci
+- **存储引擎**: InnoDB（支持事务和行级锁）
+- **主键规范**: BIGINT(20) 雪花 ID（分布式唯一标识）
+- **外键规范**: BIGINT(20) 雪花 ID（逻辑外键，不使用物理外键约束）
+- **时间字段**: DATETIME(3) 毫秒精度，默认值 CURRENT_TIMESTAMP(3)
+- **状态字段**: TINYINT(10) 枚举值（1=active/pending, 2=disabled/approved, etc.）
+- **JSON 配置**: TEXT 类型存储 JSON 格式字符串（应用层序列化/反序列化）
+- **审计字段**: 所有表包含 created_at/created_by/updated_at/updated_by
+- **索引规范**: 
+  - 主键索引：PRIMARY KEY (id)
+  - 外键索引：idx_{field_name} ({field_name})
+  - 组合索引：idx_{field1}_{field2} ({field1}, {field2})
+  - 时间索引：idx_{field}_created ({field}, created_at)
+
+---
+
 ### 6.1 数据集注册表 (datasets)
 
 ```sql
