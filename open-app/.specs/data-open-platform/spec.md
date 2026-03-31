@@ -803,10 +803,10 @@ CREATE TABLE datasets (
     producer_app_id   BIGINT(20) NOT NULL,          -- 生产者应用 ID
     data_source_type  TINYINT NOT NULL,             -- 数据源类型：1-DATABASE 2-API 3-FILE 4-MQ
     data_source_config TEXT NOT NULL,               -- 数据源连接配置（JSON 格式）
-    update_frequency  VARCHAR(32) NOT NULL,         -- 更新频率：REALTIME/CRON/MANUAL
+    update_frequency  TINYINT NOT NULL,             -- 更新频率：1-实时 2-定时 3-手动
     cron_expression   VARCHAR(64),                  -- Cron 表达式（定时更新时使用）
     schema_definition TEXT NOT NULL,                -- 数据字段定义（JSON 格式）
-    status            VARCHAR(16) NOT NULL DEFAULT 'pending',  -- pending/approved/rejected/disabled
+    status            TINYINT(10) NOT NULL DEFAULT '1',  -- 1-pending 2-approved 3-rejected 4-disabled
     approval_comment  VARCHAR(1024),                -- 审批意见
     created_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     created_by        BIGINT(20) NOT NULL,
@@ -830,7 +830,7 @@ CREATE TABLE data_permissions (
     data_scope        VARCHAR(512) NOT NULL,      -- 数据范围配置（JSON 格式，部门/时间等）
     access_quota      TEXT NOT NULL,              -- 访问配额（JSON 格式，单次/每日/每月）
     access_frequency  TEXT NOT NULL,              -- 访问频率限制（JSON 格式，每分钟/小时/每天）
-    status            VARCHAR(16) NOT NULL DEFAULT 'active',  -- active/disabled
+    status            TINYINT(10) NOT NULL DEFAULT '1',  -- 1-active 2-disabled
     created_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     created_by        BIGINT(20) NOT NULL,        -- 创建人
     updated_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
@@ -853,7 +853,7 @@ CREATE TABLE subscriptions (
     push_target       TEXT NOT NULL,                -- 推送目标配置（URL/Topic/Queue 等，JSON 格式）
     retry_attempts    INT NOT NULL DEFAULT 3,       -- 重试次数
     secret_signature  VARCHAR(256),                 -- 签名密钥
-    status            VARCHAR(16) NOT NULL DEFAULT 'pending',  -- pending/approved/rejected/paused/disabled
+    status            TINYINT(10) NOT NULL DEFAULT '1',  -- 1-pending 2-approved 3-rejected 4-paused 5-disabled
     approval_comment  VARCHAR(1024),                -- 审批意见
     metrics           TEXT NOT NULL,                -- 订阅统计信息（JSON 格式）
     created_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -876,8 +876,8 @@ CREATE TABLE api_credentials (
     app_name        VARCHAR(128) NOT NULL,          -- 应用名称
     api_key         VARCHAR(128) NOT NULL,          -- API 公开密钥
     api_secret      VARCHAR(256) NOT NULL,          -- API 私密密钥（加密存储）
-    auth_type       VARCHAR(32) NOT NULL DEFAULT 'jwt',  -- auth type: jwt/oauth2/cookie
-    status          VARCHAR(16) NOT NULL DEFAULT 'active',  -- active/disabled/expired
+    auth_type       TINYINT(10) NOT NULL DEFAULT '1',  -- 1-jwt 2-oauth2 3-cookie
+    status          TINYINT(10) NOT NULL DEFAULT '1',  -- 1-active 2-disabled 3-expired
     created_at      DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     created_by      BIGINT(20) NOT NULL,
     updated_at      DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
@@ -925,7 +925,7 @@ CREATE TABLE user_authorizations (
     user_id           BIGINT(20) NOT NULL,          -- 数据归属用户 ID
     dataset_id        BIGINT(20),                   -- 数据集 ID（可选，限制特定数据集）
     auth_code         VARCHAR(128) NOT NULL,        -- 授权码（加密存储）
-    auth_status       VARCHAR(16) NOT NULL DEFAULT 'pending',  -- pending/approved/rejected/expired/used/revoked
+    auth_status       TINYINT(10) NOT NULL DEFAULT '1',  -- 1-pending 2-approved 3-rejected 4-expired 5-used 6-revoked
     auth_scopes       VARCHAR(1024) NOT NULL,       -- 授权范围（JSON 格式，数据集/字段）
     purpose           VARCHAR(256),                 -- 授权用途说明
     expires_at        DATETIME(3) NOT NULL,         -- 过期时间
