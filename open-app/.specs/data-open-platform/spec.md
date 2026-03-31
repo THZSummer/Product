@@ -1091,6 +1091,54 @@ CREATE TABLE user_authorizations (
 | 企业公共系统凭证 | 消费者系统 | Cookie/JWT/OAuth2 | 外部系统身份账号凭证 |
 
 **通用规范**:
+
+### HTTP 状态码规范
+
+| 状态码 | 说明 | 使用场景 |
+|--------|------|----------|
+| 200 | OK | 请求成功，返回数据 |
+| 201 | Created | 资源创建成功 |
+| 204 | No Content | 删除成功，无返回内容 |
+| 400 | Bad Request | 参数错误、格式错误、必填项缺失 |
+| 401 | Unauthorized | 认证失败、Token 过期、凭证无效 |
+| 403 | Forbidden | 权限不足、访问未授权资源 |
+| 404 | Not Found | 资源不存在 |
+| 409 | Conflict | 资源冲突（如重复创建） |
+| 429 | Too Many Requests | 请求频率超限 |
+| 500 | Internal Server Error | 服务器内部错误 |
+| 503 | Service Unavailable | 服务暂时不可用（维护/降级） |
+
+### 业务状态码规范
+
+使用英文字符串错误码，提高可读性和国际化友好度。
+
+| 业务码 | 说明 | HTTP 状态码 |
+|--------|------|-------------|
+| `SUCCESS` | 操作成功 | 200 |
+| `INVALID_PARAMETER` | 请求参数校验失败 | 400 |
+| `INVALID_CREDENTIAL` | 认证凭证无效或过期 | 401 |
+| `PERMISSION_DENIED` | 权限不足 | 403 |
+| `NOT_FOUND` | 资源不存在 | 404 |
+| `CONFLICT` | 资源冲突 | 409 |
+| `RATE_LIMIT_EXCEEDED` | 频率超限 | 429 |
+| `AUTH_CODE_INVALID` | 授权码无效或已过期 | 401 |
+| `INTERNAL_ERROR` | 服务器内部错误 | 500 |
+| `SERVICE_UNAVAILABLE` | 服务暂时不可用 | 503 |
+
+### 统一响应格式
+
+所有接口返回统一 JSON 结构：
+
+```json
+{
+  "data": {...},
+  "code": "SUCCESS",
+  "messageZh": "操作成功",
+  "messageEn": "Operation successful",
+  "traceId": "trace_xxx"
+}
+```
+
 - **响应格式**：所有接口返回统一 JSON 结构 `{data, code, messageZh, messageEn, traceId}`
 - **认证要求**：所有接口需要认证，使用 HTTPS 传输
 - **请求频率**：基于应用凭证进行限流控制
