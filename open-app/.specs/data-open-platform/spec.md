@@ -849,7 +849,7 @@ CREATE TABLE subscriptions (
     id                BIGINT(20) PRIMARY KEY,
     dataset_id        BIGINT(20) NOT NULL,          -- 数据集 ID
     consumer_app_id   BIGINT(20) NOT NULL,          -- 消费者应用 ID
-    subscription_type VARCHAR(32) NOT NULL,         -- 订阅类型：WEBHOOK/KAFKA/RABBITMQ/ENTERPRISE_MQ
+    subscription_type TINYINT(10) NOT NULL,         -- 订阅类型：1-WEBHOOK 2-KAFKA 3-RABBITMQ 4-ENTERPRISE_MQ
     push_target       TEXT NOT NULL,                -- 推送目标配置（URL/Topic/Queue 等，JSON 格式）
     retry_attempts    INT NOT NULL DEFAULT 3,       -- 重试次数
     secret_signature  VARCHAR(256),                 -- 签名密钥
@@ -905,7 +905,7 @@ CREATE TABLE api_audit_logs (
     response_status INT NOT NULL,
     response_time   BIGINT NOT NULL,                -- 响应耗时 (毫秒)
     response_size   BIGINT,                         -- 响应大小字节
-    access_type     VARCHAR(32) NOT NULL,           -- 访问类型：REST_API/WEBSOCKET/KAFKA/RABBITMQ/WEBHOOK
+    access_type     TINYINT(10) NOT NULL,           -- 访问类型：1-REST_API 2-WEBSOCKET 3-KAFKA 4-RABBITMQ 5-ENTERPRISE_MQ 6-WEBHOOK
     created_by      BIGINT(20) NOT NULL,            -- 操作用户 ID
     created_at      DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     
@@ -1362,6 +1362,7 @@ Response: 500 Internal Server Error
 | **1.0.20** | **2026-03-30** | **Summer** | **补充审计字段：api_audit_logs.created_by、user_authorizations.created_by/updated_by** |
 | **1.0.21** | **2026-03-30** | **Summer** | **列表查询字段优化：description/approval_comment 从 TEXT 改为 VARCHAR** |
 | **1.0.22** | **2026-03-30** | **Summer** | **数据模型主键统一：所有 VARCHAR(64) 主键和外键改为 BIGINT(20) 支持雪花 ID** |
+| **1.0.23** | **2026-03-30** | **Summer** | **状态字段统一：所有 VARCHAR 状态字段改为 TINYINT(10) 枚举** |
 
 ---
 
