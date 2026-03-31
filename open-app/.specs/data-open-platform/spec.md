@@ -6,7 +6,7 @@
 |------|------|
 | **标识符** | `DATA-OPEN-001` |
 | **名称** | 数据开放平台 |
-| **版本** | 1.0.31 |
+| **版本** | 1.0.32 |
 | **创建日期** | 2026-03-30 |
 | **作者** | Summer |
 | **优先级** | P0 |
@@ -1443,6 +1443,7 @@ Response: 500 Internal Server Error
 | **1.0.29** | **2026-03-30** | **Summer** | **统一时间字段命名：last_used_at→last_use_time、expires_at→expire_time、used_at→use_time、revoked_at→revoke_time** |
 | **1.0.30** | **2026-03-30** | **Summer** | **第 7 章 API 响应字段与第 6 章数据库设计统一（createTime/createBy/lastUpdateTime/lastUpdateBy/expireTime/useTime/revokeTime）** |
 | **1.0.31** | **2026-03-30** | **Summer** | **API 响应 ID 字段改为 String 避免 JavaScript 精度丢失（BIGINT→String）** |
+| **1.0.32** | **2026-03-30** | **Summer** | **API 响应格式添加 traceId 字段用于链路追踪和问题排查** |
 
 ---
 
