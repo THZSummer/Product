@@ -796,20 +796,18 @@
 **设计原则**: 规范化、可扩展、高性能，支持雪花 ID 和毫秒级时间戳
 
 **数据库规范**:
-- **字符集**: utf8mb4（支持 Emoji 和多语言）
-- **排序规则**: utf8mb4_general_ci
 - **存储引擎**: InnoDB（支持事务和行级锁）
-- **主键规范**: BIGINT(20) 雪花 ID（分布式唯一标识）
-- **外键规范**: BIGINT(20) 雪花 ID（逻辑外键，不使用物理外键约束）
+- **主键规范**: BIGINT(20) 雪花ID（分布式唯一标识）
+- **外键规范**: BIGINT(20) 雪花ID（逻辑外键，不使用物理外键约束）
 - **时间字段**: DATETIME(3) 毫秒精度，默认值 CURRENT_TIMESTAMP(3)
 - **状态字段**: TINYINT(10) 枚举值（1=active/pending, 2=disabled/approved, etc.）
 - **JSON 配置**: TEXT 类型存储 JSON 格式字符串（应用层序列化/反序列化）
-- **审计字段**: 所有表包含 created_at/created_by/updated_at/updated_by
+- **审计字段**: 所有表包含 create_time/create_by/last_update_time/last_update_by
 - **索引规范**: 
   - 主键索引：PRIMARY KEY (id)
   - 外键索引：idx_{field_name} ({field_name})
   - 组合索引：idx_{field1}_{field2} ({field1}, {field2})
-  - 时间索引：idx_{field}_created ({field}, created_at)
+  - 时间索引：idx_{field}_created ({field}, create_time)
 
 ---
 
@@ -828,10 +826,10 @@ CREATE TABLE datasets (
     schema_definition TEXT NOT NULL,                -- 数据字段定义（JSON 格式）
     status            TINYINT(10) NOT NULL DEFAULT '1',  -- 1-pending 2-approved 3-rejected 4-disabled
     approval_comment  VARCHAR(1024),                -- 审批意见
-    created_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    created_by        BIGINT(20) NOT NULL,
-    updated_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-    updated_by        BIGINT(20) NOT NULL,
+    create_time        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    create_by        BIGINT(20) NOT NULL,
+    last_update_time        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+    last_update_by        BIGINT(20) NOT NULL,
     
     INDEX idx_producer_app_id (producer_app_id),
     INDEX idx_status (status),
@@ -851,10 +849,10 @@ CREATE TABLE data_permissions (
     access_quota      TEXT NOT NULL,              -- 访问配额（JSON 格式，单次/每日/每月）
     access_frequency  TEXT NOT NULL,              -- 访问频率限制（JSON 格式，每分钟/小时/每天）
     status            TINYINT(10) NOT NULL DEFAULT '1',  -- 1-active 2-disabled
-    created_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    created_by        BIGINT(20) NOT NULL,        -- 创建人
-    updated_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-    updated_by        BIGINT(20) NOT NULL,        -- 更新人
+    create_time        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    create_by        BIGINT(20) NOT NULL,        -- 创建人
+    last_update_time        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+    last_update_by        BIGINT(20) NOT NULL,        -- 更新人
     
     INDEX idx_dataset_id (dataset_id),
     INDEX idx_consumer_app_id (consumer_app_id),
@@ -876,10 +874,10 @@ CREATE TABLE subscriptions (
     status            TINYINT(10) NOT NULL DEFAULT '1',  -- 1-pending 2-approved 3-rejected 4-paused 5-disabled
     approval_comment  VARCHAR(1024),                -- 审批意见
     metrics           TEXT NOT NULL,                -- 订阅统计信息（JSON 格式）
-    created_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    created_by        BIGINT(20) NOT NULL,          -- 创建人
-    updated_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-    updated_by        BIGINT(20) NOT NULL,          -- 更新人
+    create_time        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    create_by        BIGINT(20) NOT NULL,          -- 创建人
+    last_update_time        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+    last_update_by        BIGINT(20) NOT NULL,          -- 更新人
     
     INDEX idx_dataset_id (dataset_id),
     INDEX idx_consumer_app_id (consumer_app_id),
@@ -898,10 +896,10 @@ CREATE TABLE api_credentials (
     api_secret      VARCHAR(256) NOT NULL,          -- API 私密密钥（加密存储）
     auth_type       TINYINT(10) NOT NULL DEFAULT '1',  -- 1-jwt 2-oauth2 3-cookie
     status          TINYINT(10) NOT NULL DEFAULT '1',  -- 1-active 2-disabled 3-expired
-    created_at      DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    created_by      BIGINT(20) NOT NULL,
-    updated_at      DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-    updated_by      BIGINT(20) NOT NULL,
+    create_time      DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    create_by      BIGINT(20) NOT NULL,
+    last_update_time      DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+    last_update_by      BIGINT(20) NOT NULL,
     last_used_at    DATETIME(3),                    -- 最后使用时间
     
     INDEX idx_app_id (app_id),
@@ -926,13 +924,13 @@ CREATE TABLE api_audit_logs (
     response_time   BIGINT NOT NULL,                -- 响应耗时 (毫秒)
     response_size   BIGINT,                         -- 响应大小字节
     access_type     TINYINT(10) NOT NULL,           -- 访问类型：1-REST_API 2-WEBSOCKET 3-KAFKA 4-RABBITMQ 5-ENTERPRISE_MQ 6-WEBHOOK
-    created_by      BIGINT(20) NOT NULL,            -- 操作用户 ID
-    created_at      DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    create_by      BIGINT(20) NOT NULL,            -- 操作用户 ID
+    create_time      DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     
     INDEX idx_trace_id (trace_id),
-    INDEX idx_consumer_app_id_created (consumer_app_id, created_at),
-    INDEX idx_dataset_id_created (dataset_id, created_at),
-    INDEX idx_created_date (DATE(created_at))
+    INDEX idx_consumer_app_id_time (consumer_app_id, create_time),
+    INDEX idx_dataset_id_time (dataset_id, create_time),
+    INDEX idx_create_date (DATE(create_time))
 );
 ```
 
@@ -951,10 +949,10 @@ CREATE TABLE user_authorizations (
     expires_at        DATETIME(3) NOT NULL,         -- 过期时间
     used_at           DATETIME(3),                  -- 使用时间
     revoked_at        DATETIME(3),                  -- 撤销时间
-    created_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    created_by        BIGINT(20) NOT NULL,          -- 创建人
-    updated_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-    updated_by        BIGINT(20) NOT NULL,          -- 更新人
+    create_time        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    create_by        BIGINT(20) NOT NULL,          -- 创建人
+    last_update_time        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+    last_update_by        BIGINT(20) NOT NULL,          -- 更新人
     
     INDEX idx_consumer_app_id (consumer_app_id),
     INDEX idx_user_id (user_id),
@@ -962,7 +960,7 @@ CREATE TABLE user_authorizations (
     INDEX idx_auth_code (auth_code),
     INDEX idx_status (auth_status),
     INDEX idx_expires_at (expires_at),
-    INDEX idx_created_by (created_by)
+    INDEX idx_create_by (create_by)
 );
 ```
 
@@ -1411,7 +1409,7 @@ Response: 500 Internal Server Error
 | **1.0.18** | **2026-03-30** | **Summer** | **数据模型 JSON 字段改为 TEXT：8 个字段统一为 TEXT 或 VARCHAR** |
 
 | **1.0.19** | **2026-03-30** | **Summer** | **数据模型时间字段统一：所有 TIMESTAMP → DATETIME(3)** |
-| **1.0.20** | **2026-03-30** | **Summer** | **补充审计字段：api_audit_logs.created_by、user_authorizations.created_by/updated_by** |
+| **1.0.20** | **2026-03-30** | **Summer** | **补充审计字段（create_time/create_by/last_update_time/last_update_by）：api_audit_logs.create_by、user_authorizations.create_by/last_update_by** |
 | **1.0.21** | **2026-03-30** | **Summer** | **列表查询字段优化：description/approval_comment 从 TEXT 改为 VARCHAR** |
 | **1.0.22** | **2026-03-30** | **Summer** | **数据模型主键统一：所有 VARCHAR(64) 主键和外键改为 BIGINT(20) 支持雪花 ID** |
 | **1.0.23** | **2026-03-30** | **Summer** | **状态字段统一：所有 VARCHAR 状态字段改为 TINYINT(10) 枚举** |
