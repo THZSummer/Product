@@ -826,10 +826,10 @@ CREATE TABLE data_permissions (
     id                VARCHAR(64) PRIMARY KEY,
     dataset_id        VARCHAR(64) NOT NULL,         -- 数据集 ID
     consumer_app_id   VARCHAR(64) NOT NULL,         -- 消费者应用 ID
-    permitted_fields  TEXT NOT NULL,                -- 允许访问的字段列表（JSON 格式，空为全部）
-    data_scope        TEXT NOT NULL,                -- 数据范围配置（JSON 格式，部门/时间等）
-    access_quota      TEXT NOT NULL,                -- 访问配额（JSON 格式，单次/每日/每月）
-    access_frequency  TEXT NOT NULL,                -- 访问频率限制（JSON 格式，每分钟/小时/每天）
+    permitted_fields  VARCHAR(2048) NOT NULL,     -- 允许访问的字段列表（JSON 格式，空为全部）
+    data_scope        VARCHAR(512) NOT NULL,      -- 数据范围配置（JSON 格式，部门/时间等）
+    access_quota      TEXT NOT NULL,              -- 访问配额（JSON 格式，单次/每日/每月）
+    access_frequency  TEXT NOT NULL,              -- 访问频率限制（JSON 格式，每分钟/小时/每天）
     status            VARCHAR(16) NOT NULL DEFAULT 'active',  -- active/disabled
     created_at        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     created_by        VARCHAR(64) NOT NULL,
@@ -925,7 +925,7 @@ CREATE TABLE user_authorizations (
     dataset_id        VARCHAR(64),                  -- 数据集 ID（可选，限制特定数据集）
     auth_code         VARCHAR(128) NOT NULL,        -- 授权码（加密存储）
     auth_status       VARCHAR(16) NOT NULL DEFAULT 'pending',  -- pending/approved/rejected/expired/used/revoked
-    auth_scopes       TEXT NOT NULL,                -- 授权范围（JSON 格式，数据集/字段）
+    auth_scopes       VARCHAR(1024) NOT NULL,       -- 授权范围（JSON 格式，数据集/字段）
     purpose           VARCHAR(256),                 -- 授权用途说明
     expires_at        TIMESTAMP NOT NULL,           -- 过期时间
     used_at           TIMESTAMP,                    -- 使用时间
