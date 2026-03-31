@@ -976,7 +976,7 @@ CREATE TABLE user_authorizations (
 
 **API 规范**: 
 - 所有接口遵循 RESTful 设计规范
-- 响应格式统一为 JSON 结构 `{data, code, messageZh, messageEn}`
+- 响应格式统一为 JSON 结构 `{data, code, messageZh, messageEn, traceId}`（用于问题排查和链路追踪）
 - 认证方式：
   - **生产者通道**：企业内部系统身份账号凭证（Cookie/JWT/OAuth2）
   - **消费者通道**：企业公共系统账号身份凭证（Cookie/JWT/OAuth2）
@@ -1017,7 +1017,8 @@ Response: 201 Created
   },
   "code": 0,
   "messageZh": "创建成功，待审批",
-  "messageEn": "Created successfully, pending approval"
+  "messageEn": "Created successfully, pending approval",
+  "traceId": "trace_xxxxxxxxxxxxxxxxxxxxxxxx"
 }
 ```
 
@@ -1046,7 +1047,8 @@ Response: 200 OK
   },
   "code": 0,
   "messageZh": "配置成功",
-  "messageEn": "Configured successfully"
+  "messageEn": "Configured successfully",
+  "traceId": "trace_xxxxxxxxxxxxxxxxxxxxxxxx"
 }
 ```
 
@@ -1078,7 +1080,8 @@ Response: 201 Created
   },
   "code": 0,
   "messageZh": "申请已提交，待审批",
-  "messageEn": "Application submitted, pending approval"
+  "messageEn": "Application submitted, pending approval",
+  "traceId": "trace_xxxxxxxxxxxxxxxxxxxxxxxx"
 }
 ```
 
@@ -1104,7 +1107,8 @@ Response: 200 OK
   },
   "code": 0,
   "messageZh": "成功",
-  "messageEn": "success"
+  "messageEn": "success",
+  "traceId": "trace_xxxxxxxxxxxxxxxxxxxxxxxx"
 }
 ```
 
@@ -1139,7 +1143,8 @@ Response: 201 Created
   },
   "code": 0,
   "messageZh": "授权请求已生成，请用户确认",
-  "messageEn": "Authorization request generated, please confirm"
+  "messageEn": "Authorization request generated, please confirm",
+  "traceId": "trace_xxxxxxxxxxxxxxxxxxxxxxxx"
 }
 ```
 
@@ -1153,6 +1158,7 @@ Response: 401 Unauthorized
   "code": "API_INVALID_CREDENTIAL",
   "messageZh": "无效的企业凭证，请检查认证方式是否正确",
   "messageEn": "Invalid enterprise credential, please check authentication",
+  "traceId": "trace_xxxxxxxxxxxxxxxxxxxxxxxx",
   "details": {
     "errorType": "authentication",
     "authType": "enterprise/public"
@@ -1166,6 +1172,7 @@ Response: 403 Forbidden
   "code": "API_PERMISSION_DENIED",
   "messageZh": "当前凭证无权访问指定的字段或操作",
   "messageEn": "Current credential has no permission to access specified field or operation",
+  "traceId": "trace_xxxxxxxxxxxxxxxxxxxxxxxx",
   "details": {
     "requiredPermission": "dataset:read:salary",
     "resource": "/api/v1/datasets/987654321/data"
@@ -1179,6 +1186,7 @@ Response: 429 Too Many Requests
   "code": "API_RATE_LIMIT_EXCEEDED",
   "messageZh": "API 调用频率超限",
   "messageEn": "API rate limit exceeded",
+  "traceId": "trace_xxxxxxxxxxxxxxxxxxxxxxxx",
   "details": {
     "limit": 1000,
     "remaining": 0,
@@ -1194,6 +1202,7 @@ Response: 404 Not Found
   "code": "API_DATASET_NOT_FOUND",
   "messageZh": "指定的数据集不存在",
   "messageEn": "Specified dataset not found",
+  "traceId": "trace_xxxxxxxxxxxxxxxxxxxxxxxx",
   "details": {
     "datasetId": "987654321"
   }
@@ -1206,6 +1215,7 @@ Response: 401 Unauthorized
   "code": "API_AUTH_CODE_INVALID",
   "messageZh": "授权码无效或已过期",
   "messageEn": "Authorization code invalid or expired",
+  "traceId": "trace_xxxxxxxxxxxxxxxxxxxxxxxx",
   "details": {
     "authCode": "auth_abc123...",
     "status": "expired|used|revoked"
@@ -1219,8 +1229,8 @@ Response: 500 Internal Server Error
   "code": "API_INTERNAL_ERROR",
   "messageZh": "服务器内部错误",
   "messageEn": "Internal server error",
+  "traceId": "trace_xxxxxxxxxxxxxxxxxxxxxxxx",
   "details": {
-    "traceId": "trace_xxxxxxxxxxxx",
     "retrySafe": true
   }
 }
