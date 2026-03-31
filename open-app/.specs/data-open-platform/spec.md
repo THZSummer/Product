@@ -803,6 +803,7 @@
 - **状态字段**: TINYINT(10) 枚举值（1=active/pending, 2=disabled/approved, etc.）
 - **JSON 配置**: TEXT 类型存储 JSON 格式字符串（应用层序列化/反序列化）
 - **审计字段**: 所有表包含 create_time/create_by/last_update_time/last_update_by
+- **其他时间字段**: last_use_time（最后使用时间）、expire_time（过期时间）、use_time（使用时间）、revoke_time（撤销时间）
 - **索引规范**: 
   - 主键索引：PRIMARY KEY (id)
   - 外键索引：idx_{field_name} ({field_name})
@@ -1009,8 +1010,10 @@ Response: 201 Created
     "id": 987654321,
     "name": "用户数据集",
     "status": 1,
-    "createdAt": "2026-03-30T10:00:00.123Z",
-    "createdBy": 123456
+    "createTime": "2026-03-30T10:00:00.123Z",
+    "createBy": 123456,
+    "lastUpdateTime": "2026-03-30T10:00:00.123Z",
+    "lastUpdateBy": 123456
   },
   "code": 0,
   "messageZh": "创建成功，待审批",
@@ -1039,11 +1042,11 @@ Response: 200 OK
   "data": {
     "datasetId": 987654321,
     "productionMethod": 1,
-    "status": "active"
+    "status": 1
   },
   "code": 0,
   "messageZh": "配置成功",
-  "messageEn": "Configured successfully",
+  "messageEn": "Configured successfully"
 }
 ```
 
@@ -1068,11 +1071,14 @@ Response: 201 Created
     "id": 111222333,
     "datasetId": 987654321,
     "status": 1,
-    "createdAt": "2026-03-30T10:00:00.123Z"
+    "createTime": "2026-03-30T10:00:00.123Z",
+    "createBy": 123456,
+    "lastUpdateTime": "2026-03-30T10:00:00.123Z",
+    "lastUpdateBy": 123456
   },
   "code": 0,
   "messageZh": "申请已提交，待审批",
-  "messageEn": "Application submitted, pending approval",
+  "messageEn": "Application submitted, pending approval"
 }
 ```
 
@@ -1113,7 +1119,7 @@ Authorization: Bearer {public_token}
   "datasetId": 987654321,
   "authScopes": "{\"datasets\":[987654321],\"fields\":{\"987654321\":[\"id\",\"name\"]}}",
   "purpose": "业务集成",
-  "expiresAt": "2026-03-30T11:00:00.000Z"
+  "expireTime": "2026-03-30T11:00:00.000Z"
 }
 
 Response: 201 Created
@@ -1122,12 +1128,18 @@ Response: 201 Created
     "id": 555666777,
     "authCode": "auth_abc123...",
     "status": 1,
-    "expiresAt": "2026-03-30T11:00:00.000Z",
+    "expireTime": "2026-03-30T11:00:00.000Z",
+    "useTime": null,
+    "revokeTime": null,
+    "createTime": "2026-03-30T10:00:00.123Z",
+    "createBy": 123456,
+    "lastUpdateTime": "2026-03-30T10:00:00.123Z",
+    "lastUpdateBy": 123456,
     "authUrl": "https://open-app.example.com/authorize?code=auth_abc123"
   },
   "code": 0,
   "messageZh": "授权请求已生成，请用户确认",
-  "messageEn": "Authorization request generated, please confirm",
+  "messageEn": "Authorization request generated, please confirm"
 }
 ```
 
