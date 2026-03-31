@@ -1024,62 +1024,73 @@ CREATE TABLE user_authorizations (
 
 ### 接口清单
 
-#### 数据注册管理
+#### web-producer-console（生产者管理控制台）
+使用**通用用户凭证 (Cookie)**，供数据 Owner 使用：
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | /api/v1/datasets | 查询我的数据集列表 |
+| POST | /api/v1/datasets | 创建数据集 |
+| PUT | /api/v1/datasets/{id} | 更新数据集 |
+| DELETE | /api/v1/datasets/{id} | 删除数据集 |
+| POST | /api/v1/datasets/{id}/production-methods | 配置数据生产方式 |
+| POST | /api/v1/datasets/{datasetId}/permissions | 配置数据访问权限 |
+| PUT | /api/v1/permissions/{id} | 更新权限配置 |
+| DELETE | /api/v1/permissions/{id} | 删除权限配置 |
+| GET | /api/v1/subscriptions/approvals | 查询待审批的订阅申请 |
+| POST | /api/v1/subscriptions/{id}/approve | 批准订阅申请 |
+| POST | /api/v1/subscriptions/{id}/reject | 拒绝订阅申请 |
 
+#### web-consumer-portal（消费者开发者门户）
+使用**通用用户凭证 (Cookie)**，供外部开发者使用：
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | /api/v1/datasets | 查询数据集列表 |
+| GET | /api/v1/datasets/{id} | 查询数据集详情 |
+| POST | /api/v1/subscriptions | 创建数据订阅 |
+| PUT | /api/v1/subscriptions/{id} | 更新订阅配置 |
+| DELETE | /api/v1/subscriptions/{id} | 取消订阅 |
+| GET | /api/v1/subscriptions | 查询我的订阅列表 |
+| GET | /api/v1/authorizations | 查询我的授权列表 |
+
+#### web-admin-console（平台管理控制台）
+使用**企业内部管理员凭证**，供企业管理员使用：
 | 方法 | 路径 | 说明 | 认证方式 |
 |------|------|------|----------|
-| POST | /api/v1/datasets | 创建数据集 | 企业内部凭证 |
-| PUT | /api/v1/datasets/{id} | 更新数据集 | 企业内部凭证 |
-| DELETE | /api/v1/datasets/{id} | 删除数据集 | 企业内部凭证 |
-| POST | /api/v1/datasets/{id}/production-methods | 配置数据生产方式 | 企业内部凭证 |
+| GET | /api/v1/datasets/approvals | 查询待审批的数据集注册 | 企业内部管理员凭证 |
+| POST | /api/v1/datasets/{id}/approve | 批准数据集注册 | 企业内部管理员凭证 |
+| POST | /api/v1/datasets/{id}/reject | 拒绝数据集注册 | 企业内部管理员凭证 |
+| GET | /api/v1/audit-logs | 查询审计日志 | 企业内部管理员凭证 |
+| GET | /api/v1/audit-logs/{id} | 查询审计日志详情 | 企业内部管理员凭证 |
 
-#### 数据权限管理
-
+#### 生产者系统接口
+使用**企业内部系统身份账号凭证**，供内部系统调用：
 | 方法 | 路径 | 说明 | 认证方式 |
 |------|------|------|----------|
-| POST | /api/v1/datasets/{datasetId}/permissions | 配置数据访问权限 | 企业内部凭证 |
-| PUT | /api/v1/permissions/{id} | 更新权限配置 | 企业内部凭证 |
-| DELETE | /api/v1/permissions/{id} | 删除权限配置 | 企业内部凭证 |
+| POST | /api/v1/datasets/{id}/data | 推送数据到平台 | 企业内部系统凭证 |
+| POST | /api/v1/datasets/{id}/production-methods | 配置数据生产方式 | 企业内部系统凭证 |
 
-#### 数据订阅管理
-
+#### 消费者系统接口
+使用**企业公共系统身份凭证**，供外部系统调用：
 | 方法 | 路径 | 说明 | 认证方式 |
 |------|------|------|----------|
-| POST | /api/v1/subscriptions | 创建数据订阅 | 企业公共凭证 |
-| PUT | /api/v1/subscriptions/{id} | 更新订阅配置 | 企业公共凭证 |
-| DELETE | /api/v1/subscriptions/{id} | 取消订阅 | 企业公共凭证 |
-| GET | /api/v1/subscriptions | 查询我的订阅列表 | 企业公共凭证 |
+| GET | /api/v1/datasets/{id}/data | 查询数据集数据 | 企业公共系统凭证 |
 
-#### 数据查询
-
+#### 普通用户接口
+使用**通用用户凭证 (Cookie)**，供普通用户使用：
 | 方法 | 路径 | 说明 | 认证方式 |
 |------|------|------|----------|
-| GET | /api/v1/datasets | 查询数据集列表 | 企业公共凭证 |
-| GET | /api/v1/datasets/{id} | 查询数据集详情 | 企业公共凭证 |
-| GET | /api/v1/datasets/{id}/data | 查询数据集数据 | 企业公共凭证 |
-
-#### 用户授权
-
-| 方法 | 路径 | 说明 | 认证方式 |
-|------|------|------|----------|
-| POST | /api/v1/authorizations/request | 创建授权请求 | 企业公共凭证 |
 | POST | /api/v1/authorizations/confirm | 确认授权 | 用户 Cookie |
 | DELETE | /api/v1/authorizations/{id} | 撤销授权 | 用户 Cookie |
-| GET | /api/v1/authorizations | 查询我的授权列表 | 企业公共凭证 |
 
-#### 审计日志
-
-| 方法 | 路径 | 说明 | 认证方式 |
-|------|------|------|----------|
-| GET | /api/v1/audit-logs | 查询审计日志 | 企业管理员凭证 |
-| GET | /api/v1/audit-logs/{id} | 查询审计日志详情 | 企业管理员凭证 |
+**认证方式说明表格**：
+| 认证方式 | 使用模块/系统 | 凭证类型 | 说明 |
+|----------|--------------|----------|------|
+| 通用用户凭证 | web-producer-console / web-consumer-portal / 普通用户 | Cookie | 普通用户登录凭证 |
+| 企业内部管理员凭证 | web-admin-console | Cookie/JWT/OAuth2 | IT 管理员/安全管理员凭证 |
+| 企业内部系统凭证 | 生产者系统 | Cookie/JWT/OAuth2 | 内部系统身份账号凭证 |
+| 企业公共系统凭证 | 消费者系统 | Cookie/JWT/OAuth2 | 外部系统身份账号凭证 |
 
 **通用规范**:
-- **认证方式**：
-  - **企业内部凭证**：企业内部系统身份账号凭证（Cookie/JWT/OAuth2），用于生产者数据注册和管理
-  - **企业公共凭证**：企业公共系统账号身份凭证（Cookie/JWT/OAuth2），用于消费者数据订阅和查询
-  - **用户 Cookie**：普通用户登录凭证，用于用户授权确认和撤销
-  - **企业管理员凭证**：IT 管理员/安全管理员凭证，用于审批和审计日志查询
 - **响应格式**：所有接口返回统一 JSON 结构 `{data, code, messageZh, messageEn, traceId}`
 - **认证要求**：所有接口需要认证，使用 HTTPS 传输
 - **请求频率**：基于应用凭证进行限流控制
