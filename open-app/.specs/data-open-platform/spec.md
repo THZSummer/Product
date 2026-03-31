@@ -793,6 +793,59 @@
 
 ## 6. 数据模型
 
+### ER 图
+
+```mermaid
+erDiagram
+    DATASETS ||--o{ DATA_PERMISSIONS : "1:N"
+    DATASETS ||--o{ SUBSCRIPTIONS : "1:N"
+    DATASETS ||--o{ USER_AUTHORIZATIONS : "1:N"
+    API_CREDENTIALS ||--o{ DATA_PERMISSIONS : "1:N"
+    API_CREDENTIALS ||--o{ SUBSCRIPTIONS : "1:N"
+    API_CREDENTIALS ||--o{ USER_AUTHORIZATIONS : "1:N"
+    API_AUDIT_LOGS }o--|| DATASETS : "N:1"
+    API_AUDIT_LOGS }o--|| API_CREDENTIALS : "N:1"
+    
+    DATASETS {
+        BIGINT id PK
+        VARCHAR name
+        TINYINT status
+    }
+    DATA_PERMISSIONS {
+        BIGINT id PK
+        BIGINT dataset_id FK
+        BIGINT consumer_app_id FK
+    }
+    SUBSCRIPTIONS {
+        BIGINT id PK
+        BIGINT dataset_id FK
+        BIGINT consumer_app_id FK
+    }
+    API_CREDENTIALS {
+        BIGINT id PK
+        BIGINT app_id
+    }
+    API_AUDIT_LOGS {
+        BIGINT id PK
+        BIGINT consumer_app_id FK
+        BIGINT dataset_id FK
+    }
+    USER_AUTHORIZATIONS {
+        BIGINT id PK
+        BIGINT consumer_app_id FK
+        BIGINT dataset_id FK
+    }
+```
+
+**表关系说明**：
+- `datasets` 与 `data_permissions`：一对多关系，一个数据集可配置多个消费者权限
+- `datasets` 与 `subscriptions`：一对多关系，一个数据集可被多个消费者订阅
+- `datasets` 与 `user_authorizations`：一对多关系，一个数据集可有多条用户授权记录
+- `api_credentials` 与 `data_permissions`：一对多关系，一个应用可配置多个数据集权限
+- `api_credentials` 与 `subscriptions`：一对多关系，一个应用可订阅多个数据集
+- `api_credentials` 与 `user_authorizations`：一对多关系，一个应用可有多条用户授权记录
+- `api_audit_logs` 关联 `datasets` 和 `api_credentials`：多对一关系，审计日志记录消费者对数据集的访问
+
 **设计原则**: 规范化、可扩展、高性能，支持雪花 ID 和毫秒级时间戳
 
 **数据库规范**:
