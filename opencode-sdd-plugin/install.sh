@@ -142,13 +142,8 @@ print_color "${CYAN}[5/6] Copying opencode.json...${NC}"
 cp "${SCRIPT_DIR}/dist/opencode.json" "${TARGET_DIR}/opencode.json"
 print_color "${GREEN}[OK] Copied opencode.json${NC}"
 
-# Step 6: Copy installation guide
-print_color "${CYAN}[6/7] Copying documentation...${NC}"
-cp "${SCRIPT_DIR}/INSTALL.md" "${TARGET_DIR}/SDD_INSTALL_GUIDE.md"
-print_color "${GREEN}[OK] Copied SDD_INSTALL_GUIDE.md${NC}"
-
-# Step 7: Initialize .sdd/ directory structure
-print_color "${CYAN}[7/7] Initializing .sdd/ directory...${NC}"
+# Step 6: Initialize .sdd/ directory structure
+print_color "${CYAN}[6/6] Initializing .sdd/ directory...${NC}"
 
 # Create .sdd/README.md
 cat > "${TARGET_DIR}/.sdd/README.md" << 'EOF'
@@ -217,7 +212,6 @@ echo "Files:"
 echo "  - .opencode/plugins/sdd/ ($FILE_COUNT files from dist/)"
 echo "  - .opencode/agents/ (16 agents from dist/templates/agents/)"
 echo "  - opencode.json (plugin configuration)"
-echo "  - SDD_INSTALL_GUIDE.md (quick start guide)"
 echo "  - .sdd/ (SDD workspace container)"
 echo "    └── .specs/ (SDD specification files)"
 echo ""
@@ -239,6 +233,5 @@ echo "  @sdd 开始 [feature 名称]"
 echo ""
 print_color "${GRAY}Documentation:${NC}"
 echo "  - README.md     - Full documentation"
-echo "  - INSTALL.md    - Detailed installation guide"
 echo "  - CHANGELOG.md  - Version history"
 echo ""

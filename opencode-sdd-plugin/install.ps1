@@ -85,13 +85,8 @@ Write-Host "[5/6] Copying opencode.json..." -ForegroundColor Cyan
 Copy-Item "$ScriptDir\dist\opencode.json" -Destination "$TargetDir\opencode.json" -Force
 Write-Host "[OK] Copied opencode.json" -ForegroundColor Green
 
-# Step 6: Copy installation guide
-Write-Host "[6/7] Copying documentation..." -ForegroundColor Cyan
-Copy-Item "$ScriptDir\INSTALL.md" -Destination "$TargetDir\SDD_INSTALL_GUIDE.md" -Force
-Write-Host "[OK] Copied SDD_INSTALL_GUIDE.md" -ForegroundColor Green
-
-# Step 7: Initialize .sdd/ directory structure
-Write-Host "[7/7] Initializing .sdd/ directory..." -ForegroundColor Cyan
+# Step 6: Initialize .sdd/ directory structure
+Write-Host "[6/6] Initializing .sdd/ directory..." -ForegroundColor Cyan
 
 # Create .sdd/README.md
 $sddReadme = @'
@@ -160,7 +155,6 @@ Write-Host "Files:"
 Write-Host "  - .opencode/plugins/sdd/ ($fileCount files from dist/)"
 Write-Host "  - .opencode/agents/ (16 agents from dist/templates/agents/)"
 Write-Host "  - opencode.json (plugin configuration)"
-Write-Host "  - SDD_INSTALL_GUIDE.md (quick start guide)"
 Write-Host "  - .sdd/ (SDD workspace container)"
 Write-Host "    └── .specs/ (SDD specification files)"
 Write-Host ""
@@ -182,6 +176,5 @@ Write-Host "  @sdd 开始 [feature 名称]"
 Write-Host ""
 Write-Host "Documentation:" -ForegroundColor Gray
 Write-Host "  - README.md     - Full documentation"
-Write-Host "  - INSTALL.md    - Detailed installation guide"
 Write-Host "  - CHANGELOG.md  - Version history"
 Write-Host ""
