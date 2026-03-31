@@ -6,7 +6,7 @@
 |------|------|
 | **标识符** | `DATA-OPEN-001` |
 | **名称** | 数据开放平台 |
-| **版本** | 1.0.10 |
+| **版本** | 1.0.20 |
 | **创建日期** | 2026-03-30 |
 | **作者** | Summer |
 | **优先级** | P0 |
@@ -1350,7 +1350,8 @@ Response: 500 Internal Server Error
 | **1.0.9** | **2026-03-30** | **Summer** | **第 1 章新增 1.6 业务流程图（全流程/注册/订阅/授权/消费）、FR-001.3 数据源类型明确（数据库仅 MySQL，API/文件/MQ 支持）、FR-002 补充各生产方式配置参数** |
 | **1.0.10** | **2026-03-30** | **Summer** | **1.6 业务流程图重构：合并为一张完整业务流程图（4 个阶段 + 全程审计），纯业务视角指导后续设计，移除 US 引用** |
 
-| **1.0.19** | **2026-03-30** | **Summer** | **数据模型时间字段统一：所有 TIMESTAMP → DATETIME(3)，补充 api_audit_logs.created_by、user_authorizations.created_by/updated_by** |
+| **1.0.19** | **2026-03-30** | **Summer** | **数据模型时间字段统一：所有 TIMESTAMP → DATETIME(3)** |
+| **1.0.20** | **2026-03-30** | **Summer** | **补充审计字段：api_audit_logs.created_by、user_authorizations.created_by/updated_by** |
 
 ---
 
