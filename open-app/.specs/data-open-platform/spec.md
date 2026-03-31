@@ -799,7 +799,7 @@
 CREATE TABLE datasets (
     id                VARCHAR(64) PRIMARY KEY,
     name              VARCHAR(128) NOT NULL,        -- 数据集名称
-    description       TEXT,                         -- 数据集描述
+    description       VARCHAR(512),                   -- 数据集描述
     producer_app_id   VARCHAR(64) NOT NULL,         -- 生产者应用 ID
     data_source_type  TINYINT NOT NULL,             -- 数据源类型：1-DATABASE 2-API 3-FILE 4-MQ
     data_source_config TEXT NOT NULL,               -- 数据源连接配置（JSON 格式）
@@ -807,7 +807,7 @@ CREATE TABLE datasets (
     cron_expression   VARCHAR(64),                  -- Cron 表达式（定时更新时使用）
     schema_definition TEXT NOT NULL,                -- 数据字段定义（JSON 格式）
     status            VARCHAR(16) NOT NULL DEFAULT 'pending',  -- pending/approved/rejected/disabled
-    approval_comment  TEXT,                         -- 审批意见
+    approval_comment  VARCHAR(1024),                -- 审批意见
     created_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     created_by        VARCHAR(64) NOT NULL,
     updated_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
@@ -854,7 +854,7 @@ CREATE TABLE subscriptions (
     retry_attempts    INT NOT NULL DEFAULT 3,       -- 重试次数
     secret_signature  VARCHAR(256),                 -- 签名密钥
     status            VARCHAR(16) NOT NULL DEFAULT 'pending',  -- pending/approved/rejected/paused/disabled
-    approval_comment  TEXT,                         -- 审批意见
+    approval_comment  VARCHAR(1024),                -- 审批意见
     metrics           TEXT NOT NULL,                -- 订阅统计信息（JSON 格式）
     created_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     created_by        VARCHAR(64) NOT NULL,
