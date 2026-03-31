@@ -6,7 +6,7 @@
 |------|------|
 | **标识符** | `DATA-OPEN-001` |
 | **名称** | 数据开放平台 |
-| **版本** | 1.0.32 |
+| **版本** | 1.0.33 |
 | **创建日期** | 2026-03-30 |
 | **作者** | Summer |
 | **优先级** | P0 |
@@ -1497,6 +1497,7 @@ Response: 500 Internal Server Error
 | **1.0.30** | **2026-03-30** | **Summer** | **第 7 章 API 响应字段与第 6 章数据库设计统一（createTime/createBy/lastUpdateTime/lastUpdateBy/expireTime/useTime/revokeTime）** |
 | **1.0.31** | **2026-03-30** | **Summer** | **API 响应 ID 字段改为 String 避免 JavaScript 精度丢失（BIGINT→String）** |
 | **1.0.32** | **2026-03-30** | **Summer** | **API 响应格式添加 traceId 字段用于链路追踪和问题排查** |
+| **1.0.33** | **2026-03-30** | **Summer** | **第 6 章添加 Mermaid ER 图（6 张表关系可视化）** |
 
 ---
 
