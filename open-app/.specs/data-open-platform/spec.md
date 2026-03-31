@@ -805,7 +805,7 @@ CREATE TABLE datasets (
     data_source_config TEXT NOT NULL,               -- 数据源连接配置（JSON 格式）
     update_frequency  VARCHAR(32) NOT NULL,         -- 更新频率：REALTIME/CRON/MANUAL
     cron_expression   VARCHAR(64),                  -- Cron 表达式（定时更新时使用）
-    schema_definition JSON NOT NULL,                -- 数据字段定义
+    schema_definition TEXT NOT NULL,                -- 数据字段定义（JSON 格式）
     status            VARCHAR(16) NOT NULL DEFAULT 'pending',  -- pending/approved/rejected/disabled
     approval_comment  TEXT,                         -- 审批意见
     created_at        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -826,10 +826,10 @@ CREATE TABLE data_permissions (
     id                VARCHAR(64) PRIMARY KEY,
     dataset_id        VARCHAR(64) NOT NULL,         -- 数据集 ID
     consumer_app_id   VARCHAR(64) NOT NULL,         -- 消费者应用 ID
-    permitted_fields  JSON NOT NULL,                -- 允许访问的字段列表，空为全部
-    data_scope        JSON NOT NULL,                -- 数据范围配置（部门/时间等）
-    access_quota      JSON NOT NULL,                -- 访问配额（单次/每日/每月）
-    access_frequency  JSON NOT NULL,                -- 访问频率限制（每分钟/小时/每天）
+    permitted_fields  TEXT NOT NULL,                -- 允许访问的字段列表（JSON 格式，空为全部）
+    data_scope        TEXT NOT NULL,                -- 数据范围配置（JSON 格式，部门/时间等）
+    access_quota      TEXT NOT NULL,                -- 访问配额（JSON 格式，单次/每日/每月）
+    access_frequency  TEXT NOT NULL,                -- 访问频率限制（JSON 格式，每分钟/小时/每天）
     status            VARCHAR(16) NOT NULL DEFAULT 'active',  -- active/disabled
     created_at        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     created_by        VARCHAR(64) NOT NULL,
@@ -855,7 +855,7 @@ CREATE TABLE subscriptions (
     secret_signature  VARCHAR(256),                 -- 签名密钥
     status            VARCHAR(16) NOT NULL DEFAULT 'pending',  -- pending/approved/rejected/paused/disabled
     approval_comment  TEXT,                         -- 审批意见
-    metrics           JSON NOT NULL,                -- 订阅统计信息
+    metrics           TEXT NOT NULL,                -- 订阅统计信息（JSON 格式）
     created_at        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     created_by        VARCHAR(64) NOT NULL,
     updated_at        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -901,7 +901,7 @@ CREATE TABLE api_audit_logs (
     client_ip       VARCHAR(45) NOT NULL,
     http_method     VARCHAR(10) NOT NULL,
     request_path    TEXT NOT NULL,
-    query_params    JSON,
+    query_params    TEXT,                           -- 查询参数（JSON 格式）
     response_status INT NOT NULL,
     response_time   BIGINT NOT NULL,                -- 响应耗时 (毫秒)
     response_size   BIGINT,                         -- 响应大小字节
@@ -925,7 +925,7 @@ CREATE TABLE user_authorizations (
     dataset_id        VARCHAR(64),                  -- 数据集 ID（可选，限制特定数据集）
     auth_code         VARCHAR(128) NOT NULL,        -- 授权码（加密存储）
     auth_status       VARCHAR(16) NOT NULL DEFAULT 'pending',  -- pending/approved/rejected/expired/used/revoked
-    auth_scopes       JSON NOT NULL,                -- 授权范围（数据集/字段）
+    auth_scopes       TEXT NOT NULL,                -- 授权范围（JSON 格式，数据集/字段）
     purpose           VARCHAR(256),                 -- 授权用途说明
     expires_at        TIMESTAMP NOT NULL,           -- 过期时间
     used_at           TIMESTAMP,                    -- 使用时间
