@@ -1114,12 +1114,16 @@ CREATE TABLE user_authorizations (
 - 所有主键/外键使用 BIGINT(20) 雪花 ID（返回前端时转为 String 避免精度丢失）
 - 时间格式使用 ISO 8601（毫秒精度）：`2026-03-31T10:00:00.123Z`
 
-### 7.1 数据集注册
+### 7.1 web-producer-console 接口示例
+
+使用**通用用户凭证 (Cookie)**，供数据 Owner 使用。
+
+#### 7.1.1 创建数据集
 
 ```http
 POST /api/v1/datasets
 Content-Type: application/json
-Authorization: Bearer {enterprise_token}
+Cookie: SESSION=xxx
 
 {
   "name": "用户数据集",
@@ -1150,12 +1154,12 @@ Response: 201 Created
 }
 ```
 
-### 7.2 数据生产方式配置
+#### 7.1.2 配置数据生产方式
 
 ```http
 POST /api/v1/datasets/{datasetId}/production-methods
 Content-Type: application/json
-Authorization: Bearer {enterprise_token}
+Cookie: SESSION=xxx
 
 {
   "productionMethod": 1,
@@ -1180,12 +1184,76 @@ Response: 200 OK
 }
 ```
 
-### 7.3 数据订阅申请
+#### 7.1.3 批准订阅申请
+
+```http
+POST /api/v1/subscriptions/{id}/approve
+Content-Type: application/json
+Cookie: SESSION=xxx
+
+{
+  "comment": "同意申请"
+}
+
+Response: 200 OK
+{
+  "data": {
+    "id": "111222333",
+    "datasetId": "987654321",
+    "consumerAppId": "456789",
+    "status": 2,
+    "approvalComment": "同意申请",
+    "lastUpdateTime": "2026-03-31T10:00:00.123Z",
+    "lastUpdateBy": "123456"
+  },
+  "code": 0,
+  "messageZh": "批准成功",
+  "messageEn": "Approved successfully",
+  "traceId": "trace_xxxxxxxxxxxxxxxxxxxxxxxx"
+}
+```
+
+### 7.2 web-consumer-portal 接口示例
+
+使用**通用用户凭证 (Cookie)**，供外部开发者使用。
+
+#### 7.2.1 查询数据集列表
+
+```http
+GET /api/v1/datasets?page=1&pageSize=20
+Cookie: SESSION=xxx
+
+Response: 200 OK
+{
+  "data": {
+    "items": [
+      {
+        "id": "987654321",
+        "name": "用户数据集",
+        "description": "企业用户基础信息",
+        "producerAppId": "123456789",
+        "updateFrequency": 1,
+        "status": 2,
+        "createTime": "2026-03-31T10:00:00.123Z"
+      }
+    ],
+    "total": 50,
+    "page": 1,
+    "pageSize": 20
+  },
+  "code": 0,
+  "messageZh": "成功",
+  "messageEn": "success",
+  "traceId": "trace_xxxxxxxxxxxxxxxxxxxxxxxx"
+}
+```
+
+#### 7.2.2 创建数据订阅
 
 ```http
 POST /api/v1/subscriptions
 Content-Type: application/json
-Authorization: Bearer {public_token}
+Cookie: SESSION=xxx
 
 {
   "datasetId": "987654321",
@@ -1200,6 +1268,7 @@ Response: 201 Created
   "data": {
     "id": "111222333",
     "datasetId": "987654321",
+    "consumerAppId": "456789",
     "status": 1,
     "createTime": "2026-03-31T10:00:00.123Z",
     "createBy": "123456",
@@ -1213,11 +1282,124 @@ Response: 201 Created
 }
 ```
 
-### 7.4 数据查询（REST API）
+### 7.3 web-admin-console 接口示例
+
+使用**企业内部管理员凭证**，供企业管理员使用。
+
+#### 7.3.1 批准数据集注册
+
+```http
+POST /api/v1/datasets/{id}/approve
+Content-Type: application/json
+Authorization: Bearer {admin_token}
+
+{
+  "comment": "审批通过"
+}
+
+Response: 200 OK
+{
+  "data": {
+    "id": "987654321",
+    "name": "用户数据集",
+    "status": 2,
+    "approvalComment": "审批通过",
+    "lastUpdateTime": "2026-03-31T10:00:00.123Z",
+    "lastUpdateBy": "admin001"
+  },
+  "code": 0,
+  "messageZh": "批准成功",
+  "messageEn": "Approved successfully",
+  "traceId": "trace_xxxxxxxxxxxxxxxxxxxxxxxx"
+}
+```
+
+#### 7.3.2 查询审计日志
+
+```http
+GET /api/v1/audit-logs?appId=123456&startDate=2026-03-01&endDate=2026-03-31&page=1&pageSize=50
+Authorization: Bearer {admin_token}
+
+Response: 200 OK
+{
+  "data": {
+    "items": [
+      {
+        "id": "100000001",
+        "traceId": "trace_abc123",
+        "consumerAppId": "456789",
+        "datasetId": "987654321",
+        "clientIp": "192.168.1.100",
+        "httpMethod": "GET",
+        "requestPath": "/api/v1/datasets/987654321/data",
+        "responseStatus": 200,
+        "responseTime": 45,
+        "accessType": 1,
+        "createTime": "2026-03-31T10:00:00.123Z"
+      }
+    ],
+    "total": 1500,
+    "page": 1,
+    "pageSize": 50
+  },
+  "code": 0,
+  "messageZh": "成功",
+  "messageEn": "success",
+  "traceId": "trace_xxxxxxxxxxxxxxxxxxxxxxxx"
+}
+```
+
+### 7.4 生产者系统接口示例
+
+使用**企业内部系统身份账号凭证**，供内部系统调用。
+
+#### 7.4.1 推送数据到平台
+
+```http
+POST /api/v1/datasets/{id}/data
+Content-Type: application/json
+Authorization: Bearer {enterprise_system_token}
+
+{
+  "items": [
+    {
+      "id": "1001",
+      "name": "张三",
+      "department": "tech",
+      "createTime": "2026-03-31T10:00:00.123Z"
+    },
+    {
+      "id": "1002",
+      "name": "李四",
+      "department": "sales",
+      "createTime": "2026-03-31T10:00:01.456Z"
+    }
+  ]
+}
+
+Response: 200 OK
+{
+  "data": {
+    "acceptedCount": 2,
+    "failedCount": 0,
+    "receivedTime": "2026-03-31T10:00:02.000Z"
+  },
+  "code": 0,
+  "messageZh": "数据接收成功",
+  "messageEn": "Data received successfully",
+  "traceId": "trace_xxxxxxxxxxxxxxxxxxxxxxxx"
+}
+```
+
+### 7.5 消费者系统接口示例
+
+使用**企业公共系统身份凭证**，供外部系统调用。
+
+#### 7.5.1 查询数据集数据
 
 ```http
 GET /api/v1/datasets/{datasetId}/data?permittedFields=["id","name"]&dataScope={"department":"tech"}&page=1&pageSize=50
-Authorization: Bearer {public_token}
+Authorization: Bearer {public_system_token}
 
 Response: 200 OK
 {
@@ -1226,6 +1408,11 @@ Response: 200 OK
       {
         "id": "1001",
         "name": "张三",
+        "department": "tech"
+      },
+      {
+        "id": "1003",
+        "name": "王五",
         "department": "tech"
       }
     ],
@@ -1240,43 +1427,74 @@ Response: 200 OK
 }
 ```
 
-### 7.5 用户授权
+### 7.6 普通用户接口示例
+
+使用**通用用户凭证 (Cookie)**，供普通用户使用。
+
+#### 7.6.1 确认授权
 
 ```http
-POST /api/v1/authorizations/request
+POST /api/v1/authorizations/confirm
 Content-Type: application/json
-Authorization: Bearer {public_token}
+Cookie: SESSION=xxx
 
 {
-  "datasetId": "987654321",
-  "authScopes": "{\"datasets\":[987654321],\"fields\":{\"987654321\":[\"id\",\"name\"]}}",
-  "purpose": "业务集成",
-  "expireTime": "2026-03-31T11:00:00.000Z"
+  "authRequestId": "555666777",
+  "decision": "approve"
 }
 
-Response: 201 Created
+Response: 200 OK
 {
   "data": {
     "id": "555666777",
-    "authCode": "auth_abc123...",
-    "status": 1,
+    "consumerAppId": "456789",
+    "userId": "123456",
+    "datasetId": "987654321",
+    "authCode": "auth_abc123xyz",
+    "authStatus": 2,
+    "authScopes": "{\"datasets\":[987654321],\"fields\":{\"987654321\":[\"id\",\"name\"]}}",
+    "purpose": "业务集成",
     "expireTime": "2026-03-31T11:00:00.000Z",
     "useTime": null,
     "revokeTime": null,
     "createTime": "2026-03-31T10:00:00.123Z",
     "createBy": "123456",
     "lastUpdateTime": "2026-03-31T10:00:00.123Z",
-    "lastUpdateBy": "123456",
-    "authUrl": "https://open-app.example.com/authorize?code=auth_abc123"
+    "lastUpdateBy": "123456"
   },
   "code": 0,
-  "messageZh": "授权请求已生成，请用户确认",
-  "messageEn": "Authorization request generated, please confirm",
+  "messageZh": "授权成功",
+  "messageEn": "Authorization confirmed successfully",
   "traceId": "trace_xxxxxxxxxxxxxxxxxxxxxxxx"
 }
 ```
 
-### 7.6 错误响应示例
+#### 7.6.2 撤销授权
+
+```http
+DELETE /api/v1/authorizations/{id}
+Cookie: SESSION=xxx
+
+Response: 200 OK
+{
+  "data": {
+    "id": "555666777",
+    "consumerAppId": "456789",
+    "userId": "123456",
+    "datasetId": "987654321",
+    "authStatus": 6,
+    "revokeTime": "2026-03-31T10:30:00.000Z",
+    "lastUpdateTime": "2026-03-31T10:30:00.000Z",
+    "lastUpdateBy": "123456"
+  },
+  "code": 0,
+  "messageZh": "撤销成功",
+  "messageEn": "Authorization revoked successfully",
+  "traceId": "trace_xxxxxxxxxxxxxxxxxxxxxxxx"
+}
+```
+
+### 7.7 错误响应示例
 
 ```http
 // 场景 1: 认证失败 (401)
