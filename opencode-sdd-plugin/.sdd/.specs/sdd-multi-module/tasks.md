@@ -183,7 +183,7 @@ export interface FeatureState {
 }
 
 /**
- * 扫描子 Feature 目录（同级目录结构）
+ * 扫描子 Feature 目录（同级扁平结构）
  * 子 Feature 位于 .sdd/.specs/[sub-feature-id]/ 目录下
  */
 export function scanSubFeatures(featurePath: string): FeatureState[] {

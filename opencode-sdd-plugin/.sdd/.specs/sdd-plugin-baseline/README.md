@@ -1,38 +1,38 @@
-# sdd-plugin-phase2
+# sdd-plugin-baseline
 
-> **Feature ID**: sdd-plugin-phase2  
-> **版本**: v1.2.0  
-> **状态**: implementing  
+> **Feature ID**: sdd-plugin-baseline  
+> **版本**: v1.1.0  
+> **状态**: completed  
 > **创建日期**: 2026-03-28  
-> **最后更新**: 2026-03-30
+> **最后更新**: 2026-03-28
 
 ---
 
 ## 📋 概述
 
-Phase 2 能力增强，主要实现在已有基础之上增加更智能和全面的辅助功能。专注于任务细化实现阶段的具体功能。
+SDD插件的基本能力规范，包括基础功能、配置管理和生命周期管理。为后续扩展提供稳定的基线功能。
 
 ---
 
 ## 🎯 功能目标
 
-- 实现更智能化的功能分析和规划
-- 增强任务分解的精确性和可操作性
-- 提供更完善的开发工作流支持
-- 完善状态管理和跟踪机制
-- 实现自动化测试和验证流程
+- 定义SDD插件的基础架构和组件能力
+- 建立基本的插件初始化机制
+- 定义模块生命周期管理
+- 配置管理系统的基线能力
+- 建立插件的可观测性能力
 
 ---
 
 ## 📁 目录结构
 
 ```
-sdd-plugin-phase2/
+sdd-plugin-baseline/
 ├── README.md           # 本文件
 ├── spec.md            # 需求规格说明
 ├── plan.md            # 技术规划
 ├── tasks.md           # 任务分解
-└── .state.json        # 状态文件
+└── state.json         # 状态文件
 ```
 
 ---
@@ -43,17 +43,17 @@ sdd-plugin-phase2/
 |------|------|------|------|
 | spec.md | completed | 需求规格说明 | [查看](./spec.md) |
 | plan.md | completed | 技术规划 | [查看](./plan.md) |
-| tasks.md | tasked | 任务分解 | [查看](./tasks.md) |
+| tasks.md | completed | 任务分解 | [查看](./tasks.md) |
 
 ---
 
 ## 🔄 状态流转
 
 ```
-tasked → implementing → reviewed
+completed → completed → completed
 ```
 
-**当前阶段**: [4/6] - build
+**当前阶段**: [6/6] - validate
 
 ---
 
@@ -67,7 +67,7 @@ tasked → implementing → reviewed
 @sdd status
 
 # 下一阶段
-@sdd build sdd-plugin-phase2
+@sdd validate sdd-plugin-baseline
 ```
 
 ---
@@ -76,8 +76,7 @@ tasked → implementing → reviewed
 
 | 日期 | 版本 | 说明 |
 |------|------|------|
-| 2026-03-28 | v1.2.0 | 完成需求和规划 |
-| 2026-03-30 | v1.2.0 | 进入实施阶段 |
+| 2026-03-28 | v1.1.0 | 完成功能开发和验证 |
 
 ---
 

@@ -5,10 +5,10 @@
   "status": "implementing",
   "phase": 4,
   "files": {
-    "spec": ".specs/sdd-multi-module/spec.md",
-    "plan": ".specs/sdd-multi-module/plan.md", 
-    "tasks": ".specs/sdd-multi-module/tasks.md",
-    "readme": ".sdd/README.md"
+    "spec": ".sdd/.specs/sdd-multi-module/spec.md",
+    "plan": ".sdd/.specs/sdd-multi-module/plan.md",
+    "tasks": ".sdd/.specs/sdd-multi-module/tasks.md",
+    "readme": ".sdd/.specs/sdd-multi-module/README.md"
   },
   "dependencies": {
     "on": [],

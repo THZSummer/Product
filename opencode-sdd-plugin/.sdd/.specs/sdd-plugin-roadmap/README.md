@@ -1,38 +1,37 @@
-# sdd-plugin-baseline
+# sdd-plugin-roadmap
 
-> **Feature ID**: sdd-plugin-baseline  
-> **版本**: v1.1.0  
+> **Feature ID**: sdd-plugin-roadmap  
+> **版本**: v1.2.0  
 > **状态**: completed  
-> **创建日期**: 2026-03-28  
-> **最后更新**: 2026-03-28
+> **创建日期**: 2026-03-30  
+> **最后更新**: 2026-04-01
 
 ---
 
 ## 📋 概述
 
-SDD插件的基本能力规范，包括基础功能、配置管理和生命周期管理。为后续扩展提供稳定的基线功能。
+实现动态Roadmap管理，通过Agent智能生成和更新产品特性路线图。该功能能够自动生成基于当前状态和进度的可视化Roadmap。
 
 ---
 
 ## 🎯 功能目标
 
-- 定义SDD插件的基础架构和组件能力
-- 建立基本的插件初始化机制
-- 定义模块生命周期管理
-- 配置管理系统的基线能力
-- 建立插件的可观测性能力
+- 设计智能化的Roadmap生成机制
+- 实现多维度特性管理视图
+- 提供进度可视化展示功能
+- 生成阶段性工作成果统计
+- 完善Roadmap动态更新机制
 
 ---
 
 ## 📁 目录结构
 
 ```
-sdd-plugin-baseline/
+sdd-plugin-roadmap/
 ├── README.md           # 本文件
 ├── spec.md            # 需求规格说明
 ├── plan.md            # 技术规划
-├── tasks.md           # 任务分解
-└── .state.json        # 状态文件
+└── tasks.md           # 任务分解
 ```
 
 ---
@@ -67,7 +66,7 @@ completed → completed → completed
 @sdd status
 
 # 下一阶段
-@sdd validate sdd-plugin-baseline
+@sdd validate sdd-plugin-roadmap
 ```
 
 ---
@@ -76,7 +75,7 @@ completed → completed → completed
 
 | 日期 | 版本 | 说明 |
 |------|------|------|
-| 2026-03-28 | v1.1.0 | 完成功能开发和验证 |
+| 2026-03-30 | v1.2.0 | 完成功能开发和验证 |
 
 ---
 
