@@ -1355,9 +1355,12 @@ Response: 500 Internal Server Error
 | **1.0.14** | **2026-03-30** | **Summer** | **第 3 章重组：US-001~US-016，按申请 - 配置阶段拆分** |
 | **1.0.15** | **2026-03-30** | **Summer** | **生产/消费通道认证方式统一** |
 | **1.0.16** | **2026-03-30** | **Summer** | **消费通道企业消息命名统一：企业公共消息数据消费通道** |
+| **1.0.17** | **2026-03-30** | **Summer** | **数据模型字段类型优化：data_source_type 使用 TINYINT 枚举，config 字段使用 TEXT** |
+| **1.0.18** | **2026-03-30** | **Summer** | **数据模型 JSON 字段改为 TEXT：8 个字段统一为 TEXT 或 VARCHAR** |
 
 | **1.0.19** | **2026-03-30** | **Summer** | **数据模型时间字段统一：所有 TIMESTAMP → DATETIME(3)** |
 | **1.0.20** | **2026-03-30** | **Summer** | **补充审计字段：api_audit_logs.created_by、user_authorizations.created_by/updated_by** |
+| **1.0.21** | **2026-03-30** | **Summer** | **列表查询字段优化：description/approval_comment 从 TEXT 改为 VARCHAR** |
 
 ---
 
