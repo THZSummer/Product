@@ -807,7 +807,7 @@
   - 主键索引：PRIMARY KEY (id)
   - 外键索引：idx_{field_name} ({field_name})
   - 组合索引：idx_{field1}_{field2} ({field1}, {field2})
-  - 时间索引：idx_{field}_created ({field}, create_time)
+  - 时间索引：idx_{field}_time ({field}, create_time)
 
 ---
 
