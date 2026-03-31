@@ -797,10 +797,10 @@
 
 ```sql
 CREATE TABLE datasets (
-    id                VARCHAR(64) PRIMARY KEY,
+    id                BIGINT(20) PRIMARY KEY,
     name              VARCHAR(128) NOT NULL,        -- 数据集名称
-    description       VARCHAR(512),                   -- 数据集描述
-    producer_app_id   VARCHAR(64) NOT NULL,         -- 生产者应用 ID
+    description       VARCHAR(512),                 -- 数据集描述
+    producer_app_id   BIGINT(20) NOT NULL,          -- 生产者应用 ID
     data_source_type  TINYINT NOT NULL,             -- 数据源类型：1-DATABASE 2-API 3-FILE 4-MQ
     data_source_config TEXT NOT NULL,               -- 数据源连接配置（JSON 格式）
     update_frequency  VARCHAR(32) NOT NULL,         -- 更新频率：REALTIME/CRON/MANUAL
@@ -823,18 +823,18 @@ CREATE TABLE datasets (
 
 ```sql
 CREATE TABLE data_permissions (
-    id                VARCHAR(64) PRIMARY KEY,
-    dataset_id        VARCHAR(64) NOT NULL,         -- 数据集 ID
-    consumer_app_id   VARCHAR(64) NOT NULL,         -- 消费者应用 ID
+    id                BIGINT(20) PRIMARY KEY,
+    dataset_id        BIGINT(20) NOT NULL,          -- 数据集 ID
+    consumer_app_id   BIGINT(20) NOT NULL,          -- 消费者应用 ID
     permitted_fields  VARCHAR(2048) NOT NULL,     -- 允许访问的字段列表（JSON 格式，空为全部）
     data_scope        VARCHAR(512) NOT NULL,      -- 数据范围配置（JSON 格式，部门/时间等）
     access_quota      TEXT NOT NULL,              -- 访问配额（JSON 格式，单次/每日/每月）
     access_frequency  TEXT NOT NULL,              -- 访问频率限制（JSON 格式，每分钟/小时/每天）
     status            VARCHAR(16) NOT NULL DEFAULT 'active',  -- active/disabled
     created_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    created_by        VARCHAR(64) NOT NULL,
+    created_by        BIGINT(20) NOT NULL,        -- 创建人
     updated_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-    updated_by        VARCHAR(64) NOT NULL,
+    updated_by        BIGINT(20) NOT NULL,        -- 更新人
     
     INDEX idx_dataset_id (dataset_id),
     INDEX idx_consumer_app_id (consumer_app_id),
@@ -846,9 +846,9 @@ CREATE TABLE data_permissions (
 
 ```sql
 CREATE TABLE subscriptions (
-    id                VARCHAR(64) PRIMARY KEY,
-    dataset_id        VARCHAR(64) NOT NULL,         -- 数据集 ID
-    consumer_app_id   VARCHAR(64) NOT NULL,         -- 消费者应用 ID
+    id                BIGINT(20) PRIMARY KEY,
+    dataset_id        BIGINT(20) NOT NULL,          -- 数据集 ID
+    consumer_app_id   BIGINT(20) NOT NULL,          -- 消费者应用 ID
     subscription_type VARCHAR(32) NOT NULL,         -- 订阅类型：WEBHOOK/KAFKA/RABBITMQ/ENTERPRISE_MQ
     push_target       TEXT NOT NULL,                -- 推送目标配置（URL/Topic/Queue 等，JSON 格式）
     retry_attempts    INT NOT NULL DEFAULT 3,       -- 重试次数
@@ -857,9 +857,9 @@ CREATE TABLE subscriptions (
     approval_comment  VARCHAR(1024),                -- 审批意见
     metrics           TEXT NOT NULL,                -- 订阅统计信息（JSON 格式）
     created_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    created_by        VARCHAR(64) NOT NULL,
+    created_by        BIGINT(20) NOT NULL,          -- 创建人
     updated_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-    updated_by        VARCHAR(64) NOT NULL,
+    updated_by        BIGINT(20) NOT NULL,          -- 更新人
     
     INDEX idx_dataset_id (dataset_id),
     INDEX idx_consumer_app_id (consumer_app_id),
@@ -871,18 +871,18 @@ CREATE TABLE subscriptions (
 
 ```sql
 CREATE TABLE api_credentials (
-    id              VARCHAR(64) PRIMARY KEY,
-    app_id          VARCHAR(64) NOT NULL,
+    id              BIGINT(20) PRIMARY KEY,
+    app_id          BIGINT(20) NOT NULL,
     app_name        VARCHAR(128) NOT NULL,          -- 应用名称
     api_key         VARCHAR(128) NOT NULL,          -- API 公开密钥
     api_secret      VARCHAR(256) NOT NULL,          -- API 私密密钥（加密存储）
     auth_type       VARCHAR(32) NOT NULL DEFAULT 'jwt',  -- auth type: jwt/oauth2/cookie
     status          VARCHAR(16) NOT NULL DEFAULT 'active',  -- active/disabled/expired
     created_at      DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    created_by      VARCHAR(64) NOT NULL,
+    created_by      BIGINT(20) NOT NULL,
     updated_at      DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-    updated_by      VARCHAR(64) NOT NULL,
-    last_used_at    DATETIME(3),                      -- 最后使用时间
+    updated_by      BIGINT(20) NOT NULL,
+    last_used_at    DATETIME(3),                    -- 最后使用时间
     
     INDEX idx_app_id (app_id),
     INDEX idx_api_key (api_key),
@@ -896,8 +896,8 @@ CREATE TABLE api_credentials (
 CREATE TABLE api_audit_logs (
     id              BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     trace_id        VARCHAR(64) NOT NULL,           -- 分布式追踪 ID
-    consumer_app_id VARCHAR(64) NOT NULL,           -- 消费者应用 ID
-    dataset_id      VARCHAR(64),                    -- 数据集 ID
+    consumer_app_id BIGINT(20) NOT NULL,            -- 消费者应用 ID
+    dataset_id      BIGINT(20),                     -- 数据集 ID
     client_ip       VARCHAR(45) NOT NULL,
     http_method     VARCHAR(10) NOT NULL,
     request_path    TEXT NOT NULL,
@@ -906,7 +906,7 @@ CREATE TABLE api_audit_logs (
     response_time   BIGINT NOT NULL,                -- 响应耗时 (毫秒)
     response_size   BIGINT,                         -- 响应大小字节
     access_type     VARCHAR(32) NOT NULL,           -- 访问类型：REST_API/WEBSOCKET/KAFKA/RABBITMQ/WEBHOOK
-    created_by      VARCHAR(64) NOT NULL,           -- 操作用户 ID
+    created_by      BIGINT(20) NOT NULL,            -- 操作用户 ID
     created_at      DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     
     INDEX idx_trace_id (trace_id),
@@ -920,21 +920,21 @@ CREATE TABLE api_audit_logs (
 
 ```sql
 CREATE TABLE user_authorizations (
-    id                VARCHAR(64) PRIMARY KEY,
-    consumer_app_id   VARCHAR(64) NOT NULL,         -- 消费者应用 ID
-    user_id           VARCHAR(64) NOT NULL,         -- 数据归属用户 ID
-    dataset_id        VARCHAR(64),                  -- 数据集 ID（可选，限制特定数据集）
+    id                BIGINT(20) PRIMARY KEY,
+    consumer_app_id   BIGINT(20) NOT NULL,          -- 消费者应用 ID
+    user_id           BIGINT(20) NOT NULL,          -- 数据归属用户 ID
+    dataset_id        BIGINT(20),                   -- 数据集 ID（可选，限制特定数据集）
     auth_code         VARCHAR(128) NOT NULL,        -- 授权码（加密存储）
     auth_status       VARCHAR(16) NOT NULL DEFAULT 'pending',  -- pending/approved/rejected/expired/used/revoked
     auth_scopes       VARCHAR(1024) NOT NULL,       -- 授权范围（JSON 格式，数据集/字段）
     purpose           VARCHAR(256),                 -- 授权用途说明
-    expires_at        DATETIME(3) NOT NULL,           -- 过期时间
-    used_at           DATETIME(3),                    -- 使用时间
-    revoked_at        DATETIME(3),                    -- 撤销时间
+    expires_at        DATETIME(3) NOT NULL,         -- 过期时间
+    used_at           DATETIME(3),                  -- 使用时间
+    revoked_at        DATETIME(3),                  -- 撤销时间
     created_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    created_by        VARCHAR(64) NOT NULL,           -- 创建人
+    created_by        BIGINT(20) NOT NULL,          -- 创建人
     updated_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-    updated_by        VARCHAR(64) NOT NULL,           -- 更新人
+    updated_by        BIGINT(20) NOT NULL,          -- 更新人
     
     INDEX idx_consumer_app_id (consumer_app_id),
     INDEX idx_user_id (user_id),
