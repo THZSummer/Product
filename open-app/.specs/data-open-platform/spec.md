@@ -808,9 +808,9 @@ CREATE TABLE datasets (
     schema_definition TEXT NOT NULL,                -- 数据字段定义（JSON 格式）
     status            VARCHAR(16) NOT NULL DEFAULT 'pending',  -- pending/approved/rejected/disabled
     approval_comment  TEXT,                         -- 审批意见
-    created_at        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     created_by        VARCHAR(64) NOT NULL,
-    updated_at        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updated_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
     updated_by        VARCHAR(64) NOT NULL,
     
     INDEX idx_producer_app_id (producer_app_id),
@@ -831,9 +831,9 @@ CREATE TABLE data_permissions (
     access_quota      TEXT NOT NULL,              -- 访问配额（JSON 格式，单次/每日/每月）
     access_frequency  TEXT NOT NULL,              -- 访问频率限制（JSON 格式，每分钟/小时/每天）
     status            VARCHAR(16) NOT NULL DEFAULT 'active',  -- active/disabled
-    created_at        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     created_by        VARCHAR(64) NOT NULL,
-    updated_at        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updated_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
     updated_by        VARCHAR(64) NOT NULL,
     
     INDEX idx_dataset_id (dataset_id),
@@ -856,9 +856,9 @@ CREATE TABLE subscriptions (
     status            VARCHAR(16) NOT NULL DEFAULT 'pending',  -- pending/approved/rejected/paused/disabled
     approval_comment  TEXT,                         -- 审批意见
     metrics           TEXT NOT NULL,                -- 订阅统计信息（JSON 格式）
-    created_at        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     created_by        VARCHAR(64) NOT NULL,
-    updated_at        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updated_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
     updated_by        VARCHAR(64) NOT NULL,
     
     INDEX idx_dataset_id (dataset_id),
@@ -878,11 +878,11 @@ CREATE TABLE api_credentials (
     api_secret      VARCHAR(256) NOT NULL,          -- API 私密密钥（加密存储）
     auth_type       VARCHAR(32) NOT NULL DEFAULT 'jwt',  -- auth type: jwt/oauth2/cookie
     status          VARCHAR(16) NOT NULL DEFAULT 'active',  -- active/disabled/expired
-    created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at      DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     created_by      VARCHAR(64) NOT NULL,
-    updated_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updated_at      DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
     updated_by      VARCHAR(64) NOT NULL,
-    last_used_at    TIMESTAMP,                      -- 最后使用时间
+    last_used_at    DATETIME(3),                      -- 最后使用时间
     
     INDEX idx_app_id (app_id),
     INDEX idx_api_key (api_key),
@@ -906,7 +906,7 @@ CREATE TABLE api_audit_logs (
     response_time   BIGINT NOT NULL,                -- 响应耗时 (毫秒)
     response_size   BIGINT,                         -- 响应大小字节
     access_type     VARCHAR(32) NOT NULL,           -- 访问类型：REST_API/WEBSOCKET/KAFKA/RABBITMQ/WEBHOOK
-    created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at      DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     
     INDEX idx_trace_id (trace_id),
     INDEX idx_consumer_app_id_created (consumer_app_id, created_at),
@@ -927,11 +927,11 @@ CREATE TABLE user_authorizations (
     auth_status       VARCHAR(16) NOT NULL DEFAULT 'pending',  -- pending/approved/rejected/expired/used/revoked
     auth_scopes       VARCHAR(1024) NOT NULL,       -- 授权范围（JSON 格式，数据集/字段）
     purpose           VARCHAR(256),                 -- 授权用途说明
-    expires_at        TIMESTAMP NOT NULL,           -- 过期时间
-    used_at           TIMESTAMP,                    -- 使用时间
-    revoked_at        TIMESTAMP,                    -- 撤销时间
-    created_at        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    expires_at        DATETIME(3) NOT NULL,           -- 过期时间
+    used_at           DATETIME(3),                    -- 使用时间
+    revoked_at        DATETIME(3),                    -- 撤销时间
+    created_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    updated_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
     
     INDEX idx_consumer_app_id (consumer_app_id),
     INDEX idx_user_id (user_id),
