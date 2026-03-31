@@ -801,8 +801,8 @@ CREATE TABLE datasets (
     name              VARCHAR(128) NOT NULL,        -- 数据集名称
     description       TEXT,                         -- 数据集描述
     producer_app_id   VARCHAR(64) NOT NULL,         -- 生产者应用 ID
-    data_source_type  VARCHAR(32) NOT NULL,         -- 数据源类型：DATABASE/API/FILE/MQ
-    data_source_config JSON NOT NULL,               -- 数据源连接配置
+    data_source_type  TINYINT NOT NULL,             -- 数据源类型：1-DATABASE 2-API 3-FILE 4-MQ
+    data_source_config TEXT NOT NULL,               -- 数据源连接配置（JSON 格式）
     update_frequency  VARCHAR(32) NOT NULL,         -- 更新频率：REALTIME/CRON/MANUAL
     cron_expression   VARCHAR(64),                  -- Cron 表达式（定时更新时使用）
     schema_definition JSON NOT NULL,                -- 数据字段定义
@@ -850,7 +850,7 @@ CREATE TABLE subscriptions (
     dataset_id        VARCHAR(64) NOT NULL,         -- 数据集 ID
     consumer_app_id   VARCHAR(64) NOT NULL,         -- 消费者应用 ID
     subscription_type VARCHAR(32) NOT NULL,         -- 订阅类型：WEBHOOK/KAFKA/RABBITMQ/ENTERPRISE_MQ
-    push_target       JSON NOT NULL,                -- 推送目标配置（URL/Topic/Queue 等）
+    push_target       TEXT NOT NULL,                -- 推送目标配置（URL/Topic/Queue 等，JSON 格式）
     retry_attempts    INT NOT NULL DEFAULT 3,       -- 重试次数
     secret_signature  VARCHAR(256),                 -- 签名密钥
     status            VARCHAR(16) NOT NULL DEFAULT 'pending',  -- pending/approved/rejected/paused/disabled
