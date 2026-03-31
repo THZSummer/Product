@@ -900,7 +900,7 @@ CREATE TABLE api_credentials (
     create_by      BIGINT(20) NOT NULL,
     last_update_time      DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
     last_update_by      BIGINT(20) NOT NULL,
-    last_used_at    DATETIME(3),                    -- 最后使用时间
+    last_use_time    DATETIME(3),                    -- 最后使用时间
     
     INDEX idx_app_id (app_id),
     INDEX idx_api_key (api_key),
@@ -946,9 +946,9 @@ CREATE TABLE user_authorizations (
     auth_status       TINYINT(10) NOT NULL DEFAULT '1',  -- 1-pending 2-approved 3-rejected 4-expired 5-used 6-revoked
     auth_scopes       VARCHAR(1024) NOT NULL,       -- 授权范围（JSON 格式，数据集/字段）
     purpose           VARCHAR(256),                 -- 授权用途说明
-    expires_at        DATETIME(3) NOT NULL,         -- 过期时间
-    used_at           DATETIME(3),                  -- 使用时间
-    revoked_at        DATETIME(3),                  -- 撤销时间
+    expire_time        DATETIME(3) NOT NULL,         -- 过期时间
+    use_time           DATETIME(3),                  -- 使用时间
+    revoke_time        DATETIME(3),                  -- 撤销时间
     create_time        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     create_by        BIGINT(20) NOT NULL,          -- 创建人
     last_update_time        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
@@ -959,7 +959,7 @@ CREATE TABLE user_authorizations (
     INDEX idx_dataset_id (dataset_id),
     INDEX idx_auth_code (auth_code),
     INDEX idx_status (auth_status),
-    INDEX idx_expires_at (expires_at),
+    INDEX idx_expire_time (expire_time),
     INDEX idx_create_by (create_by)
 );
 ```
