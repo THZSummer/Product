@@ -9,14 +9,28 @@
     "build:agents": "node build-agents.cjs",
     "build:ts": "tsc",
     "dev": "tsc --watch",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
-  "keywords": ["opencode", "plugin", "sdd"],
+  "keywords": [
+    "opencode",
+    "plugin",
+    "sdd"
+  ],
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/node": "^20.0.0",
+    "jest": "^30.3.0",
     "rimraf": "^5.0.0",
+    "ts-jest": "^29.4.6",
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "ajv": "^8.18.0",
+    "ajv-formats": "^3.0.1",
+    "uuid": "^13.0.0"
   }
 }

@@ -362,7 +362,7 @@ OpenCode SDD 插件自 v1.1.1 发布以来，已成功将 SDD 6 阶段工作流 
 ```
 
 **子 Feature 发现**:
-- 扫描 `.specs/` 同级目录下所有子目录
+- 扫描 `.sdd/.specs/` 同级目录下所有子目录
 - 每个子目录是一个 Sub-Feature
 - 读取每个 Sub-Feature 的 `state.json` 获取状态
 
@@ -401,47 +401,71 @@ OpenCode SDD 插件自 v1.1.1 发布以来，已成功将 SDD 6 阶段工作流 
 #### 6.3.1 多子 Feature 模式 (顶层扁平结构)
 
 ```
-.specs/                          # 顶层 Feature
-├── README.md                    # Feature 总览和导航 (~2KB)
-├── spec.md                      # 主文档 (~5KB): 全局概述 + 子 Feature 索引 + 跨子 Feature 协同
-├── plan.md                      # 主文档：整体技术架构 + 子 Feature 间接口
-├── tasks.md                     # 主文档：并行任务分组
-├── state.json                   # Feature 级状态 (使用统一 Schema)
-├── [sub-feature-1]/             # 子 Feature 目录 (直接在 .specs/ 下)
-│   ├── README.md                # 子 Feature 说明 (~1KB)
-│   ├── spec.md                  # 子 Feature 独立 spec (~10-15KB)
-│   ├── plan.md                  # 子 Feature 独立 plan (可选)
-│   ├── tasks.md                 # 子 Feature 独立 tasks (可选)
-│   └── state.json               # 子 Feature 自治状态 (使用统一 Schema)
-├── [sub-feature-2]/
-│   ├── README.md
-│   ├── spec.md
-│   ├── plan.md
-│   └── state.json
-└── ...
+.sdd/                            # SDD 工作空间容器（必选）
+├── README.md                    # SDD 使用说明（必选）
+├── ROADMAP.md                   # 版本路线图（必选）
+├── config.json                  # SDD 配置（可选）
+└── .specs/                      # SDD 规范文件目录（必选）
+    ├── README.md                # 目录说明
+    ├── spec.md                  # 主文档 (~5KB): 全局概述 + 子 Feature 索引 + 跨子 Feature 协同
+    ├── plan.md                  # 整体技术架构 + 子 Feature 间接口
+    ├── tasks.md                 # 并行任务分组
+    ├── state.json               # Feature 级状态 (使用统一 Schema)
+    └── [sub-feature-1]/         # 子 Feature 目录
+        ├── README.md            # 目录说明（必选）
+        ├── spec.md              # 需求规格（必选）
+        ├── plan.md              # 技术规划（必选）
+        ├── tasks.md             # 任务分解（必选）
+        └── state.json           # 状态文件（必选）
 ```
 
 **设计原则**:
-- **顶层扁平**: 主 Feature 和子 Feature 同级，都在 `.specs/` 目录下
+- **容器化边界**: `.sdd/` 作为 SDD 工作空间的明确边界
+- **规范目录**: 所有规范文件位于 `.sdd/.specs/` 下
+- **顶层扁平**: 主 Feature 和子 Feature 同级，都在 `.sdd/.specs/` 目录下
 - **状态自治**: 每个 Sub-Feature 独立管理自身 `state.json`，不依赖外部状态
 - **全局视图**: 主 Feature 通过扫描同级子 Feature 目录聚合子 Feature 状态
 - **目录一致性**: Feature 和 Sub-Feature 有相同的文档结构 (spec/plan/tasks/state)
 - **父子关系隐含**: Sub-Feature 通过目录层级表明归属，无需 `parentFeature` 字段
 - **极简设计**: State 文件只关心自身状态，不存储结构信息
 - **文件名统一**: 使用 `state.json` (无前导点)
+- **统一模式**: 单 Feature 和 多 Feature 使用相同结构，无子目录即为单 Feature 模式
 
-#### 6.3.2 单 Feature 模式 (无子 Feature 目录)
+#### 6.3.2 单 Feature 模式 (多 Feature 的特例)
+
+单 Feature 模式是多 Feature 模式的特例，即**没有子 Feature 的树结构**。结构完全相同，只是不创建子 Feature 目录。
 
 ```
-.specs/[feature-name]/
-├── README.md                    # Feature 说明 (可选)
-├── spec.md                      # 完整需求文档
-├── plan.md                      # 技术规划
-├── tasks.md                     # 任务分解
-└── state.json                   # 使用统一 Schema (9 个核心字段)
+.sdd/                            # SDD 工作空间容器（必选）
+├── README.md                    # SDD 使用说明（必选）
+├── ROADMAP.md                   # 版本路线图（必选）
+├── config.json                  # SDD 配置（可选）
+└── .specs/                      # SDD 规范文件目录（必选）
+    ├── README.md                # 目录说明
+    ├── spec.md                  # 需求规格
+    ├── plan.md                  # 技术规划
+    ├── tasks.md                 # 任务分解
+    └── state.json               # 状态文件（使用统一 Schema）
 ```
 
-**向后兼容**: 旧项目无需迁移，无子 Feature 目录即为单 Feature 模式。
+**说明**:
+- 单 Feature 模式与多 Feature 模式使用相同的容器化结构 (`.sdd/`)
+- 区别仅在于 `.sdd/.specs/` 目录下是否有子 Feature 目录
+- 无子 Feature 目录 = 单 Feature 模式
+- 有子 Feature 目录 = 多 Feature 模式
+- 这种设计保证了**向后兼容性**和**结构一致性**
+
+**设计原则**:
+- ✅ **统一结构**: 单 Feature 和 多 Feature 使用相同的 `.sdd/` 容器结构
+- ✅ **自动识别**: 通过扫描 `.sdd/.specs/` 子目录自动判断模式
+- ✅ **零成本迁移**: 单 Feature 项目可随时添加子 Feature 目录升级为多 Feature 模式
+
+#### 6.3.3 容器化设计原则
+
+- **工作空间边界**: `.sdd/` 作为 SDD 工作空间的明确边界
+- **配置集中**: 全局配置存放在 `.sdd/config.json`
+- **规范分离**: 规范文件存放在 `.sdd/.specs/`，与源代码分离
+- **向后兼容**: 支持旧的 `.specs/` 结构，通过兼容层迁移
 
 ### 6.4 核心算法
 
@@ -452,10 +476,10 @@ OpenCode SDD 插件自 v1.1.1 发布以来，已成功将 SDD 6 阶段工作流 
  * 聚合子 Feature 状态计算 Feature 整体状态
  * 规则：Feature 状态 = 最慢子 Feature 的状态
  * 
- * 子 Feature 发现：扫描 .specs/ 同级目录，读取每个子目录的 state.json
+ * 子 Feature 发现：扫描 .sdd/.specs/ 同级目录，读取每个子目录的 state.json
  */
 function aggregateFeatureState(specsDir: string): FeatureStatus {
-  // 扫描 .specs/ 同级目录获取所有子 Feature
+  // 扫描 .sdd/.specs/ 同级目录获取所有子 Feature
   const subFeatureStates = scanSubFeatures(specsDir)
   
   if (subFeatureStates.length === 0) {
@@ -625,6 +649,14 @@ class ParallelWriteConflictError extends Error {
 
 ## 9. 验收标准
 
+### 9.0 容器化结构验收
+
+| 验收项 | 测试场景 | 预期结果 |
+|--------|----------|----------|
+| **AC-250-1** | `.sdd/` 目录结构正确 | 检查目录层级 | `.sdd/` 包含 README.md, ROADMAP.md, `.sdd/.specs/` |
+| **AC-250-2** | 配置文件位置正确 | `.sdd/config.json` 存在 | 全局配置可读取 |
+| **AC-250-3** | 向后兼容旧结构 | `.specs/` 项目可迁移 | 兼容层正常工作，自动迁移 |
+
 ### 9.1 功能验收
 
 | 验收项 | 测试场景 | 预期结果 |
@@ -632,7 +664,7 @@ class ParallelWriteConflictError extends Error {
 | **AC-251-1** | 创建多子 Feature | `@sdd-spec 多子 Feature 功能` | 生成主 spec.md + 子 Feature 目录 + README.md |
 | **AC-251-2** | 主 spec 包含子 Feature 索引 | 检查 spec.md 内容 | 索引表完整，包含所有子 Feature |
 | **AC-251-3** | 单模块项目保持兼容 | 打开旧 Feature | 无需迁移，正常工作 |
-| **AC-251-4** | 子 Feature 目录结构一致 | 检查 .specs/[sub-feature-id]/ | 包含 README.md + spec.md + state.json |
+| **AC-251-4** | 子 Feature 目录结构一致 | 检查 `.sdd/.specs/[sub-feature-id]/` | 包含 README.md + spec.md + state.json |
 | **AC-252-1** | 更新子 Feature 状态 | 完成一个子 Feature 的 plan | 子 Feature state.json 更新 |
 | **AC-252-2** | 聚合状态计算 | 子 Feature A:planned, 子 Feature B:specified | Feature 状态 = specified (扫描同级子 Feature 目录聚合) |
 | **AC-252-3** | 旧状态迁移 | 加载 v1.1.1 state.json | 自动升级为 v1.2.11 格式 |
@@ -662,8 +694,8 @@ class ParallelWriteConflictError extends Error {
 |------|----------|
 | OpenCode Plugin SDK | https://opencode.ai/docs/plugins |
 | OpenCode Agent 规范 | https://opencode.ai/docs/agents |
-| SDD Phase 2 Plan | `.specs/sdd-plugin-phase2/plan.md` |
-| ROADMAP.md | `.specs/ROADMAP.md` |
+| SDD Phase 2 Plan | `.sdd/.specs/sdd-plugin-phase2/plan.md` |
+| ROADMAP.md | `.sdd/ROADMAP.md` |
 
 ### 10.2 示例：子 Feature 索引表
 
@@ -726,11 +758,11 @@ class ParallelWriteConflictError extends Error {
 ```
 
 **子 Feature 发现**:
-- 扫描 `.specs/` 同级目录下所有子目录
+- 扫描 `.sdd/.specs/` 同级目录下所有子目录
 - 每个子目录是一个 Sub-Feature
 - 读取每个 Sub-Feature 的 `state.json` 获取状态
 
-**说明**: 使用统一 Schema，有子 Feature 目录即为多子 Feature 模式。State 文件不存储子 Feature 引用，通过目录结构自动发现。
+**说明**: 使用统一 Schema，有子 Feature 目录即为多子 Feature 模式。State 文件不存储子 Feature 引用，通过目录结构自动发现。子 Feature 位于 `.sdd/.specs/[sub-feature-id]/` 目录下。
 
 ---
 

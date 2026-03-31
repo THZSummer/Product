@@ -102,7 +102,7 @@ print_color "${GREEN}[OK] Build complete${NC}"
 print_color "${CYAN}[3/6] Creating directories...${NC}"
 
 # Create directories one by one (POSIX compatible, no arrays)
-for dir in "${TARGET_DIR}/.opencode/plugins/sdd" "${TARGET_DIR}/.opencode/agents" "${TARGET_DIR}/.specs" "${TARGET_DIR}/.specs/examples" "${TARGET_DIR}/.specs/architecture/adr"; do
+for dir in "${TARGET_DIR}/.opencode/plugins/sdd" "${TARGET_DIR}/.opencode/agents" "${TARGET_DIR}/.sdd" "${TARGET_DIR}/.sdd/.specs"; do
     if [ -d "$dir" ]; then
         print_color "${YELLOW}[WARN] Exists: $dir${NC}"
     else
@@ -143,9 +143,69 @@ cp "${SCRIPT_DIR}/dist/opencode.json" "${TARGET_DIR}/opencode.json"
 print_color "${GREEN}[OK] Copied opencode.json${NC}"
 
 # Step 6: Copy installation guide
-print_color "${CYAN}[6/6] Copying documentation...${NC}"
+print_color "${CYAN}[6/7] Copying documentation...${NC}"
 cp "${SCRIPT_DIR}/INSTALL.md" "${TARGET_DIR}/SDD_INSTALL_GUIDE.md"
 print_color "${GREEN}[OK] Copied SDD_INSTALL_GUIDE.md${NC}"
+
+# Step 7: Initialize .sdd/ directory structure
+print_color "${CYAN}[7/7] Initializing .sdd/ directory...${NC}"
+
+# Create .sdd/README.md
+cat > "${TARGET_DIR}/.sdd/README.md" << 'EOF'
+# SDD Workspace
+
+## 目录结构
+
+```
+.sdd/
+├── README.md              # 本文件 - SDD 工作空间说明
+├── ROADMAP.md             # 版本路线图
+├── config.json            # SDD 配置（可选）
+└── .specs/                # 规范文件目录
+    ├── README.md          # 目录说明
+    └── [feature]/         # Feature 目录
+```
+
+## 快速开始
+
+1. 使用 `@sdd 开始 [feature 名称]` 开始新 feature
+2. 规范文件将自动创建在 `.sdd/.specs/` 目录
+3. 文档会自动维护，无需手动创建 README
+
+## Agents
+
+- `@sdd` - 智能入口
+- `@sdd-docs` - 目录导航（自动触发）
+- `@sdd-roadmap` - Roadmap 规划
+EOF
+
+print_color "${GREEN}[OK] Created .sdd/README.md${NC}"
+
+# Create .sdd/.specs/README.md
+cat > "${TARGET_DIR}/.sdd/.specs/README.md" << 'EOF'
+# SDD 规范目录
+
+## 目录结构
+
+```
+.specs/
+├── README.md              # 本文件
+├── [feature-1]/           # Feature 1
+│   ├── spec.md
+│   ├── plan.md
+│   ├── tasks.md
+│   └── state.json
+└── [feature-2]/           # Feature 2
+    └── ...
+```
+
+## 使用说明
+
+- 每个 Feature 有独立的目录
+- 文档会自动维护（@sdd-docs）
+EOF
+
+print_color "${GREEN}[OK] Created .sdd/.specs/README.md${NC}"
 
 # Done
 echo ""
@@ -155,12 +215,13 @@ print_color "Installed to: ${TARGET_DIR}"
 echo ""
 echo "Files:"
 echo "  - .opencode/plugins/sdd/ ($FILE_COUNT files from dist/)"
-echo "  - .opencode/agents/ (14 agents from dist/templates/agents/)"
+echo "  - .opencode/agents/ (16 agents from dist/templates/agents/)"
 echo "  - opencode.json (plugin configuration)"
 echo "  - SDD_INSTALL_GUIDE.md (quick start guide)"
-echo "  - .specs/ (SDD working directories)"
+echo "  - .sdd/ (SDD workspace container)"
+echo "    └── .specs/ (SDD specification files)"
 echo ""
-print_color "${CYAN}Agents installed (14 total):${NC}"
+print_color "${CYAN}Agents installed (16 total):${NC}"
 echo "  @sdd              - Smart entry point"
 echo "  @sdd-help         - Help assistant"
 echo "  @sdd-1-spec       - Specification (Phase 1/6)"

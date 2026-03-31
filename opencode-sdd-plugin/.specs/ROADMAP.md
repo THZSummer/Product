@@ -19,7 +19,7 @@ OpenCode SDD 插件致力于将 Specification-Driven Development (SDD) 方法论
 
 | 版本 | 主题 | 发布时间 | 状态 | 核心功能 |
 |------|------|----------|------|----------|
-| **v1.1.1** | Phase 1+ | 2026-03-30 | ✅ 已完成 | 15 个 Agent + Roadmap Agent |
+| **v1.1.1** | Phase 1+ | 2026-03-30 | ✅ 已完成 | 16 个 Agent (6 阶段×2 + 4 特殊) |
 | **v1.2.0** | Phase 2: 能力增强 | 2026-04-30 | 🔄 开发中 | Skills + TUI + MCP + Structured Output |
 | **v1.2.11** | Phase 2.8: 容器化支持 | 2026-05-20 | 📋 规划中 | .sdd/ 容器 + 子 Feature 化 |
 | **v1.3.0** | Phase 3: 体验升级 | 2026-06-15 | 📋 规划中 | 状态面板 + Git Hooks + 多 Feature |
@@ -117,7 +117,7 @@ touch src/plugins/compaction-plugin.ts
 
 | 版本 | 代号 | 目标发布时间 | 主题 | 核心功能 | 团队规模 | 预计工期 |
 |------|------|-------------|------|----------|----------|----------|
-| **v1.1.1** | Phase 1+ | 2026-03-30 | Roadmap 增强 | @sdd-roadmap Agent | 2 人 | ✅ 已完成 |
+| **v1.1.1** | Phase 1+ | 2026-03-30 | Agent 完整 | 16 个 Agent (6 阶段×2 + sdd/sdd-help/sdd-roadmap/sdd-docs) | 2 人 | ✅ 已完成 |
 | **v1.2.0** | Phase 2 | 2026-04-30 | 能力增强 | Skills + TUI + MCP + Structured Output | 2 人 | 4 周 |
 | **v1.3.0** | Phase 3 | 2026-06-15 | 体验升级 | 图形化状态面板 + Git Hooks + 多 Feature 并发 | 2 人 | 6 周 |
 | **v2.0.0** | Phase 4 | 2026-09-30 | 生态集成 | 企业级功能 + 插件市场 + 数据洞察 | 3-4 人 | 12 周 |
@@ -383,25 +383,37 @@ export const TUIPlugin: Plugin = async ({ client }) => {
 
 **结构设计**:
 ```
-.specs/                          # 顶层 Feature
-├── README.md                    # Feature 总览
-├── spec.md                      # 需求规格
-├── plan.md                      # 技术规划
-├── tasks.md                     # 任务分解
-└── state.json                   # 状态文件
-
-# 子 Feature 直接在 .specs/ 目录下
-├── [feature-xxx]/               # 子 Feature xxx
-│   ├── README.md
-│   ├── spec.md
-│   ├── plan.md
-│   ├── tasks.md
-│   └── state.json
-└── [feature-yyy]/               # 子 Feature yyy
-    ├── README.md
-    ├── spec.md
-    └── state.json
+.sdd/                          # SDD 工作空间容器（必选）
+├── README.md                  # SDD 使用说明（必选）
+├── ROADMAP.md                 # 版本路线图（顶层规划）（必选）
+├── config.json                # SDD 配置（可选）
+└── .specs/                    # SDD 规范文件目录 - 顶层 Feature（必选）
+    ├── README.md              # 目录说明
+    ├── spec.md                # 需求规格（可选）
+    ├── plan.md                # 技术规划（可选）
+    ├── tasks.md               # 任务分解（可选）
+    ├── state.json             # 状态文件（可选）
+    ├── [feature-xxx]/         # 子 Feature xxx（可选）
+    │   ├── README.md          # 目录说明（必选）
+    │   ├── spec.md            # 需求规格（必选）
+    │   ├── plan.md            # 技术规划（必选）
+    │   ├── tasks.md           # 任务分解（必选）
+    │   └── state.json         # 状态文件（必选）
+    └── [feature-yyy]/         # 子 Feature yyy（可选）
+        ├── README.md          # 目录说明（必选）
+        ├── spec.md            # 需求规格（必选）
+        ├── plan.md            # 技术规划（必选）
+        ├── tasks.md           # 任务分解（必选）
+        └── state.json         # 状态文件（必选）
 ```
+
+**变更原因**: 为了更好地组织 SDD 工作空间，将 SDD 相关文件集中到 `.sdd/` 容器目录
+
+**主要优势**:
+- **工作空间边界更清晰**: 所有 SDD 相关文件均位于 `.sdd/` 容器内
+- **便于工具识别和管理**: 统一的工作空间入口便于 AI Agent 和工具识别
+- **支持多项目/多工作空间场景**: 独立容器结构支持并行项目开发
+- **配置和状态文件分离**: 工作空间配置与各 Feature 状态文件合理分离
 
 **设计原则**:
 - ✅ **所有 Feature 结构相同**: 顶层和子 Feature 使用相同文档结构

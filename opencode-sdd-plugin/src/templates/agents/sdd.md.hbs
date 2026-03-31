@@ -22,7 +22,7 @@ permission:
 当用户调用 `@sdd` 或任何阶段命令时：
 1. 读取 `.opencode/sdd/state.json`（如果存在）
 2. 检查当前 feature 的状态
-3. 检查 `.specs/[feature]/` 下的文件是否存在（spec.md, plan.md, tasks.md）
+3. 检查 `.sdd/.specs/[feature]/` 下的文件是否存在（spec.md, plan.md, tasks.md）
 4. 根据状态决定下一步
 
 ### 2. 状态流转规则（不可跳过）
@@ -50,9 +50,9 @@ drafting → specified → planned → tasked → implementing → reviewed → 
 | 目标阶段 | 必需前置 | 必需文件 | 验证逻辑 |
 |----------|----------|----------|----------|
 | spec | 无 | 无 | 始终允许 |
-| plan | specified | `.specs/[feature]/spec.md` | 检查文件存在 + 状态 |
-| tasks | planned | `.specs/[feature]/plan.md` | 检查文件存在 + 状态 |
-| build | tasked | `.specs/[feature]/tasks.md` | 检查文件存在 + 状态 |
+| plan | specified | `.sdd/.specs/[feature]/spec.md` | 检查文件存在 + 状态 |
+| tasks | planned | `.sdd/.specs/[feature]/plan.md` | 检查文件存在 + 状态 |
+| build | tasked | `.sdd/.specs/[feature]/tasks.md` | 检查文件存在 + 状态 |
 | review | implementing | 代码已实现 | 检查代码文件 + 状态 |
 | validate | reviewed | review 报告 | 检查审查通过 + 状态 |
 
@@ -91,3 +91,68 @@ spec ✅ → plan ⏳ → tasks ⏳ → build ❌(blocked)
 | `@sdd build [TASK]` | 任务实现 | ✅ 必须有 tasks.md |
 | `@sdd review [name]` | 代码审查 | ✅ 必须有代码实现 |
 | `@sdd validate [name]` | 最终验证 | ✅ 必须有 review 通过 |
+| `@sdd roadmap` | Roadmap 规划 | ✅ 独立功能，无需前置阶段 |
+| `@sdd docs` | 手动触发目录导航更新 | 无 |
+
+## 🗺️ Roadmap 规划（独立功能）
+
+`@sdd-roadmap` 是独立于 6 阶段工作流的特殊 Agent，用于多版本、多 Feature 的整体规划。
+
+### 使用场景
+- 制定产品版本路线图
+- 评估多个 Feature 的优先级
+- 规划发布时间表
+- 分析依赖关系
+
+### 调用方式
+```bash
+@sdd-roadmap "规划 Q2 版本，包含登录、支付、分享功能"
+# 或
+@sdd roadmap "基于现有 spec 规划下一步"
+```
+
+### 输出
+- `.sdd/ROADMAP.md` - 完整的多版本规划文档
+
+## 📚 目录导航（自动）
+
+`@sdd-docs` 是目录导航生成 Agent，在每次主流程执行后**自动触发**，无需手动调用。
+
+### 职责
+- 扫描 `.sdd/` 下所有层级目录
+- 读取文件内容生成简介（标题 + 概述）
+- 读取子目录 README 生成目录简介
+- 验证已有 README 与实际内容一致
+- 为缺少或过时的目录生成/更新导航
+
+### 作用域
+**扫描整个 `.sdd/` 目录树**，为每个目录层级生成导航。
+
+### 生成内容
+每个目录的 `README.md` 包含：
+- **目录简介** - 从子文件/子目录 README 提取
+- **目录结构树** - 可视化目录层级
+- **文件说明表** - 带标题、简介、状态
+- **子目录列表** - 带简介（如有）
+- **上级目录导航** - 返回上级链接
+
+### 验证机制
+**对已有 README**：
+- 对比实际目录结构
+- 检测文件新增/删除
+- 更新过时简介
+- 同步状态变更
+
+### 手动触发（可选）
+```bash
+@sdd docs                    # 扫描整个 .sdd/ 目录
+@sdd-docs .sdd/.specs/      # 扫描指定目录
+```
+
+### 输出文件
+- `.sdd/README.md` - SDD 工作空间根目录导航
+- `.sdd/.specs/README.md` - 规范目录导航
+- `.sdd/.specs/[directory]/README.md` - 目录导航
+- `.sdd/.specs/[directory]/[sub-directory]/README.md` - 子目录导航
+
+**注意**: 通常无需手动调用，目录导航会在主流程后自动更新且保持与实际一致。

@@ -155,7 +155,7 @@ cp opencode-sdd-plugin/package.json .opencode/plugins/sdd/
 - `sdd-help.md` - 帮助
 - `sdd-1-spec.md` 到 `sdd-6-validate.md` - 6 个阶段 agents
 
-> 💡 提示：可以从 `opencode-sdd-plugin/templates/agents/` 复制模板文件
+> 💡 提示：可以从 `dist/templates/agents/` 复制模板文件
 
 #### 5. 验证安装
 
