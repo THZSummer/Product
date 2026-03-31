@@ -1022,6 +1022,70 @@ CREATE TABLE user_authorizations (
 
 ## 7. API 设计
 
+### 接口清单
+
+#### 数据注册管理
+
+| 方法 | 路径 | 说明 | 认证方式 |
+|------|------|------|----------|
+| POST | /api/v1/datasets | 创建数据集 | 企业内部凭证 |
+| PUT | /api/v1/datasets/{id} | 更新数据集 | 企业内部凭证 |
+| DELETE | /api/v1/datasets/{id} | 删除数据集 | 企业内部凭证 |
+| POST | /api/v1/datasets/{id}/production-methods | 配置数据生产方式 | 企业内部凭证 |
+
+#### 数据权限管理
+
+| 方法 | 路径 | 说明 | 认证方式 |
+|------|------|------|----------|
+| POST | /api/v1/datasets/{datasetId}/permissions | 配置数据访问权限 | 企业内部凭证 |
+| PUT | /api/v1/permissions/{id} | 更新权限配置 | 企业内部凭证 |
+| DELETE | /api/v1/permissions/{id} | 删除权限配置 | 企业内部凭证 |
+
+#### 数据订阅管理
+
+| 方法 | 路径 | 说明 | 认证方式 |
+|------|------|------|----------|
+| POST | /api/v1/subscriptions | 创建数据订阅 | 企业公共凭证 |
+| PUT | /api/v1/subscriptions/{id} | 更新订阅配置 | 企业公共凭证 |
+| DELETE | /api/v1/subscriptions/{id} | 取消订阅 | 企业公共凭证 |
+| GET | /api/v1/subscriptions | 查询我的订阅列表 | 企业公共凭证 |
+
+#### 数据查询
+
+| 方法 | 路径 | 说明 | 认证方式 |
+|------|------|------|----------|
+| GET | /api/v1/datasets | 查询数据集列表 | 企业公共凭证 |
+| GET | /api/v1/datasets/{id} | 查询数据集详情 | 企业公共凭证 |
+| GET | /api/v1/datasets/{id}/data | 查询数据集数据 | 企业公共凭证 |
+
+#### 用户授权
+
+| 方法 | 路径 | 说明 | 认证方式 |
+|------|------|------|----------|
+| POST | /api/v1/authorizations/request | 创建授权请求 | 企业公共凭证 |
+| POST | /api/v1/authorizations/confirm | 确认授权 | 用户 Cookie |
+| DELETE | /api/v1/authorizations/{id} | 撤销授权 | 用户 Cookie |
+| GET | /api/v1/authorizations | 查询我的授权列表 | 企业公共凭证 |
+
+#### 审计日志
+
+| 方法 | 路径 | 说明 | 认证方式 |
+|------|------|------|----------|
+| GET | /api/v1/audit-logs | 查询审计日志 | 企业管理员凭证 |
+| GET | /api/v1/audit-logs/{id} | 查询审计日志详情 | 企业管理员凭证 |
+
+**通用规范**:
+- **认证方式**：
+  - **企业内部凭证**：企业内部系统身份账号凭证（Cookie/JWT/OAuth2），用于生产者数据注册和管理
+  - **企业公共凭证**：企业公共系统账号身份凭证（Cookie/JWT/OAuth2），用于消费者数据订阅和查询
+  - **用户 Cookie**：普通用户登录凭证，用于用户授权确认和撤销
+  - **企业管理员凭证**：IT 管理员/安全管理员凭证，用于审批和审计日志查询
+- **响应格式**：所有接口返回统一 JSON 结构 `{data, code, messageZh, messageEn, traceId}`
+- **认证要求**：所有接口需要认证，使用 HTTPS 传输
+- **请求频率**：基于应用凭证进行限流控制
+- **ID 格式**：所有主键/外键使用 BIGINT(20) 雪花 ID，返回前端时转为 String 避免精度丢失
+- **时间格式**：使用 ISO 8601（毫秒精度）：`2026-03-30T10:00:00.123Z`
+
 **设计原则**: API-First，所有接口设计为 RESTful 风格，供以下调用方使用：
 - 内部系统调用（企业内部系统身份账号凭证）
 - 外部第三方集成（企业公共系统账号身份凭证）
