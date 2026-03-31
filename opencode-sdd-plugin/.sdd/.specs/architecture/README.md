@@ -9,8 +9,11 @@
 ```
 architecture/
 ├── README.md          # 本文件
-└── adr/               # 架构决策记录
-    └── [ADR-XXX].md   # 具体 ADR 文档
+├── anti-skip-fix.md   # SDD 流程防跳过修复文档
+├── adr/               # 架构决策记录
+│   └── [ADR-XXX].md   # 具体 ADR 文档
+└── archive/           # 历史档案
+    └── [version].md   # 版本文档
 ```
 
 ## 📄 文件说明
@@ -18,7 +21,9 @@ architecture/
 | 文件/目录 | 类型 | 说明 |
 |-----------|------|------|
 | README.md | 文件 | 本导航文件 |
+| anti-skip-fix.md | 文件 | SDD 流程防跳过修复文档 |
 | adr/ | 目录 | 架构决策记录 (Architecture Decision Records) |
+| archive/ | 目录 | 历史版本文档档案 |
 
 ## 📖 什么是 ADR
 
@@ -32,6 +37,14 @@ ADR (Architecture Decision Record) 是记录重要架构决策的文档，包括
 
 - [上级目录](../) - SDD 规范目录
 - [ADR 目录](./adr/) - 具体架构决策记录
+- [历史档案](./archive/) - 版本文档档案
+
+## 历史档案
+
+| 文档 | 版本 | 日期 | 说明 |
+|------|------|------|------|
+| [v1.1.0-phase1.md](./archive/v1.1.0-phase1.md) | v1.1.0 | 2026-03-25 | Phase 1 优化完成报告 |
+| [v1.0.0-initial.md](./archive/v1.0.0-initial.md) | v1.0.0 | 2026-03-20 | 首发版本文档 |
 
 ---
 

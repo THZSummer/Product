@@ -1,5 +1,18 @@
 # SDD Workspace
 
+## 📚 文档目录
+
+| 目录 | 说明 |
+|------|------|
+| `.specs/` | Feature 规范目录 |
+| `src/` | 源代码目录 |
+| `tests/` | 测试目录 |
+| `docs/` | 项目文档（安装指南等） |
+| `.specs/architecture/` | 架构文档和 ADR |
+| `.specs/architecture/archive/` | 历史版本文档 |
+
+---
+
 ## 目录结构
 
 ### 运行时结构（安装部署）
