@@ -6,7 +6,7 @@
 |------|------|
 | **标识符** | `DATA-OPEN-001` |
 | **名称** | 数据开放平台 |
-| **版本** | 1.0.27 |
+| **版本** | 1.0.28 |
 | **创建日期** | 2026-03-30 |
 | **作者** | Summer |
 | **优先级** | P0 |
@@ -1408,15 +1408,16 @@ Response: 500 Internal Server Error
 | **1.0.17** | **2026-03-30** | **Summer** | **数据模型字段类型优化：data_source_type 使用 TINYINT 枚举，config 字段使用 TEXT** |
 | **1.0.18** | **2026-03-30** | **Summer** | **数据模型 JSON 字段改为 TEXT：8 个字段统一为 TEXT 或 VARCHAR** |
 
-| **1.0.19** | **2026-03-30** | **Summer** | **数据模型时间字段统一：所有 TIMESTAMP → DATETIME(3)** |
-| **1.0.20** | **2026-03-30** | **Summer** | **补充审计字段（create_time/create_by/last_update_time/last_update_by）：api_audit_logs.create_by、user_authorizations.create_by/last_update_by** |
+| **1.0.19** | **2026-03-30** | **Summer** | **数据模型时间字段统一：所有 TIMESTAMP → DATETIME(3)（毫秒精度）** |
+| **1.0.20** | **2026-03-30** | **Summer** | **补充审计字段：所有表增加 create_time/create_by/last_update_time/last_update_by** |
 | **1.0.21** | **2026-03-30** | **Summer** | **列表查询字段优化：description/approval_comment 从 TEXT 改为 VARCHAR** |
 | **1.0.22** | **2026-03-30** | **Summer** | **数据模型主键统一：所有 VARCHAR(64) 主键和外键改为 BIGINT(20) 支持雪花 ID** |
 | **1.0.23** | **2026-03-30** | **Summer** | **状态字段统一：所有 VARCHAR 状态字段改为 TINYINT(10) 枚举** |
 | **1.0.24** | **2026-03-30** | **Summer** | **枚举字段统一：subscription_type/access_type 从 VARCHAR 改为 TINYINT(10)** |
 | **1.0.25** | **2026-03-30** | **Summer** | **第 7-8 章更新：API 设计重构（企业内/公共凭证、BIGINT ID、DATETIME(3)）、补充授权码错误处理** |
 | **1.0.26** | **2026-03-30** | **Summer** | **API 响应国际化：message 拆分为 messageZh/messageEn** |
-| **1.0.27** | **2026-03-30** | **Summer** | **第 6 章添加数据库设计原则和规范（字符集/存储引擎/主键外键/时间字段/状态字段/索引规范）** |
+| **1.0.27** | **2026-03-30** | **Summer** | **第 6 章添加数据库设计原则和规范（存储引擎/主键外键/时间字段/状态字段/审计字段/索引规范）** |
+| **1.0.28** | **2026-03-30** | **Summer** | **审计字段命名统一：created_at/created_by/updated_at/updated_by → create_time/create_by/last_update_time/last_update_by** |
 
 ---
 
