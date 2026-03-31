@@ -809,9 +809,9 @@ CREATE TABLE datasets (
     status            VARCHAR(16) NOT NULL DEFAULT 'pending',  -- pending/approved/rejected/disabled
     approval_comment  VARCHAR(1024),                -- 审批意见
     created_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    created_by        VARCHAR(64) NOT NULL,
+    created_by        BIGINT(20) NOT NULL,
     updated_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-    updated_by        VARCHAR(64) NOT NULL,
+    updated_by        BIGINT(20) NOT NULL,
     
     INDEX idx_producer_app_id (producer_app_id),
     INDEX idx_status (status),
