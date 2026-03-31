@@ -906,6 +906,7 @@ CREATE TABLE api_audit_logs (
     response_time   BIGINT NOT NULL,                -- 响应耗时 (毫秒)
     response_size   BIGINT,                         -- 响应大小字节
     access_type     VARCHAR(32) NOT NULL,           -- 访问类型：REST_API/WEBSOCKET/KAFKA/RABBITMQ/WEBHOOK
+    created_by      VARCHAR(64) NOT NULL,           -- 操作用户 ID
     created_at      DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     
     INDEX idx_trace_id (trace_id),
@@ -931,14 +932,17 @@ CREATE TABLE user_authorizations (
     used_at           DATETIME(3),                    -- 使用时间
     revoked_at        DATETIME(3),                    -- 撤销时间
     created_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    created_by        VARCHAR(64) NOT NULL,           -- 创建人
     updated_at        DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+    updated_by        VARCHAR(64) NOT NULL,           -- 更新人
     
     INDEX idx_consumer_app_id (consumer_app_id),
     INDEX idx_user_id (user_id),
     INDEX idx_dataset_id (dataset_id),
     INDEX idx_auth_code (auth_code),
     INDEX idx_status (auth_status),
-    INDEX idx_expires_at (expires_at)
+    INDEX idx_expires_at (expires_at),
+    INDEX idx_created_by (created_by)
 );
 ```
 
@@ -1345,6 +1349,8 @@ Response: 500 Internal Server Error
 | **1.0.8** | **2026-03-30** | **Summer** | **第 3 章重组：US-001~US-016（生产者/消费者按申请 - 配置阶段拆分）、新增 3.4 用户授权管理、3.5 数据权限管控、3.6 数据通道、3.7 数据使用审计，第 4 章 FR 编号同步更新** |
 | **1.0.9** | **2026-03-30** | **Summer** | **第 1 章新增 1.6 业务流程图（全流程/注册/订阅/授权/消费）、FR-001.3 数据源类型明确（数据库仅 MySQL，API/文件/MQ 支持）、FR-002 补充各生产方式配置参数** |
 | **1.0.10** | **2026-03-30** | **Summer** | **1.6 业务流程图重构：合并为一张完整业务流程图（4 个阶段 + 全程审计），纯业务视角指导后续设计，移除 US 引用** |
+
+| **1.0.19** | **2026-03-30** | **Summer** | **数据模型时间字段统一：所有 TIMESTAMP → DATETIME(3)，补充 api_audit_logs.created_by、user_authorizations.created_by/updated_by** |
 
 ---
 
