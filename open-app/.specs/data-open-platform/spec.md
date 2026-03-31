@@ -6,7 +6,7 @@
 |------|------|
 | **标识符** | `DATA-OPEN-001` |
 | **名称** | 数据开放平台 |
-| **版本** | 1.0.28 |
+| **版本** | 1.0.29 |
 | **创建日期** | 2026-03-30 |
 | **作者** | Summer |
 | **优先级** | P0 |
@@ -1418,6 +1418,7 @@ Response: 500 Internal Server Error
 | **1.0.26** | **2026-03-30** | **Summer** | **API 响应国际化：message 拆分为 messageZh/messageEn** |
 | **1.0.27** | **2026-03-30** | **Summer** | **第 6 章添加数据库设计原则和规范（存储引擎/主键外键/时间字段/状态字段/审计字段/索引规范）** |
 | **1.0.28** | **2026-03-30** | **Summer** | **审计字段命名统一：created_at/created_by/updated_at/updated_by → create_time/create_by/last_update_time/last_update_by** |
+| **1.0.29** | **2026-03-30** | **Summer** | **统一时间字段命名：last_used_at→last_use_time、expires_at→expire_time、used_at→use_time、revoked_at→revoke_time** |
 
 ---
 
