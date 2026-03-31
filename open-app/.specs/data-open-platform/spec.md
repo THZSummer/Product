@@ -983,7 +983,7 @@ CREATE TABLE user_authorizations (
   - **消息队列**：Kafka/RabbitMQ 自身认证机制
 - 使用 HTTPS 保证传输安全
 - 请求频率限制基于应用凭证进行控制
-- 所有主键/外键使用 BIGINT(20) 雪花 ID
+- 所有主键/外键使用 BIGINT(20) 雪花 ID（返回前端时转为 String 避免精度丢失）
 - 时间格式使用 ISO 8601（毫秒精度）：`2026-03-30T10:00:00.123Z`
 
 ### 7.1 数据集注册
@@ -996,7 +996,7 @@ Authorization: Bearer {enterprise_token}
 {
   "name": "用户数据集",
   "description": "企业用户基础信息",
-  "producerAppId": 123456789,
+  "producerAppId": "123456789",
   "dataSourceType": 1,
   "dataSourceConfig": "{\"host\":\"localhost\",\"port\":3306,\"database\":\"users\",\"table\":\"user_info\"}",
   "updateFrequency": 1,
@@ -1007,13 +1007,13 @@ Authorization: Bearer {enterprise_token}
 Response: 201 Created
 {
   "data": {
-    "id": 987654321,
+    "id": "987654321",
     "name": "用户数据集",
     "status": 1,
     "createTime": "2026-03-30T10:00:00.123Z",
-    "createBy": 123456,
+    "createBy": "123456",
     "lastUpdateTime": "2026-03-30T10:00:00.123Z",
-    "lastUpdateBy": 123456
+    "lastUpdateBy": "123456"
   },
   "code": 0,
   "messageZh": "创建成功，待审批",
@@ -1040,7 +1040,7 @@ Authorization: Bearer {enterprise_token}
 Response: 200 OK
 {
   "data": {
-    "datasetId": 987654321,
+    "datasetId": "987654321",
     "productionMethod": 1,
     "status": 1
   },
@@ -1058,7 +1058,7 @@ Content-Type: application/json
 Authorization: Bearer {public_token}
 
 {
-  "datasetId": 987654321,
+  "datasetId": "987654321",
   "permittedFields": "[\"id\",\"name\",\"email\"]",
   "dataScope": "{\"department\":[\"tech\",\"sales\"]}",
   "subscriptionType": 1,
@@ -1068,13 +1068,13 @@ Authorization: Bearer {public_token}
 Response: 201 Created
 {
   "data": {
-    "id": 111222333,
-    "datasetId": 987654321,
+    "id": "111222333",
+    "datasetId": "987654321",
     "status": 1,
     "createTime": "2026-03-30T10:00:00.123Z",
-    "createBy": 123456,
+    "createBy": "123456",
     "lastUpdateTime": "2026-03-30T10:00:00.123Z",
-    "lastUpdateBy": 123456
+    "lastUpdateBy": "123456"
   },
   "code": 0,
   "messageZh": "申请已提交，待审批",
@@ -1093,7 +1093,7 @@ Response: 200 OK
   "data": {
     "items": [
       {
-        "id": 1001,
+        "id": "1001",
         "name": "张三",
         "department": "tech"
       }
@@ -1116,7 +1116,7 @@ Content-Type: application/json
 Authorization: Bearer {public_token}
 
 {
-  "datasetId": 987654321,
+  "datasetId": "987654321",
   "authScopes": "{\"datasets\":[987654321],\"fields\":{\"987654321\":[\"id\",\"name\"]}}",
   "purpose": "业务集成",
   "expireTime": "2026-03-30T11:00:00.000Z"
@@ -1125,16 +1125,16 @@ Authorization: Bearer {public_token}
 Response: 201 Created
 {
   "data": {
-    "id": 555666777,
+    "id": "555666777",
     "authCode": "auth_abc123...",
     "status": 1,
     "expireTime": "2026-03-30T11:00:00.000Z",
     "useTime": null,
     "revokeTime": null,
     "createTime": "2026-03-30T10:00:00.123Z",
-    "createBy": 123456,
+    "createBy": "123456",
     "lastUpdateTime": "2026-03-30T10:00:00.123Z",
-    "lastUpdateBy": 123456,
+    "lastUpdateBy": "123456",
     "authUrl": "https://open-app.example.com/authorize?code=auth_abc123"
   },
   "code": 0,
@@ -1195,7 +1195,7 @@ Response: 404 Not Found
   "messageZh": "指定的数据集不存在",
   "messageEn": "Specified dataset not found",
   "details": {
-    "datasetId": 987654321
+    "datasetId": "987654321"
   }
 }
 
