@@ -951,143 +951,164 @@ CREATE TABLE user_authorizations (
 ## 7. API 设计
 
 **设计原则**: API-First，所有接口设计为 RESTful 风格，供以下调用方使用：
-- 内部系统调用
-- 外部第三方集成
+- 内部系统调用（企业内部系统身份账号凭证）
+- 外部第三方集成（企业公共系统账号身份凭证）
 - 数据分析平台
 
 **API 规范**: 
 - 所有接口遵循 RESTful 设计规范
 - 响应格式统一为 JSON 结构 `{data, code, message}`
-- 使用 JWT 进行身份认证
+- 认证方式：
+  - **生产者通道**：企业内部系统身份账号凭证（Cookie/JWT/OAuth2）
+  - **消费者通道**：企业公共系统账号身份凭证（Cookie/JWT/OAuth2）
+  - **消息队列**：Kafka/RabbitMQ 自身认证机制
 - 使用 HTTPS 保证传输安全
 - 请求频率限制基于应用凭证进行控制
+- 所有主键/外键使用 BIGINT(20) 雪花 ID
+- 时间格式使用 ISO 8601（毫秒精度）：`2026-03-30T10:00:00.123Z`
 
-### 7.1 创建 API 凭证
+### 7.1 数据集注册
 
 ```http
-POST /api/v1/api-credentials
+POST /api/v1/datasets
 Content-Type: application/json
-Authorization: Bearer {admin_token}
+Authorization: Bearer {enterprise_token}
 
 {
-  "app_id": "app_xxxxxxxxxxxx",
-  "name": "生产环境访问凭证",
-  "permissions": {
-    "datasets": ["users", "orders"],
-    "fields": {
-      "users": ["id", "name", "email", "department"],
-      "orders": ["id", "order_no", "status", "amount", "create_time"]
-    },
-    "methods": {
-      "users": ["GET"],
-      "orders": ["GET"]
-    }
-  },
-  "rate_limit": {
-    "requests_per_minute": 1000,
-    "burst_capacity": 2000
-  }
+  "name": "用户数据集",
+  "description": "企业用户基础信息",
+  "producerAppId": 123456789,
+  "dataSourceType": 1,
+  "dataSourceConfig": "{\"host\":\"localhost\",\"port\":3306,\"database\":\"users\",\"table\":\"user_info\"}",
+  "updateFrequency": 1,
+  "cronExpression": "0 0 2 * * ?",
+  "schemaDefinition": "{\"fields\":[{\"name\":\"id\",\"type\":\"BIGINT\"},{\"name\":\"name\",\"type\":\"VARCHAR(64)\"}]}"
 }
 
 Response: 201 Created
 {
   "data": {
-    "id": "cred_xxxxxxxxxxxx",
-    "api_key": "ak_xxxxxxx...",
-    "api_secret": "secret_12345...",
-    "status": "active",
-    "created_at": "2026-03-30T10:00:00Z"
+    "id": 987654321,
+    "name": "用户数据集",
+    "status": 1,
+    "createdAt": "2026-03-30T10:00:00.123Z",
+    "createdBy": 123456
   },
   "code": 0,
-  "message": "创建成功"
+  "message": "创建成功，待审批"
 }
 ```
 
-### 7.2 获取数据资源
+### 7.2 数据生产方式配置
 
 ```http
-GET /api/v1/datasets/users?filters={"department":"tech"}&sort=["name"]&page=1&page_size=50
-Authorization: Bearer {access_token}
-X-API-Key: ak_xxxxxxx...
+POST /api/v1/datasets/{datasetId}/production-methods
+Content-Type: application/json
+Authorization: Bearer {enterprise_token}
+
+{
+  "productionMethod": 1,
+  "config": {
+    "endpoint": "https://api.example.com/data",
+    "authType": 1,
+    "credentials": {}
+  }
+}
+
+Response: 200 OK
+{
+  "data": {
+    "datasetId": 987654321,
+    "productionMethod": 1,
+    "status": "active"
+  },
+  "code": 0,
+  "message": "配置成功"
+}
+```
+
+### 7.3 数据订阅申请
+
+```http
+POST /api/v1/subscriptions
+Content-Type: application/json
+Authorization: Bearer {public_token}
+
+{
+  "datasetId": 987654321,
+  "permittedFields": "[\"id\",\"name\",\"email\"]",
+  "dataScope": "{\"department\":[\"tech\",\"sales\"]}",
+  "subscriptionType": 1,
+  "pushTarget": "{\"webhookUrl\":\"https://partner.com/webhook\"}"
+}
+
+Response: 201 Created
+{
+  "data": {
+    "id": 111222333,
+    "datasetId": 987654321,
+    "status": 1,
+    "createdAt": "2026-03-30T10:00:00.123Z"
+  },
+  "code": 0,
+  "message": "申请已提交，待审批"
+}
+```
+
+### 7.4 数据查询（REST API）
+
+```http
+GET /api/v1/datasets/{datasetId}/data?permittedFields=["id","name"]&dataScope={"department":"tech"}&page=1&pageSize=50
+Authorization: Bearer {public_token}
 
 Response: 200 OK
 {
   "data": {
     "items": [
       {
-        "id": "user_001",
+        "id": 1001,
         "name": "张三",
-        "email": "zhangsan@example.com",
         "department": "tech"
       }
     ],
     "total": 150,
     "page": 1,
-    "page_size": 50
+    "pageSize": 50
   },
   "code": 0,
   "message": "success"
 }
 ```
 
-### 7.3 创建事件订阅
+### 7.5 用户授权
 
 ```http
-POST /api/v1/event-subscriptions
+POST /api/v1/authorizations/request
 Content-Type: application/json
-Authorization: Bearer {access_token}
+Authorization: Bearer {public_token}
 
 {
-  "subscription_name": "用户更新订阅",
-  "event_types": ["USER_CREATED", "USER_UPDATED"],
-  "webhook_url": "https://partner.com/webhook/handle-user-change",
-  "retry_attempts": 3
+  "datasetId": 987654321,
+  "authScopes": "{\"datasets\":[987654321],\"fields\":{\"987654321\":[\"id\",\"name\"]}}",
+  "purpose": "业务集成",
+  "expiresAt": "2026-03-30T11:00:00.000Z"
 }
 
 Response: 201 Created
 {
   "data": {
-    "id": "sub_xxxxxxxxxxxx",
-    "subscription_name": "用户更新订阅",
-    "status": "active",
-    "events_delivered": 0
+    "id": 555666777,
+    "authCode": "auth_abc123...",
+    "status": 1,
+    "expiresAt": "2026-03-30T11:00:00.000Z",
+    "authUrl": "https://open-app.example.com/authorize?code=auth_abc123"
   },
   "code": 0,
-  "message": "创建成功"
+  "message": "授权请求已生成，请用户确认"
 }
 ```
 
-### 7.4 数据流消费（消息队列）
-
-```javascript
-// 通过消息队列 SDK 连接到数据流服务（以 Kafka 为例）
-const { Kafka } = require('kafkajs');
-
-const kafka = new Kafka({
-  clientId: 'data-consumer',
-  brokers: ['broker1:9092', 'broker2:9092'],
-  authenticationProtocol: 'oauth2', // 或 cookie
-  accessToken: 'xxx'
-});
-
-const consumer = kafka.consumer({ groupId: 'data-consumer-group' });
-
-await consumer.connect();
-await consumer.subscribe({ topic: 'user-events', fromBeginning: false });
-
-await consumer.run({
-  eachMessage: async ({ topic, partition, message }) => {
-    console.log('收到实时数据:', {
-      topic,
-      partition,
-      offset: message.offset,
-      value: message.value.toString()
-    });
-  }
-});
-```
-
-### 7.5 错误响应示例
+### 7.6 错误响应示例
 
 ```http
 // 场景 1: 认证失败 (401)
@@ -1095,10 +1116,10 @@ Response: 401 Unauthorized
 {
   "data": null,
   "code": "API_INVALID_CREDENTIAL",
-  "message": "无效的 API 令牌，请检查凭证是否正确",
+  "message": "无效的企业凭证，请检查认证方式是否正确",
   "details": {
-    "error_type": "authentication",
-    "retry_after": null
+    "errorType": "authentication",
+    "authType": "enterprise/public"
   }
 }
 
@@ -1109,8 +1130,8 @@ Response: 403 Forbidden
   "code": "API_PERMISSION_DENIED",
   "message": "当前凭证无权访问指定的字段或操作",
   "details": {
-    "required_permission": "users:read:salary",
-    "resource": "/api/v1/datasets/users"
+    "requiredPermission": "dataset:read:salary",
+    "resource": "/api/v1/datasets/987654321/data"
   }
 }
 
@@ -1123,32 +1144,31 @@ Response: 429 Too Many Requests
   "details": {
     "limit": 1000,
     "remaining": 0,
-    "reset_at": "2026-03-30T10:01:00Z",
-    "retry_after": 60
+    "resetAt": "2026-03-30T10:01:00.000Z",
+    "retryAfter": 60
   }
 }
 
-// 场景 4: 资源不存在 (404)
+// 场景 4: 数据集不存在 (404)
 Response: 404 Not Found
 {
   "data": null,
   "code": "API_DATASET_NOT_FOUND",
   "message": "指定的数据集不存在",
   "details": {
-    "dataset_id": "nonexistent_dataset"
+    "datasetId": 987654321
   }
 }
 
-// 场景 5: 参数错误 (400)
-Response: 400 Bad Request
+// 场景 5: 授权码无效 (401)
+Response: 401 Unauthorized
 {
   "data": null,
-  "code": "API_INVALID_PARAMETER",
-  "message": "请求参数校验失败",
+  "code": "API_AUTH_CODE_INVALID",
+  "message": "授权码无效或已过期",
   "details": {
-    "field": "page_size",
-    "reason": "超出最大允许值 1000",
-    "max_value": 1000
+    "authCode": "auth_abc123...",
+    "status": "expired|used|revoked"
   }
 }
 
@@ -1159,8 +1179,8 @@ Response: 500 Internal Server Error
   "code": "API_INTERNAL_ERROR",
   "message": "服务器内部错误",
   "details": {
-    "trace_id": "trace_xxxxxxxxxxxx",
-    "retry_safe": true
+    "traceId": "trace_xxxxxxxxxxxx",
+    "retrySafe": true
   }
 }
 ```
@@ -1174,7 +1194,8 @@ Response: 500 Internal Server Error
 | HTTP 状态码 | 错误码 | 错误信息 | 触发场景 | 处理方式 |
 |-------------|--------|----------|----------|----------|
 | 400 | API_INVALID_PARAMETER | 请求参数校验失败 | 参数格式错误、超出范围、必填项缺失 | 返回详细参数错误信息 |
-| 401 | API_INVALID_CREDENTIAL | 无效的 API 令牌 | Token 过期、API Key 无效、签名错误 | 拒绝请求，提示重新认证 |
+| 401 | API_INVALID_CREDENTIAL | 无效的企业凭证 | Token 过期、凭证无效、签名错误 | 拒绝请求，提示重新认证 |
+| 401 | API_AUTH_CODE_INVALID | 授权码无效或已过期 | 授权码已使用、已过期、已撤销 | 拒绝请求，提示重新获取授权 |
 | 403 | API_PERMISSION_DENIED | 权限不足 | 访问未授权资源或字段 | 拒绝请求，提示所需权限 |
 | 404 | API_DATASET_NOT_FOUND | 数据集不存在 | 访问不存在的数据集 ID | 返回 404，记录访问日志 |
 | 404 | API_FIELD_NOT_FOUND | 字段不存在 | 查询不存在的字段 | 返回 400，提示可用字段列表 |
