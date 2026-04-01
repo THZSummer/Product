@@ -3,7 +3,7 @@
 ## 目录结构
 
 ```
-.specs/
+.sdd/
 ├── README.md              # 本文件
 ├── [feature-1]/           # Feature 1
 │   ├── spec.md

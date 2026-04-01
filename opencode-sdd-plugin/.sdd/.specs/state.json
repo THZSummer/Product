@@ -37,6 +37,25 @@
       },
       "createdAt": "2026-04-01T00:00:00Z",
       "updatedAt": "2026-04-01T00:00:00Z"
+    },
+    {
+      "feature": "deprecate-sdd-tools",
+      "name": "废弃 SDD 工具",
+      "version": "1.0.0",
+      "status": "validated",
+      "phase": 6,
+      "files": {
+        "spec": "spec.md",
+        "plan": "plan.md",
+        "tasks": "tasks.md",
+        "readme": null
+      },
+      "dependencies": {
+        "on": ["sdd-plugin-phase2"],
+        "blocking": []
+      },
+      "createdAt": "2026-04-01T00:00:00Z",
+      "updatedAt": "2026-04-01T00:00:00Z"
     }
   ]
 }

@@ -4,11 +4,11 @@
  * 从源模板生成所有构建产物到 dist/
  * 
  * 输入：
- *   - src/templates/agents/*.md.hbs (10 个 agent 模板：6 个阶段 + sdd + sdd-help + sdd-roadmap + sdd-docs)
+ *   - src/templates/agents/*.md.hbs (10 个 agent 模板)
  *   - src/templates/config/opencode.json.hbs (1 个配置模板)
  * 
  * 输出：
- *   - dist/templates/agents/*.md (16 个 agent 定义：12 个阶段 + 4 个特殊)
+ *   - dist/templates/agents/*.md (16 个 agent 定义)
  *   - dist/opencode.json (配置模板副本)
  */
 
@@ -173,8 +173,7 @@ function build() {
   console.log('   ├── opencode.json          (配置模板)');
   console.log('   ├── index.js               (插件入口)');
   console.log('   ├── agents/                (插件代码)');
-  console.log('   ├── commands/');
-  console.log('   ├── state/');
+  console.log('   ├── state/                 (状态机)');
   console.log('   └── templates/agents/      (16 个 agent 定义)');
 }
 
