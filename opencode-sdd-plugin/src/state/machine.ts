@@ -49,7 +49,7 @@ export class StateMachine {
     'completed': ['spec.md', 'plan.md', 'tasks.md', 'review.md', 'validation.md']
   };
 
-  constructor(private specsDir: string = '.specs') {
+  constructor(private specsDir: string = 'specs-tree-root') {
     this.stateFilePath = path.join(specsDir, '.sdd', 'state.json');
   }
 

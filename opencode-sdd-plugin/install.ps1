@@ -52,9 +52,8 @@ Write-Host "[3/6] Creating directories..." -ForegroundColor Cyan
 $dirs = @(
     "$TargetDir\.opencode\plugins\sdd",
     "$TargetDir\.opencode\agents",
-    "$TargetDir\.specs",
-    "$TargetDir\.specs\examples",
-    "$TargetDir\.specs\architecture\adr"
+    "$TargetDir\.sdd",
+    "$TargetDir\.sdd\.specs"
 )
 foreach ($dir in $dirs) {
     if (Test-Path $dir) {
@@ -86,10 +85,65 @@ Write-Host "[5/6] Copying opencode.json..." -ForegroundColor Cyan
 Copy-Item "$ScriptDir\dist\opencode.json" -Destination "$TargetDir\opencode.json" -Force
 Write-Host "[OK] Copied opencode.json" -ForegroundColor Green
 
-# Step 6: Copy installation guide
-Write-Host "[6/6] Copying documentation..." -ForegroundColor Cyan
-Copy-Item "$ScriptDir\INSTALL.md" -Destination "$TargetDir\SDD_INSTALL_GUIDE.md" -Force
-Write-Host "[OK] Copied SDD_INSTALL_GUIDE.md" -ForegroundColor Green
+# Step 6: Initialize .sdd/ directory structure
+Write-Host "[6/6] Initializing .sdd/ directory..." -ForegroundColor Cyan
+
+# Create .sdd/README.md
+$sddReadme = @'
+# SDD Workspace
+
+## 目录结构
+
+```
+.sdd/
+├── README.md              # 本文件 - SDD 工作空间说明
+├── ROADMAP.md             # 版本路线图
+├── config.json            # SDD 配置（可选）
+└── .specs/                # 规范文件目录
+    ├── README.md          # 目录说明
+    └── [feature]/         # Feature 目录
+```
+
+## 快速开始
+
+1. 使用 `@sdd 开始 [feature 名称]` 开始新 feature
+2. 规范文件将自动创建在 `.sdd/.specs/` 目录
+3. 文档会自动维护，无需手动创建 README
+
+## Agents
+
+- `@sdd` - 智能入口
+- `@sdd-docs` - 目录导航（自动触发）
+- `@sdd-roadmap` - Roadmap 规划
+'@
+Set-Content -Path "$TargetDir\.sdd\README.md" -Value $sddReadme -Encoding UTF8
+Write-Host "[OK] Created .sdd/README.md" -ForegroundColor Green
+
+# Create .sdd/.specs/README.md
+$specsReadme = @'
+# SDD 规范目录
+
+## 目录结构
+
+```
+.specs/
+├── README.md              # 本文件
+├── [feature-1]/           # Feature 1
+│   ├── spec.md
+│   ├── plan.md
+│   ├── tasks.md
+│   └── state.json
+└── [feature-2]/           # Feature 2
+    └── ...
+```
+
+## 使用说明
+
+- 每个 Feature 有独立的目录
+- 文档会自动维护（@sdd-docs）
+'@
+Set-Content -Path "$TargetDir\.sdd\.specs\README.md" -Value $specsReadme -Encoding UTF8
+Write-Host "[OK] Created .sdd/.specs/README.md" -ForegroundColor Green
 
 # Done
 Write-Host ""
@@ -99,12 +153,12 @@ Write-Host "Installed to: $TargetDir"
 Write-Host ""
 Write-Host "Files:"
 Write-Host "  - .opencode/plugins/sdd/ ($fileCount files from dist/)"
-Write-Host "  - .opencode/agents/ (14 agents from dist/templates/agents/)"
+Write-Host "  - .opencode/agents/ (16 agents from dist/templates/agents/)"
 Write-Host "  - opencode.json (plugin configuration)"
-Write-Host "  - SDD_INSTALL_GUIDE.md (quick start guide)"
-Write-Host "  - .specs/ (SDD working directories)"
+Write-Host "  - .sdd/ (SDD workspace container)"
+Write-Host "    └── .specs/ (SDD specification files)"
 Write-Host ""
-Write-Host "Agents installed (14 total):" -ForegroundColor Cyan
+Write-Host "Agents installed (16 total):" -ForegroundColor Cyan
 Write-Host "  @sdd              - Smart entry point"
 Write-Host "  @sdd-help         - Help assistant"
 Write-Host "  @sdd-1-spec       - Specification (Phase 1/6)"
@@ -122,6 +176,5 @@ Write-Host "  @sdd 开始 [feature 名称]"
 Write-Host ""
 Write-Host "Documentation:" -ForegroundColor Gray
 Write-Host "  - README.md     - Full documentation"
-Write-Host "  - INSTALL.md    - Detailed installation guide"
 Write-Host "  - CHANGELOG.md  - Version history"
 Write-Host ""

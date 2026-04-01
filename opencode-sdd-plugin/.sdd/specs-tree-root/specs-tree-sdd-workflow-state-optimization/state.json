@@ -1,0 +1,35 @@
+{
+  "feature": "sdd-workflow-state-optimization",
+  "name": "SDD 工作流状态优化",
+  "version": "1.0.0",
+  "status": "specified",
+  "phase": 1,
+  "files": {
+    "spec": "spec.md",
+    "plan": "plan.md",
+    "tasks": "tasks.md",
+    "readme": "README.md"
+  },
+  "dependencies": {
+    "on": ["sdd-plugin-baseline", "sdd-plugin-phase2"],
+    "blocking": ["sdd-multi-module"]
+  },
+  "history": [
+    {
+      "timestamp": "2026-04-01T00:00:00Z",
+      "from": "initial",
+      "to": "specified",
+      "triggeredBy": "@sdd-spec",
+      "comment": "初始规范创建"
+    },
+    {
+      "timestamp": "2026-04-01T12:00:00Z",
+      "from": "specified",
+      "to": "specified",
+      "triggeredBy": "@sdd-spec",
+      "comment": "规范更新：状态管理从集中式改为分布式目录层级设计"
+    }
+  ],
+  "createdAt": "2026-04-01T00:00:00Z",
+  "updatedAt": "2026-04-01T12:00:00Z"
+}

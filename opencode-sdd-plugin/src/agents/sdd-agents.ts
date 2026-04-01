@@ -98,6 +98,13 @@ export async function registerAgents(context: any) {
       description: 'SDD Roadmap 规划专家 - 多版本路线图规划',
       mode: 'subagent',
       promptFile: '.opencode/agents/sdd-roadmap.md'
+    },
+    // 扩展功能：文档维护
+    {
+      name: 'sdd-docs',
+      description: 'SDD 目录导航生成器 - 扫描目录结构生成 README 导航',
+      mode: 'subagent',
+      promptFile: '.opencode/agents/sdd-docs.md'
     }
   ];
 

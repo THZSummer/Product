@@ -1,0 +1,37 @@
+{
+  "feature": "sdd-multi-module",
+  "name": "SDD 子 Feature 化并行开发支持", 
+  "version": "1.2.11",
+  "status": "implementing",
+  "phase": 4,
+  "files": {
+    "spec": ".sdd/.specs/sdd-multi-module/spec.md",
+    "plan": ".sdd/.specs/sdd-multi-module/plan.md",
+    "tasks": ".sdd/.specs/sdd-multi-module/tasks.md",
+    "readme": ".sdd/.specs/sdd-multi-module/README.md"
+  },
+  "dependencies": {
+    "on": [],
+    "blocking": []
+  },
+  "assignee": "AI Assistant",
+  "createdAt": "2026-03-31T09:00:00Z",
+  "updatedAt": "2026-03-31T11:00:00Z",
+  "completedTasks": [
+    "TASK-001",
+    "TASK-002", 
+    "TASK-003",
+    "TASK-004",
+    "TASK-005",
+    "TASK-006",
+    "TASK-007"
+  ],
+  "implementationNotes": [
+    "State Schema v1.2.11 implemented without mode/subFeatures fields",
+    "Workspace detection with priority: env var > .sdd/ > .specs/",
+    "Multi-feature directory management in flat structure",
+    "Task parser supporting parallel/serial execution groups",
+    "Dependency notification system",
+    "Forward/backward compatibility maintained"
+  ]
+}

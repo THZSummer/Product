@@ -4,11 +4,11 @@
  * 从源模板生成所有构建产物到 dist/
  * 
  * 输入：
- *   - src/templates/agents/*.md.hbs (9 个 agent 模板)
+ *   - src/templates/agents/*.md.hbs (10 个 agent 模板)
  *   - src/templates/config/opencode.json.hbs (1 个配置模板)
  * 
  * 输出：
- *   - dist/templates/agents/*.md (15 个 agent 定义)
+ *   - dist/templates/agents/*.md (16 个 agent 定义)
  *   - dist/opencode.json (配置模板副本)
  */
 
@@ -128,8 +128,8 @@ function build() {
   
   // ========== 构建 Agent 定义 ==========
   console.log('📄 Building agents...');
-  console.log(`   Source: src/templates/agents/*.md.hbs (9 files)`);
-  console.log(`   Output: dist/templates/agents/*.md (15 files)\n`);
+  console.log(`   Source: src/templates/agents/*.md.hbs (10 files: 6 stages + sdd + sdd-help + sdd-roadmap + sdd-docs)`);
+  console.log(`   Output: dist/templates/agents/*.md (16 files: 12 numbered/short + 4 special)\n`);
   
   AGENT_MAP.forEach(({ num, short, desc }) => {
     const template = readTemplate(AGENT_SRC_DIR, `sdd-${short}.md`);
@@ -146,7 +146,7 @@ function build() {
   });
   
   // 复制特殊 Agent (不需要生成编号版本)
-  ['sdd', 'sdd-help', 'sdd-roadmap'].forEach(name => {
+  ['sdd', 'sdd-help', 'sdd-roadmap', 'sdd-docs'].forEach(name => {
     const template = readTemplate(AGENT_SRC_DIR, `${name}.md`);
     const outputPath = path.join(AGENT_OUT_DIR, `${name}.md`);
     fs.writeFileSync(outputPath, template, 'utf-8');
@@ -173,9 +173,8 @@ function build() {
   console.log('   ├── opencode.json          (配置模板)');
   console.log('   ├── index.js               (插件入口)');
   console.log('   ├── agents/                (插件代码)');
-  console.log('   ├── commands/');
-  console.log('   ├── state/');
-  console.log('   └── templates/agents/      (15 个 agent 定义)');
+  console.log('   ├── state/                 (状态机)');
+  console.log('   └── templates/agents/      (16 个 agent 定义)');
 }
 
 build();
