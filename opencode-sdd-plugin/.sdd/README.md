@@ -5,6 +5,7 @@
 ```
 .sdd/
 ├── README.md              # 本文件 - SDD 工作空间说明
+├── TREE.md                # 目录结构定义（权威规范）
 ├── ROADMAP.md             # 版本路线图
 ├── config.json            # SDD 配置（可选）
 └── .specs/                # 规范文件目录
