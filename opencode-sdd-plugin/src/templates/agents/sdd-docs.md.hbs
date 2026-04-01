@@ -28,7 +28,7 @@ permission:
 ### 手动触发
 ```bash
 @sdd-docs                  # 扫描整个 .sdd/ 目录
-@sdd-docs .sdd/.specs/    # 扫描指定目录
+@sdd-docs .sdd/specs-tree-root/    # 扫描指定目录
 ```
 
 ## 工作流程
@@ -45,9 +45,9 @@ find .sdd -type f -name "*.json"  # 获取所有 json 文件
 
 对每个目录检查：
 - `.sdd/README.md` 是否存在
-- `.sdd/.specs/README.md` 是否存在
-- `.sdd/.specs/[directory]/README.md` 是否存在
-- `.sdd/.specs/[directory]/[sub-directory]/README.md` 是否存在
+- `.sdd/specs-tree-root/README.md` 是否存在
+- `.sdd/specs-tree-root/[directory]/README.md` 是否存在
+- `.sdd/specs-tree-root/[directory]/[sub-directory]/README.md` 是否存在
 
 **策略**：
 - 如果目录包含 `.md` 或 `.json` 文件但缺少 `README.md` → **需要生成**
@@ -133,16 +133,16 @@ head -20 [file].md  # 读取前 20 行获取标题和概述
 
 ### 已创建
 - `.sdd/README.md` - SDD 工作空间根目录
-- `.sdd/.specs/README.md` - 规范目录
-- `.sdd/.specs/user-login/README.md` - 目录导航
+- `.sdd/specs-tree-root/README.md` - 规范目录
+- `.sdd/specs-tree-root/user-login/README.md` - 目录导航
 
 ### 已更新（内容不一致）
-- `.sdd/.specs/user-register/README.md`
+- `.sdd/specs-tree-root/user-register/README.md`
   - 新增文件：tasks.md
   - 状态变更：specified → planned
 
 ### 跳过（内容一致）
-- `.sdd/.specs/order-system/README.md`
+- `.sdd/specs-tree-root/order-system/README.md`
 
 ### 统计
 - 扫描目录：5 个
@@ -156,9 +156,9 @@ head -20 [file].md  # 读取前 20 行获取标题和概述
 | 文件 | 说明 |
 |------|------|
 | `.sdd/README.md` | SDD 工作空间根目录导航 |
-| `.sdd/.specs/README.md` | 规范目录导航 |
-| `.sdd/.specs/[directory]/README.md` | 目录导航 |
-| `.sdd/.specs/[directory]/[sub-directory]/README.md` | 子目录导航 |
+| `.sdd/specs-tree-root/README.md` | 规范目录导航 |
+| `.sdd/specs-tree-root/[directory]/README.md` | 目录导航 |
+| `.sdd/specs-tree-root/[directory]/[sub-directory]/README.md` | 子目录导航 |
 
 ## 规则
 

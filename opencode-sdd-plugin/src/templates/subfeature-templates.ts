@@ -249,7 +249,7 @@ ${template.description || 'Feature 详细说明...'}
 ## 目录结构
 
 \`\`\`
-.specs/
+specs-tree-root/
 └─ ${template.featureId}/
     ├─ spec.md           # 总体规格文档
     ├─ plan.md           # 技术实现方案

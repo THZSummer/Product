@@ -243,7 +243,7 @@ export function validateSubFeatureCompleteness(subFeature: SubFeatureMeta): {
   valid: boolean;
   missing: string[]
 } {
-  const featureDir = path.join(process.cwd(), '.specs', subFeature.dir);
+  const featureDir = path.join(process.cwd(), 'specs-tree-root', subFeature.dir);
   const missing: string[] = [];
 
   try {

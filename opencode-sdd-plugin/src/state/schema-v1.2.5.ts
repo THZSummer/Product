@@ -185,10 +185,10 @@ export function createInitialState(feature: string, name?: string): StateV1_2_5 
     status: 'drafting',
     mode: 'multi', // 默认值
     files: {
-      spec: `.specs/${feature}/spec.md`,
-      plan: `.specs/${feature}/plan.md`,
-      tasks: `.specs/${feature}/tasks.md`,
-      readme: `.specs/${feature}/README.md`
+      spec: `specs-tree-root/${feature}/spec.md`,
+      plan: `specs-tree-root/${feature}/plan.md`,
+      tasks: `specs-tree-root/${feature}/tasks.md`,
+      readme: `specs-tree-root/${feature}/README.md`
     },
     dependencies: {
       on: [],

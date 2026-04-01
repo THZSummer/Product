@@ -24,7 +24,7 @@ export const SDDPlugin = async ({ project, client, $, directory, worktree }) => 
     // 监听文件编辑
     "file.edited": async (input) => {
       // 追踪规范文件变更
-      if (input.filePath.includes(".specs/")) {
+      if (input.filePath.includes("specs-tree-root/")) {
         await client.app.log({
           body: {
             service: "sdd-plugin",

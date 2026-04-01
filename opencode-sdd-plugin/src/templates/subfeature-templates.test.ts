@@ -208,7 +208,7 @@ describe('子 Feature 目录结构模板生成器测试', () => {
     expect(result).toContain('认证系统重构');
     expect(result).toContain('用户管理重构');
     expect(result).toContain('用户模型设计');
-    expect(result).toContain('/specs/');
+    expect(result).toContain('/specs-tree-root/');
     expect(result).toContain('sub-features/');
   });
 });

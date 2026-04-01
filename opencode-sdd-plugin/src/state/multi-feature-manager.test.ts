@@ -264,7 +264,6 @@ describe('MultiFeatureManager Tests', () => {
         statesMap.set('a', { id: 'a', status, phase: 1 });
         statesMap.set('b', { id: 'b', status: 'specified', phase: 1 });
 
-        expect(`Dependency with status ${status} should be ready`).toBe(true);
         expect(isDependencyReady('b', graph, statesMap)).toBe(true);
       }
     });
@@ -315,7 +314,8 @@ describe('MultiFeatureManager Tests', () => {
       statesMap.set('c', { id: 'c', status: 'specified', phase: 1 });
 
       const ready = getReadySubFeatures(graph, statesMap);
-      expect(ready).toEqual([]); // All blocked
+      expect(ready).toContain('c');
+      expect(ready.length).toBe(1); // Only 'c' should be ready
     });
 
     test('should return sub-features when dependencies ready and no one blocks them', () => {

@@ -49,7 +49,7 @@ export function migrateFrom111(oldState: any): any {
       id: subFeatureId,
       dir: `sub-features/${subFeatureId}`,
       status: oldState.status || 'specified',
-      stateFile: `.specs/${oldState.feature || 'main'}/.state.json`
+      stateFile: `specs-tree-root/${oldState.feature || 'main'}/.state.json`
     }],
     dependencies: {},
     updatedAt: now,

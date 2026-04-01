@@ -4,7 +4,7 @@ import { join } from 'path';
 
 /**
  * 获取 SDD 工作空间根目录
- * 优先级：环境变量 > .sdd/ 目录 > .specs/ 目录
+ * 优先级：环境变量 > .sdd/ 目录 > specs-tree-root/ 目录 > .specs/ 目录
  */
 export function getSDDWorkspace(): string {
   // 1. 检查环境变量
@@ -17,12 +17,17 @@ export function getSDDWorkspace(): string {
     return '.sdd';
   }
   
-  // 3. 回退到 .specs/ 目录（兼容模式）
+  // 3. 查找 specs-tree-root/ 目录（新标准）
+  if (existsSync('specs-tree-root')) {
+    return '.';
+  }
+  
+  // 4. 回退到 .specs/ 目录（兼容模式）
   if (existsSync('.specs')) {
     return '.';
   }
   
-  throw new Error('未找到 SDD 工作空间：请确保存在 .sdd/ 或 .specs/ 目录');
+  throw new Error('未找到 SDD 工作空间：请确保存在 .sdd/ 或 specs-tree-root/ 或 .specs/ 目录');
 }
 
 /**
@@ -30,7 +35,17 @@ export function getSDDWorkspace(): string {
  */
 export function getSpecsDir(): string {
   const workspace = getSDDWorkspace();
-  return workspace === '.sdd' ? '.sdd/.specs' : '.specs';
+  if (workspace === '.sdd') {
+    return '.sdd/.specs';
+  }
+  
+  // 检查当前目录是否有 specs-tree-root 子目录
+  if (existsSync('specs-tree-root')) {
+    return 'specs-tree-root';
+  }
+  
+  // 默认为 .specs 目录
+  return '.specs';
 }
 
 /**

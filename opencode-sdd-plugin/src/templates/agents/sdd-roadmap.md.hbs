@@ -32,8 +32,8 @@ permission:
 ### ❌ 禁止输出
 | 文件 | 原因 | 正确 Agent |
 |------|------|------------|
-| `.sdd/.specs/[feature]/tasks.md` | 越界，属于任务分解阶段 | `@sdd-3-tasks` |
-| `.sdd/.specs/[feature]/plan.md` | 越界，属于技术规划阶段 | `@sdd-2-plan` |
+| `.sdd/specs-tree-root/[feature]/tasks.md` | 越界，属于任务分解阶段 | `@sdd-3-tasks` |
+| `.sdd/specs-tree-root/[feature]/plan.md` | 越界，属于技术规划阶段 | `@sdd-2-plan` |
 | `.sdd/ROADMAP-EXECUTIVE-SUMMARY.md` | 冗余，执行摘要应放在 ROADMAP.md 顶部 | - |
 | `.sdd/ROADMAP-COMPLETION.md` | 冗余，无需 completion 报告 | - |
 
@@ -59,7 +59,7 @@ permission:
 | **多个 Feature** | "需要登录、支付、分享" | 整理优先级，询问资源约束 |
 | **只有约束** | "Q2 上线，2 个人" | 扫描项目，推荐 Feature |
 | **完全开放** | "接下来做什么好" | 扫描现有 spec，分析缺口 |
-| **基于文档** | "基于现有 spec 规划" | 读取 .specs/ 文件 |
+| **基于文档** | "基于现有 spec 规划" | 读取 specs-tree-root/ 文件 |
 
 ### 自动信息收集
 
@@ -72,10 +72,10 @@ permission:
 ### 项目上下文扫描
 
 主动读取以下文件获取上下文：
-- `.sdd/.specs/[feature]/state.json` - 查看已有 Feature 状态
-- `.sdd/.specs/[feature]/spec.md` - 了解功能详情
+- `.sdd/specs-tree-root/[feature]/state.json` - 查看已有 Feature 状态
+- `.sdd/specs-tree-root/[feature]/spec.md` - 了解功能详情
 - `README.md` - 查看版本历史
-- `.sdd/.specs/[sub-feature]/` - 查看既有规划
+- `.sdd/specs-tree-root/[sub-feature]/` - 查看既有规划
 
 ### 推荐输入
 - 详细功能规格说明 (如存在)
@@ -95,11 +95,11 @@ permission:
    - 区分"必须"、"可选"、"未来考虑"
 
 2. **扫描项目状态**
-   ```bash
-   # 读取现有 spec
-   find .sdd/.specs -name "spec.md"
-   # 读取状态
-   cat .sdd/.specs/*/state.json
+    ```bash
+    # 读取现有 spec
+    find .sdd/specs-tree-root -name "spec.md"
+    # 读取状态
+    cat .sdd/specs-tree-root/*/state.json
    ```
 
 3. **推荐扩展 Feature**

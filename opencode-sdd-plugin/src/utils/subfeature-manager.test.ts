@@ -234,7 +234,7 @@ describe('SubfeatureManager', () => {
 
     it('对于完整的子 Feature，验证应该通过', async () => {
       // 创建子 Feature 目录结构
-      const subDirPath = path.join(tempBaseDir, '.specs', testSubFeature.dir);
+      const subDirPath = path.join(tempBaseDir, 'specs-tree-root', testSubFeature.dir);
       await fs.mkdir(subDirPath, { recursive: true });
 
       // 创建所有必需的文件
@@ -251,7 +251,7 @@ describe('SubfeatureManager', () => {
 
     it('对于缺少文件的子 Feature，验证应失败并显示缺失的文件', async () => {
       // 只创建目录，但不创建必需的文件
-      const subDirPath = path.join(tempBaseDir, '.specs', testSubFeature.dir);
+      const subDirPath = path.join(tempBaseDir, 'specs-tree-root', testSubFeature.dir);
       await fs.mkdir(subDirPath, { recursive: true });
 
       // 不创建 plan.md 和 tasks.md

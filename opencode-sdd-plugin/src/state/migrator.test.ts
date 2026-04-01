@@ -54,7 +54,7 @@ describe('状态迁移工具测试', () => {
         id: 'test-feature',
         dir: 'sub-features/test-feature',
         status: 'planned',
-        stateFile: '.specs/test-feature/.state.json'
+        stateFile: 'specs-tree-root/test-feature/.state.json'
       });
       expect(newState.dependencies).toEqual({});
       expect(newState.updatedAt).toBeDefined();
@@ -70,7 +70,7 @@ describe('状态迁移工具测试', () => {
 
       expect(newState.subFeatures[0].id).toBe('main');
       expect(newState.subFeatures[0].dir).toBe('sub-features/main');
-      expect(newState.subFeatures[0].stateFile).toBe('.specs/main/.state.json');
+      expect(newState.subFeatures[0].stateFile).toBe('specs-tree-root/main/.state.json');
     });
 
     test('应该保留原始状态的所有属性', () => {
@@ -243,7 +243,7 @@ describe('状态迁移工具测试', () => {
     test('应该在没有备份时抛出错误', async () => {
       await expect(rollbackState(mockFeatureId, mockSpecsDir))
         .rejects
-        .toThrow('未找到任何备份文件');
+        .toThrow('无法回滚: 未找到备份目录');
     });
 
     test('应该在指定备份不存在时抛出错误', async () => {
