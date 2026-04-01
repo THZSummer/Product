@@ -61,10 +61,10 @@ const createValidState = (): StateV1_2_5 => ({
   status: 'specified',
   mode: 'multi',
   files: {
-    spec: '.specs/test-feature/spec.md',
-    plan: '.specs/test-feature/plan.md',
-    tasks: '.specs/test-feature/tasks.md',
-    readme: '.specs/test-feature/README.md'
+    spec: 'specs-tree-root/test-feature/spec.md',
+    plan: 'specs-tree-root/test-feature/plan.md',
+    tasks: 'specs-tree-root/test-feature/tasks.md',
+    readme: 'specs-tree-root/test-feature/README.md'
   },
   dependencies: {
     on: ['parent-feature'],
@@ -76,14 +76,14 @@ const createValidState = (): StateV1_2_5 => ({
       name: 'Sub Feature 1',
       dir: 'sub-features/sub-1',
       status: 'specified',
-      stateFile: '.specs/test-feature/sub-features/sub-1/.state.json',
+      stateFile: 'specs-tree-root/test-feature/sub-features/sub-1/.state.json',
       assignee: 'dev1'
     },
     {
       id: 'sub-2',
       dir: 'sub-features/sub-2',
       status: 'drafting',
-      stateFile: '.specs/test-feature/sub-features/sub-2/.state.json'
+      stateFile: 'specs-tree-root/test-feature/sub-features/sub-2/.state.json'
     }
   ],
   createdAt: '2026-03-31T12:00:00.000Z',
@@ -251,10 +251,10 @@ runner.testCase('createInitialState should create initial state with all require
   
   // Check default file paths are correct
   const expectedFiles = {
-    spec: '.specs/my-feature/spec.md',
-    plan: '.specs/my-feature/plan.md',
-    tasks: '.specs/my-feature/tasks.md',
-    readme: '.specs/my-feature/README.md'
+    spec: 'specs-tree-root/my-feature/spec.md',
+    plan: 'specs-tree-root/my-feature/plan.md',
+    tasks: 'specs-tree-root/my-feature/tasks.md',
+    readme: 'specs-tree-root/my-feature/README.md'
   };
   console.assert(JSON.stringify(initialState.files) === JSON.stringify(expectedFiles), 
                  'Initial state files should match expected paths');
