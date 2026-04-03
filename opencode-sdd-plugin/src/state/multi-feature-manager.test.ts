@@ -33,9 +33,9 @@ describe('MultiFeatureManager Tests', () => {
     });
 
     test('should correctly rank from slowest to fastest', () => {
-      // Order: specified, planned, tasked, implementing, reviewing, validated, completed
-      const allStatuses: ('specified' | 'planned' | 'tasked' | 'implementing' | 'reviewing' | 'validated' | 'completed')[] = [
-        'specified', 'planned', 'tasked', 'implementing', 'reviewing', 'validated', 'completed'
+      // Order: specified, planned, tasked, implementing, reviewed, validated, completed
+      const allStatuses: ('specified' | 'planned' | 'tasked' | 'implementing' | 'reviewed' | 'validated' | 'completed')[] = [
+        'specified', 'planned', 'tasked', 'implementing', 'reviewed', 'validated', 'completed'
       ];
       
       for (let i = 0; i < allStatuses.length; i++) {
@@ -250,8 +250,8 @@ describe('MultiFeatureManager Tests', () => {
     });
 
     test('should return true when all dependencies meet minimum readiness', () => {
-      const statusesAtleastPlanned: ('planned' | 'tasked' | 'implementing' | 'reviewing' | 'validated' | 'completed')[] = [
-        'planned', 'tasked', 'implementing', 'reviewing', 'validated', 'completed'
+      const statusesAtleastPlanned: ('planned' | 'tasked' | 'implementing' | 'reviewed' | 'validated' | 'completed')[] = [
+        'planned', 'tasked', 'implementing', 'reviewed', 'validated', 'completed'
       ];
 
       for (const status of statusesAtleastPlanned) {
