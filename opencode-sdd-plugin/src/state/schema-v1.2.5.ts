@@ -1,7 +1,7 @@
 // 状态枚举
 export type FeatureStatus = 
-  | 'drafting' | 'specified' | 'planned' | 'tasked' 
-  | 'implementing' | 'reviewing' | 'validated' | 'completed';
+  | 'drafting' | 'discovered' | 'specified' | 'planned' | 'tasked' 
+  | 'implementing' | 'reviewed' | 'validated' | 'completed';
 
 // 定义 SubFeatureRef 接口
 export interface SubFeatureRef {
@@ -56,7 +56,7 @@ export function validateState(state: any): { valid: boolean; errors: string[] } 
     errors.push('version must be "1.2.5"');
   }
   
-  const allowedStatuses: FeatureStatus[] = ['drafting', 'specified', 'planned', 'tasked', 'implementing', 'reviewing', 'validated', 'completed'];
+  const allowedStatuses: FeatureStatus[] = ['drafting', 'discovered', 'specified', 'planned', 'tasked', 'implementing', 'reviewed', 'validated', 'completed'];
   if (!allowedStatuses.includes(state.status)) {
     errors.push(`status must be one of: ${allowedStatuses.join(', ')}`);
   }

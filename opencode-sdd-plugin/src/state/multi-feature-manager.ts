@@ -20,7 +20,7 @@ export function aggregateFeatureState(subFeatures: SubFeatureState[]): FeatureSt
   if (subFeatures.length === 0) return 'specified';
   
   const statusOrder: FeatureStatus[] = [
-    'specified', 'planned', 'tasked', 'implementing', 'reviewing', 'validated', 'completed'
+    'specified', 'planned', 'tasked', 'implementing', 'reviewed', 'validated', 'completed'
   ];
   
   let slowestStatus = subFeatures[0].status;
@@ -112,7 +112,7 @@ export function isDependencyReady(
  * 辅助函数：检查功能状态是否至少为 planned
  */
 function isFeatureAtLeastPlanned(status: FeatureStatus): boolean {
-  const plannedOrLater = ['planned', 'tasked', 'implementing', 'reviewing', 'validated', 'completed'];
+  const plannedOrLater = ['planned', 'tasked', 'implementing', 'reviewed', 'validated', 'completed'];
   return plannedOrLater.includes(status);
 }
 
