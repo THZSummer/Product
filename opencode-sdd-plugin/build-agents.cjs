@@ -8,7 +8,7 @@
  *   - src/templates/config/opencode.json.hbs (1 个配置模板)
  * 
  * 输出：
- *   - dist/templates/agents/*.md (16 个 agent 定义)
+ *   - dist/templates/agents/*.md (18 个 agent 定义)
  *   - dist/opencode.json (配置模板副本)
  */
 
@@ -21,6 +21,7 @@ const AGENT_OUT_DIR = path.join(__dirname, 'dist', 'templates', 'agents');
 
 // Agent 映射配置
 const AGENT_MAP = [
+  { num: '0', short: 'discovery', desc: '需求挖掘专家' },
   { num: '1', short: 'spec', desc: '规范编写专家' },
   { num: '2', short: 'plan', desc: '技术规划专家' },
   { num: '3', short: 'tasks', desc: '任务分解专家' },
@@ -68,6 +69,11 @@ function generateNumberedAgent(template, num, short, desc) {
   // 移除 model（配置在 opencode.json 中），保留 temperature
   frontMatter = frontMatter.replace(/^model:.*$\r?\n?/gm, '');
 
+  // 根据阶段号生成正确的执行顺序
+  const executionOrder = num === '0' 
+    ? '[当前] 0.discovery → 1.spec → 2.plan → 3.tasks → 4.build → 5.review → 6.validate'
+    : `1.spec → 2.plan → 3.tasks → 4.build → 5.review → 6.validate`;
+
   return `---
 ${frontMatter}
 ---
@@ -76,7 +82,7 @@ ${frontMatter}
 
 ## 执行顺序
 \`\`\`
-1.spec → 2.plan → 3.tasks → 4.build → 5.review → 6.validate
+${executionOrder}
 \`\`\`
 
 ## 依赖关系
@@ -128,8 +134,8 @@ function build() {
   
   // ========== 构建 Agent 定义 ==========
   console.log('📄 Building agents...');
-  console.log(`   Source: src/templates/agents/*.md.hbs (10 files: 6 stages + sdd + sdd-help + sdd-roadmap + sdd-docs)`);
-  console.log(`   Output: dist/templates/agents/*.md (16 files: 12 numbered/short + 4 special)\n`);
+  console.log(`   Source: src/templates/agents/*.md.hbs (11 files: 7 stages + sdd + sdd-help + sdd-roadmap + sdd-docs)`);
+  console.log(`   Output: dist/templates/agents/*.md (18 files: 14 numbered/short + 4 special)\n`);
   
   AGENT_MAP.forEach(({ num, short, desc }) => {
     const template = readTemplate(AGENT_SRC_DIR, `sdd-${short}.md`);
@@ -174,7 +180,7 @@ function build() {
   console.log('   ├── index.js               (插件入口)');
   console.log('   ├── agents/                (插件代码)');
   console.log('   ├── state/                 (状态机)');
-  console.log('   └── templates/agents/      (16 个 agent 定义)');
+  console.log('   └── templates/agents/      (18 个 agent 定义)');
 }
 
 build();

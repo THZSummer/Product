@@ -22,11 +22,22 @@
 ## 功能概览
 当前包含以下主要特性模块：
 
-1. **specs-tree-agentic** - SDD智能化功能
-2. **specs-tree-directory-naming** - 目录结构命名约定
-3. **specs-tree-directory-optimization** - 目录结构优化（当前执行的迁移）
-4. **specs-tree-state-json-fix** - 状态管理JSON修复
-5. 以及其他正在开发的specs-tree系列功能
+1. **login-module** - 登录认证模块（P0 优先级，已规划）
+2. **specs-tree-agentic** - SDD 智能化功能
+3. **specs-tree-directory-naming** - 目录结构命名约定
+4. **specs-tree-directory-optimization** - 目录结构优化（当前执行的迁移）
+5. **specs-tree-state-json-fix** - 状态管理 JSON 修复
+6. 以及其他正在开发的 specs-tree 系列功能
+
+## 特性目录列表
+
+| 目录 | 说明 | 状态 | 优先级 |
+|------|------|------|--------|
+| [login-module/](./login-module/) | 登录认证模块 - 支持用户名密码、手机验证码、第三方 OAuth 登录 | planned | P0 |
+| [specs-tree-agentic/](./specs-tree-agentic/) | SDD 智能化功能 | - | - |
+| [specs-tree-directory-naming/](./specs-tree-directory-naming/) | 目录结构命名约定 | - | - |
+| [specs-tree-directory-optimization/](./specs-tree-directory-optimization/) | 目录结构优化 | - | - |
+| [specs-tree-state-json-fix/](./specs-tree-state-json-fix/) | 状态管理 JSON 修复 | - | - |
 
 ## 特性目录约定
 所有特性目录均遵循 `specs-tree-[功能命名]` 的命名模式。
