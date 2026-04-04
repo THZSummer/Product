@@ -11,7 +11,11 @@
     "dev": "tsc --watch",
     "clean": "rimraf dist",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "sdd-spec": "node ./dist/commands/sdd-spec.js",
+    "sdd-plan": "node ./dist/commands/sdd-plan.js",
+    "sdd-tasks": "node ./dist/commands/sdd-tasks.js",
+    "sdd-build": "node ./dist/commands/sdd-build.js"
   },
   "keywords": [
     "opencode",
