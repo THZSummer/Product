@@ -24,12 +24,23 @@ opencode-sdd-plugin/
 │   ├── state/                  # 编译后状态机
 │   └── templates/agents/       # 生成的 agent 定义（17+ 个.md）
 │
-├── .sdd/                       # SDD 工作空间（规范文件存储）
-│   ├── README.md               # 工作空间说明
-│   ├── .specs/                 # 规范文件目录
-│   │   ├── ROADMAP.md          # 版本路线图
-│   │   └── [feature]/          # Feature 目录
-│   └── docs/                   # 文档目录
+├── .sdd/                       # SDD 工作空间容器（必选）
+│   ├── README.md               # SDD 容器化工作空间说明
+│   ├── ROADMAP.md              # 版本路线图
+│   ├── config.json             # SDD 配置（可选）
+│   ├── docs/                   # 文档目录
+│   │   └── migration-guide.md  # 迁移指南
+│   └── .specs/                 # 隔离规范文件目录
+│       ├── spec.md             # 主 Feature 规范
+│       ├── plan.md             # 整体技术架构
+│       ├── tasks.md            # 并行任务分组
+│       ├── state.json          # Feature 整体状态
+│       ├── [sub-feature-id]/   # 子 Feature 目录（同级结构）
+│       │   ├── spec.md
+│       │   ├── plan.md
+│       │   ├── tasks.md
+│       │   └── state.json
+│       └── ...
 │
 ├── .opencode/                  # 安装文件（本地测试用，不应提交）
 │   └── plugins/sdd/            # 插件安装目录
@@ -47,7 +58,8 @@ opencode-sdd-plugin/
 |------|------|----------|
 | `src/` | 源码 | ✅ 是 |
 | `dist/` | 构建产物 | ✅ 是 |
-| `.sdd/` | SDD 工作空间 | ✅ 是 |
+| `.sdd/` | SDD 工作空间容器 | ✅ 是 |
+| `.sdd/.specs/` | 规范文件隔离目录 | ✅ 是 |
 | `.opencode/` | 本地安装测试 | ❌ 否 |
 
 ## 🚀 安装
@@ -213,28 +225,36 @@ cp dist/templates/agents/* <target-project>/.opencode/agents/
 
 目录结构示例：
 ```
-.sdd/                          # SDD 工作空间容器（必选）
-├── README.md                  # SDD 使用说明（必选）
-├── ROADMAP.md                 # 版本路线图（顶层规划）（必选）
-├── config.json                # SDD 配置（可选）
-└── .specs/                    # SDD 规范文件目录 - 顶层 Feature（必选）
-    ├── README.md              # 目录说明
-    ├── discovery.md            # 需求挖掘文档（阶段 0）（可选推荐）
-    ├── spec.md                # 需求规格（可选）
-    ├── plan.md                # 技术规划（可选）
-    ├── tasks.md               # 任务分解（可选）
-    ├── state.json             # 状态文件（可选）
-    ├── [feature-xxx]/         # 子 Feature xxx（可选）
-    │   ├── README.md          # 目录说明（必选）
-    │   ├── discovery.md       # 需求挖掘文档（必选推荐）
-    │   ├── spec.md            # 需求规格（必选）
-    │   ├── plan.md            # 技术规划（必选）
-    │   ├── tasks.md           # 任务分解（必选）
-    │   └── state.json         # 状态文件（必选）
+.sdd/                           # SDD 工作空间容器（必选）  
+├── README.md                   # SDD 容器化工作空间说明（必选）
+├── ROADMAP.md                  # 版本路线图（顶层规划）（必选）
+├── config.json                 # SDD 配置（可选）
+├── docs/                       # 文档目录
+│   └── migration-guide.md      # 迁移指南
+└── .specs/                     # SDD 规范文件隔离目录（必选）
+    ├── README.md               # 目录说明
+    ├── discovery.md             # 需求挖掘文档（阶段 0）（可选推荐）
+    ├── spec.md                 # 需求规格（可选）
+    ├── plan.md                 # 技术规划（可选）
+    ├── tasks.md                # 任务分解（可选）
+    ├── state.json              # 状态文件（可选）
+    ├── [sub-feature-id]/       # 子 Feature 目录（同级扁平结构）（可选）
+    │   ├── README.md           # 目录说明（必选）
+    │   ├── discovery.md        # 需求挖掘文档（必选推荐）
+    │   ├── spec.md             # 需求规格（必选）
+    │   ├── plan.md             # 技术规划（必选）
+    │   ├── tasks.md            # 任务分解（必选）
+    │   └── state.json          # 状态文件（必选）
+    └── ...                     # 其他子 Feature 目录
 ```
 
-### SDD Docs 自动导航更新
-@sdd-docs Agent 具备自动扫描项目目录结构并动态生成导航的能力，每次执行后会自动扫描 .sdd/ 下所有层级目录，读取文件内容生成简介，并更新项目导航，确保文档与实际项目结构的一致性。
+容器化结构的优势包括：
+- **隔离性**: 规范文件存储在 `.sdd/.specs/` 完全隔离目录中
+- **兼容性**: 支持从旧的 `.specs/` 结构迁移
+- **扩展性**: 更易于管理和扩展复杂的多子 Feature 项目
+- **清晰性**: 明确区分插件代码和项目规格
+
+如需从旧结构迁移，请参考 [迁移指南](./.sdd/docs/migration-guide.md)。
 
 ## 💡 使用场景
 
