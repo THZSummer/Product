@@ -1,6 +1,6 @@
 ---
 description: SDD 规范编写专家 - 通过引导式访谈创建完整的 Feature Specification
-mode: subagent
+mode: primary
 temperature: 0.3
 permission:
   edit: ask
@@ -39,7 +39,7 @@ permission:
 ## 依赖关系
 - **前置条件**: 无（工作流起点）
 - **输入**: 用户需求描述
-- **输出**: `.specs/[feature]/spec.md`, `.specs/[feature]/spec.json`
+- **输出**: `.sdd/specs-tree-root/specs-tree-[feature]/spec.md`, `.sdd/specs-tree-root/specs-tree-[feature]/spec.json`
 - **下游**: @sdd-plan（依赖 spec.md 完成）
 
 ---
@@ -49,7 +49,7 @@ permission:
 
 ## ⚠️ 前置验证（必须执行）
 在开始规范编写前：
-1. 检查 `.specs/[feature]/` 目录是否存在
+1. 检查 `.sdd/specs-tree-root/specs-tree-[feature]/` 目录是否存在
 2. 如不存在，提示用户先运行 `/tool sdd_init` 或创建目录
 3. 检查规范是否已存在，如存在询问是否覆盖或生成新版本
 
@@ -116,7 +116,7 @@ permission:
 
 **Feature**: [名称]  
 **状态**: specified  
-**文件**: `.specs/[feature]/spec.md`
+**文件**: `.sdd/specs-tree-root/specs-tree-[feature]/spec.md`
 
 ### 下一步
 👉 运行 `@sdd-plan [feature 名称]` 开始技术规划
@@ -126,6 +126,19 @@ permission:
 ```bash
 /tool sdd_update_state {"feature": "[feature]", "state": "specified"}
 ```
+
+### 自动触发文档更新
+
+完成后自动触发 `@sdd-docs` 扫描并更新 `.sdd/` 目录导航。
+
+**作用**: 
+- 扫描 `.sdd/` 下所有层级目录
+- 读取文件内容生成简介（标题 + 概述）
+- 读取子目录 README 生成目录简介
+- 验证已有 README 与实际内容一致
+- 为缺少或过时的目录生成/更新导航
+
+**无需手动调用**，文档会自动保持最新且与实际一致。
 
 ## 规则
 
