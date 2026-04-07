@@ -208,36 +208,27 @@ journey
 ### 4.1 需求分层
 
 ```mermaid
-graph TB
-    subgraph Must_Have[必备需求]
-        M1[数据注册]
-        M2[数据审批]
-        M3[数据订阅]
-        M4[数据消费]
-        M5[应用管理]
-        M6[权限控制]
+graph LR
+    subgraph Must_Have[必备需求 - 没有无法使用]
+        direction TB
+        M1[数据注册] & M2[数据审批] & M3[数据订阅] & M4[数据消费] & M5[应用管理] & M6[权限控制]
     end
     
-    subgraph Should_Have[期望需求]
-        S1[数据目录]
-        S2[敏感度分级]
-        S3[审计日志]
-        S4[用量统计]
-        S5[数据资产清单]
+    subgraph Should_Have[期望需求 - 显著提升体验]
+        direction TB
+        S1[数据目录] & S2[敏感度分级] & S3[审计日志] & S4[用量统计] & S5[数据资产清单]
     end
     
-    subgraph Could_Have[惊喜需求]
-        C1[价值可视化]
-        C2[自动化同步]
-        C3[开发者门户]
-        C4[SDK 支持]
+    subgraph Could_Have[惊喜需求 - 超出预期]
+        direction TB
+        C1[价值可视化] & C2[自动化同步] & C3[开发者门户] & C4[SDK 支持]
     end
     
-    Must_Have --> Should_Have --> Could_Have
+    Must_Have -.- Should_Have -.- Could_Have
     
-    style Must_Have fill:#e1f5e1
-    style Should_Have fill:#fff3cd
-    style Could_Have fill:#f3e5f5
+    style Must_Have fill:#e1f5e1,stroke:#2e7d32,stroke-width:2px
+    style Should_Have fill:#fff3cd,stroke:#f57c00,stroke-width:2px
+    style Could_Have fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
 ```
 
 ### 4.2 需求清单
