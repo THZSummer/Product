@@ -823,7 +823,57 @@ docs: 明确成功标准的三个核心维度
 
 ---
 
-**最后更新**: 2026-04-03（成功标准三个核心维度）
+### [XX:XX] 用户
+Called the Read tool with the following input: {"filePath":"/home/usb/workspace/Product/open-app/.specs/feature-session-001/discovery-report.md","offset":447,"limit":1}
+
+### [XX:XX] 用户
+写在后续详细设计中体现即可，不写反向依赖的内容
+
+### [XX:XX] AI
+明白！将删除 6.2 中"在 spec/plan 阶段详细设计"的反向依赖说明，保持 discovery 报告的独立性。
+
+### [XX:XX] AI 行动
+
+**修改内容**:
+
+| 章节 | 修改内容 |
+|------|---------|
+| 6.2 审批机制 | 删除"实施细节将在 spec/plan 阶段详细设计"的说明 |
+
+**设计原则**:
+- discovery 报告保持独立性
+- 实施细节在后续设计中体现，不需要反向依赖后续阶段
+
+### [XX:XX] AI 行动
+
+**Git 提交**:
+```bash
+git add .specs/feature-session-001/discovery-report.md
+git commit -m "docs: 删除反向依赖说明"
+git push origin feature/data-open-platform-discovery
+```
+
+**提交信息**:
+```
+docs: 删除反向依赖说明
+
+- 删除 6.2 中的"在 spec/plan 阶段详细设计"说明
+- 保持 discovery 报告的独立性
+- 实施细节在后续设计中体现，不需要在需求挖掘报告中反向依赖后续阶段
+```
+
+### [XX:XX] AI
+✅ 反向依赖说明删除完成！已提交并推送远端。
+
+**修改总结**:
+- 1 个章节已更新
+- 2 行删除
+- 分支：feature/data-open-platform-discovery
+- 提交：2e9ba02
+
+---
+
+**最后更新**: 2026-04-03（删除反向依赖说明）
 
 ---
 
