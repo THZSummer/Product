@@ -1240,7 +1240,66 @@ design: 参考 1.1 章节语法修改 4.1 图表布局
 
 ---
 
-**最后更新**: 2026-04-03（参考 1.1 章节语法修正图表）
+### [XX:XX] 用户
+Called the Read tool with the following input: {"filePath":"/home/usb/workspace/Product/open-app/.specs/feature-session-001/discovery-report.md","offset":208,"limit":1}
+
+### [XX:XX] 用户
+重新参考 1.1 的图的整体布局进行优化
+
+### [XX:XX] AI
+明白！1.1 章节的图整体布局特点是：
+- subgraph 内节点垂直排列
+- subgraph 之间用箭头连接
+- 底部没有复杂的&连接语法
+- 简洁清晰的风格
+
+将简化 4.1 图表，参考 1.1 的简洁布局。
+
+### [XX:XX] AI 行动
+
+**修改内容**:
+
+| 章节 | 修改内容 |
+|------|---------|
+| 4.1 需求分层 | 移除底部&连接语法，保持简洁布局 |
+
+**优化要点**:
+- subgraph 内：节点垂直排列
+- subgraph 间：箭头连接（Must_Have --> Should_Have --> Could_Have）
+- 风格：参考 1.1 章节的简洁布局
+- 颜色：保持颜色区分（绿色、黄色、紫色）
+
+### [XX:XX] AI 行动
+
+**Git 提交**:
+```bash
+git add .specs/feature-session-001/discovery-report.md
+git commit -m "design: 参考 1.1 章节简化 4.1 图表布局"
+git push origin feature/data-open-platform-discovery
+```
+
+**提交信息**:
+```
+design: 参考 1.1 章节简化 4.1 图表布局
+
+- 移除底部&连接语法
+- 保持 subgraph 内节点垂直排列
+- subgraph 之间用箭头连接，体现代次关系
+- 参考 1.1 章节的简洁布局风格
+```
+
+### [XX:XX] AI
+✅ 图表简化完成！已提交并推送远端。
+
+**修改总结**:
+- 1 个章节已更新
+- 4 行删除
+- 分支：feature/data-open-platform-discovery
+- 提交：aa781bd
+
+---
+
+**最后更新**: 2026-04-03（参考 1.1 章节简化图表布局）
 
 ---
 
