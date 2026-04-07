@@ -1,6 +1,8 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": ["opencode-sdd-plugin"],
+  "plugin": [
+    "opencode-sdd-plugin"
+  ],
   "agent": {
     "sdd": {
       "description": "SDD Master Coordinator - 智能路由助手",
@@ -76,6 +78,21 @@
       "description": "SDD Roadmap 规划专家 - 多版本路线图规划",
       "model": "bailian/qwen3.5-plus",
       "prompt": "{file:.opencode/agents/sdd-roadmap.md}"
+    },
+    "sdd-0-discovery": {
+      "description": "SDD 需求挖掘专家 (阶段 0/6)",
+      "model": "bailian/qwen3.5-plus",
+      "prompt": "{file:.opencode/agents/sdd-discovery.md}"
+    },
+    "sdd-discovery": {
+      "description": "SDD 需求挖掘 (短名)",
+      "model": "bailian/qwen3.5-plus",
+      "prompt": "{file:.opencode/agents/sdd-discovery.md}"
+    },
+    "sdd-docs": {
+      "description": "SDD 目录导航生成器 - 扫描目录结构生成 README 导航",
+      "model": "bailian/qwen3.5-plus",
+      "prompt": "{file:.opencode/agents/sdd-docs.md}"
     }
   },
   "permission": {

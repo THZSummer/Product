@@ -16,11 +16,11 @@ permission:
 ```
 
 ## 依赖关系
-- **前置条件**: 
-  - ✅ `.specs/[feature]/spec.md`（@sdd-spec 输出）
-  - ✅ `.specs/[feature]/plan.md`（@sdd-plan 输出）
-  - ✅ `.specs/[feature]/tasks.md`（@sdd-tasks 输出）
-  - ✅ 代码已实现（@sdd-build 输出）
+  - **前置条件**: 
+    - ✅ `.sdd/specs-tree-root/specs-tree-[feature]/spec.md`（@sdd-spec 输出）
+    - ✅ `.sdd/specs-tree-root/specs-tree-[feature]/plan.md`（@sdd-plan 输出）
+    - ✅ `.sdd/specs-tree-root/specs-tree-[feature]/tasks.md`（@sdd-tasks 输出）
+    - ✅ 代码已实现（@sdd-build 输出）
 - **输入**: 实现的代码 + 规范文档
 - **输出**: 审查报告、改进建议
 - **下游**: @sdd-validate（依赖本 agent 通过）
@@ -38,7 +38,7 @@ permission:
 - 识别潜在问题和改进点
 
 ### 2. 规范符合性
-- 验证代码是否符合 `.specs/[feature]/spec.md`
+- 验证代码是否符合 `.sdd/specs-tree-root/specs-tree-[feature]/spec.md`
 - 检查是否满足技术计划要求
 - 确认所有任务都已完成
 
@@ -50,7 +50,7 @@ permission:
 ## ⚠️ 前置验证（必须执行）
 在开始代码审查前：
 1. 检查代码是否已实现（检查 `src/` 下相关文件）
-2. 检查 `.specs/[feature]/tasks.md` 中任务状态是否为 completed
+2. 检查 `.sdd/specs-tree-root/specs-tree-[feature]/tasks.md` 中任务状态是否为 completed
 3. 如代码未完成，**拒绝执行**并提示：「❌ 代码实现未完成，请先运行 `@sdd-build` 完成所有任务」
 
 ## 工作流程
@@ -61,9 +61,9 @@ permission:
 
 # 你的执行步骤
 1. ✅ 前置验证：检查代码实现完成
-2. 读取 `.specs/user-login/spec.md` - 规范
-3. 读取 `.specs/user-login/plan.md` - 技术计划
-4. 读取 `.specs/user-login/tasks.md` - 任务列表
+2. 读取 `.sdd/specs-tree-root/specs-tree-[feature]/spec.md` - 规范
+3. 读取 `.sdd/specs-tree-root/specs-tree-[feature]/plan.md` - 技术计划
+4. 读取 `.sdd/specs-tree-root/specs-tree-[feature]/tasks.md` - 任务列表
 5. 审查实现的代码
 5. 生成审查报告
 6. 提出改进建议
@@ -128,6 +128,19 @@ permission:
 ```bash
 /tool sdd_update_state {"feature": "[feature]", "state": "reviewed", "data": {"reviewStatus": "passed", "issues": {"blocking": 0, "improvements": 3}}}
 ```
+
+### 自动触发文档更新
+
+完成后自动触发 `@sdd-docs` 扫描并更新 `.sdd/` 目录导航。
+
+**作用**: 
+- 扫描 `.sdd/` 下所有层级目录
+- 读取文件内容生成简介（标题 + 概述）
+- 读取子目录 README 生成目录简介
+- 验证已有 README 与实际内容一致
+- 为缺少或过时的目录生成/更新导航
+
+**无需手动调用**，文档会自动保持最新且与实际一致。
 
 ## 审查结论
 

@@ -12,6 +12,16 @@
       "model": "bailian/qwen3.5-plus",
       "prompt": "{file:.opencode/agents/sdd-help.md}"
     },
+    "sdd-0-discovery": {
+      "description": "SDD 需求挖掘专家 (阶段 0/6)",
+      "model": "bailian/qwen3.5-plus",
+      "prompt": "{file:.opencode/agents/sdd-discovery.md}"
+    },
+    "sdd-discovery": {
+      "description": "SDD 需求挖掘 (短名)",
+      "model": "bailian/qwen3.5-plus",
+      "prompt": "{file:.opencode/agents/sdd-discovery.md}"
+    },
     "sdd-1-spec": {
       "description": "SDD 规范编写专家 (阶段 1/6)",
       "model": "bailian/qwen3.5-plus",
@@ -71,6 +81,11 @@
       "description": "SDD 验证 (短名)",
       "model": "bailian/qwen3-coder-plus",
       "prompt": "{file:.opencode/agents/sdd-validate.md}"
+    },
+    "sdd-docs": {
+      "description": "SDD 目录导航生成器 - 扫描目录结构生成 README 导航",
+      "model": "bailian/qwen3.5-plus",
+      "prompt": "{file:.opencode/agents/sdd-docs.md}"
     },
     "sdd-roadmap": {
       "description": "SDD Roadmap 规划专家 - 多版本路线图规划",

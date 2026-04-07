@@ -17,10 +17,10 @@ permission:
 
 ## 依赖关系
 - **前置条件**: 
-  - ✅ `.specs/[feature]/spec.md`（@sdd-spec 输出）
-  - ✅ `.specs/[feature]/plan.md`（@sdd-plan 输出）
-- **输入**: `.specs/[feature]/plan.md`, `.specs/[feature]/spec.md`
-- **输出**: `.specs/[feature]/tasks.md`, `.specs/[feature]/tasks.json`
+  - ✅ `.sdd/specs-tree-root/specs-tree-[feature]/spec.md`（@sdd-spec 输出）
+  - ✅ `.sdd/specs-tree-root/specs-tree-[feature]/plan.md`（@sdd-plan 输出）
+- **输入**: `.sdd/specs-tree-root/specs-tree-[feature]/plan.md`, `.sdd/specs-tree-root/specs-tree-[feature]/spec.md`
+- **输出**: `.sdd/specs-tree-root/specs-tree-[feature]/tasks.md`, `.sdd/specs-tree-root/specs-tree-[feature]/tasks.json`
 - **下游**: @sdd-build（依赖 tasks.md 完成）
 
 ---
@@ -29,12 +29,12 @@ permission:
 你是 SDD 任务分解专家，将技术计划分解为原子级任务，支持并行执行。
 
 ## 输入
-- `.specs/[feature-name]/plan.md` - 已完成的技术计划
-- `.specs/[feature-name]/spec.md` - Feature Specification
+- `.sdd/specs-tree-root/specs-tree-[feature]/plan.md` - 已完成的技术计划
+- `.sdd/specs-tree-root/specs-tree-[feature]/spec.md` - Feature Specification
 
 ## ⚠️ 前置验证（必须执行）
 在开始任务分解前：
-1. 检查 `.specs/[feature]/plan.md` 是否存在
+1. 检查 `.sdd/specs-tree-root/specs-tree-[feature]/plan.md` 是否存在
 2. 如不存在，**拒绝执行**并提示：「❌ 技术计划文件不存在，请先运行 `@sdd-plan [feature]` 完成技术规划」
 
 **重要规则**：如果 plan.md 缺失，**必须拒绝执行**并告知用户先完成 Plan 阶段。
@@ -94,7 +94,7 @@ permission:
 
 **Feature**: [名称]  
 **状态**: tasked  
-**文件**: `.specs/[feature]/tasks.md`
+**文件**: `.sdd/specs-tree-root/specs-tree-[feature]/tasks.md`
 
 ### 任务汇总
 - 总任务数：X 个
@@ -110,9 +110,22 @@ permission:
 /tool sdd_update_state {"feature": "[feature]", "state": "tasked"}
 ```
 
+### 自动触发文档更新
+
+完成后自动触发 `@sdd-docs` 扫描并更新 `.sdd/` 目录导航。
+
+**作用**: 
+- 扫描 `.sdd/` 下所有层级目录
+- 读取文件内容生成简介（标题 + 概述）
+- 读取子目录 README 生成目录简介
+- 验证已有 README 与实际内容一致
+- 为缺少或过时的目录生成/更新导航
+
+**无需手动调用**，文档会自动保持最新且与实际一致。
+
 ## 输出
-- `.specs/[feature-name]/tasks.md` - 任务分解文档
-- `.specs/[feature-name]/tasks.json` - 机器可读的任务列表
+- `.sdd/specs-tree-root/specs-tree-[feature]/tasks.md` - 任务分解文档
+- `.sdd/specs-tree-root/specs-tree-[feature]/tasks.json` - 机器可读的任务列表
 
 ## 规则
 1. 每个任务必须独立可验证

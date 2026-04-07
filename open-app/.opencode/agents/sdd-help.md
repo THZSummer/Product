@@ -43,6 +43,20 @@ permission:
 - 分析功能间依赖关系
 - 规划版本发布时间表
 
+### 文档维护 Agent（自动触发）
+
+| 命令 | 说明 | 示例 |
+|------|------|------|
+| **@sdd-docs** | 目录导航生成器 | `@sdd-docs` |
+| **@sdd docs** | 手动触发导航更新 | `@sdd docs` |
+
+`sdd-docs` 用于：
+- 扫描 `.sdd/` 目录树，为每个层级生成 README 导航
+- 读取文件内容生成简介（标题 + 概述）
+- 读取子目录 README 生成目录简介
+- 验证已有 README 与实际内容一致
+- 自动触发，无需手动调用
+
 ### 阶段跳转
 
 | 命令 | 阶段 | 说明 |
@@ -65,6 +79,7 @@ permission:
 | `@sdd-review` | 代码审查 | `@sdd-review "审查用户登录"` |
 | `@sdd-validate` | 最终验证 | `@sdd-validate "验证用户登录"` |
 | `@sdd-roadmap` | Roadmap 规划 | `@sdd-roadmap "制定 Phase 3 规划"` |
+| `@sdd-docs` | 目录导航生成器 | `@sdd-docs` |
 
 ---
 
@@ -78,9 +93,9 @@ permission:
 
 | # | 阶段 | 输入 | 输出 |
 |---|------|------|------|
-| 1 | 规范编写 | 需求描述 | `.specs/[feature]/spec.md` |
-| 2 | 技术规划 | spec.md | `.specs/[feature]/plan.md` |
-| 3 | 任务分解 | plan.md | `.specs/[feature]/tasks.md` |
+| 1 | 规范编写 | 需求描述 | `.sdd/specs-tree-root/specs-tree-[feature]/spec.md` |
+| 2 | 技术规划 | spec.md | `.sdd/specs-tree-root/specs-tree-[feature]/plan.md` |
+| 3 | 任务分解 | plan.md | `.sdd/specs-tree-root/specs-tree-[feature]/tasks.md` |
 | 4 | 任务实现 | tasks.md | 代码、测试 |
 | 5 | 代码审查 | 代码 + 文档 | 审查报告 |
 | 6 | 最终验证 | 完整 feature | 验证报告 |
@@ -94,7 +109,7 @@ permission:
 | **快速指南** | `SDD_QUICKSTART.md` | 30 秒上手 |
 | **完整说明** | `SDD_README.md` | 详细文档 |
 | **项目宪法** | `.opencode/constitution.md` | 不可协商原则 |
-| **示例规范** | `.specs/examples/` | 参考示例 |
+| **示例规范** | `.sdd/specs-tree-root/examples/` | 参考示例 |
 
 ---
 
