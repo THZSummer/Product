@@ -70,34 +70,33 @@ graph TB
 
 ```mermaid
 graph TB
-    subgraph XX 平台
-        A[XX 通讯平台<br/>能力丰富]
+    subgraph Producer[数据生产者]
+        A[XX 通讯平台<br/>IM/Meeting/CloudBox 等<br/>能力丰富]
     end
     
-    subgraph 三方平台
+    subgraph Consumer[数据消费者]
         B[三方平台 A<br/>业务场景]
         C[三方平台 B<br/>业务场景]
     end
     
-    subgraph 核心问题
+    subgraph Problems[核心问题]
         P1[❌ 能力封闭<br/>数据无法流出]
         P2[❌ 缺少标准通道<br/>私下对接]
         P3[❌ 数据资产不清<br/>无统一清单]
         P4[❌ 接入效率低<br/>成本高]
     end
     
-    A -.-> P1
-    B -.-> P1
-    C -.-> P1
+    A -.->|❌ 无法开放 | P1
+    B -.->|❌ 无法获取 | P1
+    C -.->|❌ 无法获取 | P1
     
     P1 --> P2
     P1 --> P3
     P1 --> P4
     
-    style P1 fill:#ffcccc
-    style P2 fill:#ffcccc
-    style P3 fill:#ffcccc
-    style P4 fill:#ffcccc
+    style Producer fill:#e3f2fd
+    style Consumer fill:#e3f2fd
+    style Problems fill:#ffebee
 ```
 
 | 痛点维度 | 具体描述 |
