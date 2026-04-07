@@ -208,17 +208,38 @@ journey
 
 ### 4.1 需求分层
 
-需求分层采用三级结构，从必备需求到惊喜需求逐级递进：
-
-| 层级 | 说明 | 包含需求 |
-|------|------|---------|
-| **必备需求**<br>没有无法使用 | 基础功能，缺少则无法使用 | 数据注册 · 数据审批 · 数据订阅 · 数据消费 · 应用管理 · 权限控制 |
-| **期望需求**<br>显著提升体验 | 提升用户体验和效率 | 数据目录 · 敏感度分级 · 审计日志 · 用量统计 · 数据资产清单 |
-| **惊喜需求**<br>超出预期 | 超出用户预期，带来 wow 体验 | 价值可视化 · 自动化同步 · 开发者门户 · SDK 支持 |
-
-**层级关系**：
-- 必备需求 → 期望需求 → 惊喜需求
-- 优先实现必备需求，再逐步完善期望需求和惊喜需求
+```mermaid
+graph LR
+    subgraph Must_Have[必备需求 - 没有无法使用]
+        M1[数据注册]
+        M2[数据审批]
+        M3[数据订阅]
+        M4[数据消费]
+        M5[应用管理]
+        M6[权限控制]
+    end
+    
+    subgraph Should_Have[期望需求 - 显著提升体验]
+        S1[数据目录]
+        S2[敏感度分级]
+        S3[审计日志]
+        S4[用量统计]
+        S5[数据资产清单]
+    end
+    
+    subgraph Could_Have[惊喜需求 - 超出预期]
+        C1[价值可视化]
+        C2[自动化同步]
+        C3[开发者门户]
+        C4[SDK 支持]
+    end
+    
+    Must_Have -.-> Should_Have -.-> Could_Have
+    
+    style Must_Have fill:#e1f5e1,stroke:#2e7d32,stroke-width:2px
+    style Should_Have fill:#fff3cd,stroke:#f57c00,stroke-width:2px
+    style Could_Have fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+```
 
 ### 4.2 需求清单
 
