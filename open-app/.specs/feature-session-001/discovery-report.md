@@ -210,16 +210,32 @@ journey
 ```mermaid
 graph TB
     subgraph Must_Have[必备需求]
-        M1[数据注册] & M2[数据审批] & M3[数据订阅] & M4[数据消费] & M5[应用管理] & M6[权限控制]
+        M1[数据注册]
+        M2[数据审批]
+        M3[数据订阅]
+        M4[数据消费]
+        M5[应用管理]
+        M6[权限控制]
     end
     
     subgraph Should_Have[期望需求]
-        S1[数据目录] & S2[敏感度分级] & S3[审计日志] & S4[用量统计] & S5[数据资产清单]
+        S1[数据目录]
+        S2[敏感度分级]
+        S3[审计日志]
+        S4[用量统计]
+        S5[数据资产清单]
     end
     
     subgraph Could_Have[惊喜需求]
-        C1[价值可视化] & C2[自动化同步] & C3[开发者门户] & C4[SDK 支持]
+        C1[价值可视化]
+        C2[自动化同步]
+        C3[开发者门户]
+        C4[SDK 支持]
     end
+    
+    M1 & M2 & M3 & M4 & M5 & M6 --> Must_Have
+    S1 & S2 & S3 & S4 & S5 --> Should_Have
+    C1 & C2 & C3 & C4 --> Could_Have
     
     Must_Have --> Should_Have --> Could_Have
     
