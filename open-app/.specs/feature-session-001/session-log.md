@@ -992,7 +992,66 @@ design: 按数据流架构重新设计 2.1 现状痛点图表
 
 ---
 
-**最后更新**: 2026-04-03（按数据流架构重新设计图表）
+### [XX:XX] 用户
+Called the Read tool with the following input: {"filePath":"/home/usb/workspace/Product/open-app/.specs/feature-session-001/discovery-report.md","offset":208,"limit":13}
+
+### [XX:XX] 用户
+图太宽了，建议优化
+
+### [XX:XX] AI
+明白！将优化 4.1 需求分层的 mermaid 图：
+- 从 TB 布局改为 LR 布局（从左到右）
+- 每个 subgraph 内使用 direction TB 垂直排列
+- 简化需求文本，减少宽度
+- 使用虚线连接三个层级
+
+### [XX:XX] AI 行动
+
+**修改内容**:
+
+| 章节 | 修改内容 |
+|------|---------|
+| 4.1 需求分层 | 优化图表布局，减少宽度 |
+
+**优化要点**:
+- 布局：LR（从左到右）替代 TB
+- 内部排列：每个 subgraph 内使用 direction TB
+- 文本：简化需求描述
+- 连接：虚线连接三个层级
+- 颜色：绿色（必备）、黄色（期望）、紫色（惊喜）
+
+### [XX:XX] AI 行动
+
+**Git 提交**:
+```bash
+git add .specs/feature-session-001/discovery-report.md
+git commit -m "design: 优化 4.1 需求分层图表布局"
+git push origin feature/data-open-platform-discovery
+```
+
+**提交信息**:
+```
+design: 优化 4.1 需求分层图表布局
+
+- 将图表从 TB（从上到下）改为 LR（从左到右）布局
+- 每个 subgraph 内使用 direction TB 垂直排列
+- 简化需求文本，减少宽度
+- 使用虚线连接三个层级，体现代次关系
+- 不同颜色区分：必备需求（绿色）、期望需求（黄色）、惊喜需求（紫色）
+```
+
+### [XX:XX] AI
+✅ 需求分层图表优化完成！已提交并推送远端。
+
+**修改总结**:
+- 1 个章节已更新
+- 23 行新增，17 行删除
+- 分支：feature/data-open-platform-discovery
+- 提交：b4b01a0
+
+---
+
+**最后更新**: 2026-04-03（优化需求分层图表宽度）
 
 ---
 
