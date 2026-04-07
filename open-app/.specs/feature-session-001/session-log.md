@@ -1299,7 +1299,89 @@ design: 参考 1.1 章节简化 4.1 图表布局
 
 ---
 
-**最后更新**: 2026-04-03（参考 1.1 章节简化图表布局）
+### [XX:XX] 用户
+Called the Read tool with the following input: {"filePath":"/home/usb/workspace/Product/open-app/.specs/feature-session-001/discovery-report.md","offset":208,"limit":1}
+
+### [XX:XX] 用户
+重新参考 1.1 的图的整体布局进行优化
+
+### [XX:XX] AI
+明白！1.1 章节的图整体布局特点是：
+- subgraph 内节点垂直排列
+- subgraph 之间用箭头连接
+- 底部没有复杂的&连接语法
+- 简洁清晰的风格
+
+将简化 4.1 图表，参考 1.1 的简洁布局。
+
+### [XX:XX] AI 行动
+（中间过程省略...）
+
+---
+
+### [XX:XX] 用户
+自己看效果，重画
+
+### [XX:XX] AI
+明白！之前的效果不对，让我重新设计 4.1 图表。
+
+### [XX:XX] 用户
+这是 1.1 的效果
+
+### [XX:XX] AI
+明白！完全理解 1.1 的布局了：
+- graph TB 布局（从上到下）
+- subgraph 内节点垂直排列
+- 底部使用&语法实现水平对齐
+- 三大块左右排列
+
+### [XX:XX] AI 行动
+
+**修改内容**:
+
+| 章节 | 修改内容 |
+|------|---------|
+| 4.1 需求分层 | 完全按 1.1 章节效果重画 |
+
+**设计要点**:
+- graph TB 布局（从上到下）
+- subgraph 内节点垂直排列
+- 底部使用&语法实现水平对齐
+- 使用==>箭头连接三大块，体现代次关系
+- 增加边框样式，更醒目
+
+### [XX:XX] AI 行动
+
+**Git 提交**:
+```bash
+git add .specs/feature-session-001/discovery-report.md
+git commit -m "design: 按 1.1 章节效果重画 4.1 需求分层图表"
+git push origin feature/data-open-platform-discovery
+```
+
+**提交信息**:
+```
+design: 按 1.1 章节效果重画 4.1 需求分层图表
+
+- graph TB 布局（从上到下）
+- subgraph 内节点垂直排列
+- 底部使用&语法实现水平对齐
+- 使用==>箭头连接三大块，体现代次关系
+- 增加边框样式，更醒目
+```
+
+### [XX:XX] AI
+✅ 图表按 1.1 效果重画完成！已提交并推送远端。
+
+**修改总结**:
+- 1 个章节已更新
+- 22 行新增，8 行删除
+- 分支：feature/data-open-platform-discovery
+- 提交：2dbaa2a
+
+---
+
+**最后更新**: 2026-04-03（按 1.1 效果重画需求分层图表）
 
 ---
 
