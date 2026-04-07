@@ -1051,7 +1051,75 @@ design: 优化 4.1 需求分层图表布局
 
 ---
 
-**最后更新**: 2026-04-03（优化需求分层图表宽度）
+### [XX:XX] 用户
+Called the Read tool with the following input: {"filePath":"/home/usb/workspace/Product/open-app/.specs/feature-session-001/discovery-report.md","offset":208,"limit":1}
+
+### [XX:XX] 用户
+必备需求、期望需求、惊喜需求三大块建议按照上下结构排列，这样整体不会太宽
+
+### [XX:XX] AI
+明白！将 4.1 需求分层图表改为上下结构：
+- 整体布局从 LR 改为 TB（从上到下）
+- 每个 subgraph 内使用 direction LR 水平排列
+- 三大块上下排列，不会太宽
+
+### [XX:XX] AI 行动
+
+**修改内容**:
+
+| 章节 | 修改内容 |
+|------|---------|
+| 4.1 需求分层 | 图表改为上下结构，每块内部水平排列 |
+
+**优化要点**:
+- 整体布局：TB（从上到下）
+- 内部排列：每个 subgraph 内 direction LR（水平）
+- 结构：三大块上下排列
+- 连接：实线箭头体现层级关系
+- 颜色：绿色（必备）、黄色（期望）、紫色（惊喜）
+
+**优化效果**:
+- 整体不会太宽
+- 层级关系更清晰
+- 每块内部水平排列，更紧凑
+
+### [XX:XX] AI 行动
+
+**Git 提交**:
+```bash
+git add .specs/feature-session-001/discovery-report.md
+git commit -m "design: 将 4.1 需求分层图表改为上下结构"
+git push origin feature/data-open-platform-discovery
+```
+
+**提交信息**:
+```
+design: 将 4.1 需求分层图表改为上下结构
+
+- 整体布局从 LR 改为 TB（从上到下）
+- 每个 subgraph 内使用 direction LR 水平排列
+- 三大块：必备需求、期望需求、惊喜需求上下排列
+- 使用实线箭头连接，体现层级关系
+- 保持颜色区分：绿色（必备）、黄色（期望）、紫色（惊喜）
+
+优化效果：
+- 整体不会太宽
+- 层级关系更清晰
+- 每块内部水平排列，更紧凑
+```
+
+### [XX:XX] AI
+✅ 需求分层图表上下结构优化完成！已提交并推送远端。
+
+**修改总结**:
+- 1 个章节已更新
+- 8 行新增，8 行删除
+- 分支：feature/data-open-platform-discovery
+- 提交：c89e68b
+
+---
+
+**最后更新**: 2026-04-03（需求分层图表上下结构）
 
 ---
 
