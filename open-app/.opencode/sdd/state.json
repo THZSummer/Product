@@ -13,23 +13,64 @@
       "completed"
     ],
     "transitions": {
-      "drafting": ["specified", "drafting"],
-      "specified": ["clarified", "drafting"],
-      "clarified": ["planned", "specified", "drafting"],
-      "planned": ["tasked", "clarified", "drafting"],
-      "tasked": ["implementing", "planned", "drafting"],
-      "implementing": ["reviewed", "tasked"],
-      "reviewed": ["validating", "implementing"],
-      "validating": ["completed", "implementing"],
-      "completed": ["drafting"]
+      "drafting": [
+        "specified",
+        "drafting"
+      ],
+      "specified": [
+        "clarified",
+        "drafting"
+      ],
+      "clarified": [
+        "planned",
+        "specified",
+        "drafting"
+      ],
+      "planned": [
+        "tasked",
+        "clarified",
+        "drafting"
+      ],
+      "tasked": [
+        "implementing",
+        "planned",
+        "drafting"
+      ],
+      "implementing": [
+        "reviewed",
+        "tasked"
+      ],
+      "reviewed": [
+        "validating",
+        "implementing"
+      ],
+      "validating": [
+        "completed",
+        "implementing"
+      ],
+      "completed": [
+        "drafting"
+      ]
     },
     "enforcedPreconditions": {
-      "planned": ["specified"],
-      "tasked": ["planned"],
-      "implementing": ["tasked"],
-      "reviewed": ["implementing"],
-      "validating": ["reviewed"],
-      "completed": ["validating"]
+      "planned": [
+        "specified"
+      ],
+      "tasked": [
+        "planned"
+      ],
+      "implementing": [
+        "tasked"
+      ],
+      "reviewed": [
+        "implementing"
+      ],
+      "validating": [
+        "reviewed"
+      ],
+      "completed": [
+        "validating"
+      ]
     }
   },
   "coachingProfile": {
@@ -85,7 +126,19 @@
         "TASK-014": "pending"
       },
       "currentTask": "TASK-011",
-      "completedTasks": ["TASK-001", "TASK-002", "TASK-003", "TASK-004", "TASK-005", "TASK-006", "TASK-007", "TASK-008", "TASK-009", "TASK-010", "TASK-011"],
+      "completedTasks": [
+        "TASK-001",
+        "TASK-002",
+        "TASK-003",
+        "TASK-004",
+        "TASK-005",
+        "TASK-006",
+        "TASK-007",
+        "TASK-008",
+        "TASK-009",
+        "TASK-010",
+        "TASK-011"
+      ],
       "waveProgress": {
         "wave1": "completed",
         "wave2": "completed",
@@ -93,11 +146,30 @@
         "wave4": "ready",
         "wave5": "pending"
       }
+    },
+    "DATA-OPEN-001": {
+      "identifier": "DATA-OPEN-001",
+      "name": "数据开放平台",
+      "state": "specified",
+      "createdAt": "2026-04-07T00:00:00+08:00",
+      "updatedAt": "2026-04-07T17:35:00+08:00",
+      "author": "Summer",
+      "priority": "P0",
+      "files": {
+        "discovery": ".sdd/specs-tree-root/specs-tree-data-open-platform/discovery-report.md",
+        "discoveryAnalysis": ".sdd/specs-tree-root/specs-tree-data-open-platform/discovery-analysis.md",
+        "sessionLog": ".sdd/specs-tree-root/specs-tree-data-open-platform/session-log.md",
+        "spec": ".sdd/specs-tree-root/specs-tree-data-open-platform/spec.md",
+        "plan": ".sdd/specs-tree-root/specs-tree-data-open-platform/plan.md",
+        "tasks": ".sdd/specs-tree-root/specs-tree-data-open-platform/tasks.md"
+      },
+      "discoveryCompletedAt": "2026-04-07T17:30:00+08:00",
+      "specifiedAt": "2026-04-07T17:35:00+08:00"
     }
   },
   "metadata": {
     "createdAt": "2026-03-20T14:27:00+08:00",
-    "updatedAt": "2026-03-23T18:15:00+08:00",
+    "updatedAt": "2026-04-07T17:35:00+08:00",
     "sddVersion": "1.0.0",
     "projectName": "open-app",
     "namingConvention": {
