@@ -69,25 +69,35 @@ graph TB
 ### 2.1 现状痛点
 
 ```mermaid
-graph LR
-    subgraph 现状
-        A[XX 平台<br/>能力丰富]
+graph TB
+    subgraph XX 平台
+        A[XX 通讯平台<br/>能力丰富]
+    end
+    
+    subgraph 三方平台
         B[三方平台 A<br/>业务场景]
         C[三方平台 B<br/>业务场景]
     end
     
-    A -.->|❌ 能力封闭| A
-    B -.->|❌ 无法利用| A
-    C -.->|❌ 无法利用| A
-    
-    subgraph 问题
-        P1[数据孤岛]
-        P2[接口混乱]
-        P3[缺少标准通道]
-        P4[安全风险]
+    subgraph 核心问题
+        P1[❌ 能力封闭<br/>数据无法流出]
+        P2[❌ 缺少标准通道<br/>私下对接]
+        P3[❌ 数据资产不清<br/>无统一清单]
+        P4[❌ 接入效率低<br/>成本高]
     end
     
-    A & B & C --> P1 & P2 & P3 & P4
+    A -.-> P1
+    B -.-> P1
+    C -.-> P1
+    
+    P1 --> P2
+    P1 --> P3
+    P1 --> P4
+    
+    style P1 fill:#ffcccc
+    style P2 fill:#ffcccc
+    style P3 fill:#ffcccc
+    style P4 fill:#ffcccc
 ```
 
 | 痛点维度 | 具体描述 |
