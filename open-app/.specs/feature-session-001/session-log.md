@@ -1381,7 +1381,59 @@ design: 按 1.1 章节效果重画 4.1 需求分层图表
 
 ---
 
-**最后更新**: 2026-04-03（按 1.1 效果重画需求分层图表）
+### [XX:XX] 用户
+（发送了渲染效果截图 - 三大块斜向排列）
+
+### [XX:XX] AI
+看到问题了！mermaid 渲染出来三大块是从右上到左下斜着排列的，不是水平对齐。这是因为 graph TB 布局 + subgraph 自动布局导致的。
+
+让我改用 graph LR 布局，让三大块水平排列。
+
+### [XX:XX] AI 行动
+
+**修改内容**:
+
+| 章节 | 修改内容 |
+|------|---------|
+| 4.1 需求分层 | 改用 graph LR 布局，让三大块水平排列 |
+
+**优化要点**:
+- graph LR 布局（从左到右）
+- 移除底部&语法连接
+- 直接连接 subgraph
+- 三大块应该水平排列
+
+### [XX:XX] AI 行动
+
+**Git 提交**:
+```bash
+git add .specs/feature-session-001/discovery-report.md
+git commit -m "design: 修复 4.1 图表斜向排列问题"
+git push origin feature/data-open-platform-discovery
+```
+
+**提交信息**:
+```
+design: 修复 4.1 图表斜向排列问题
+
+- 使用 graph LR 布局（从左到右）
+- 移除底部&语法连接
+- 直接连接 subgraph，让 mermaid 自动布局
+- 三大块应该水平排列
+```
+
+### [XX:XX] AI
+✅ 图表布局修复完成！已提交并推送远端。
+
+**修改总结**:
+- 1 个章节已更新
+- 2 行新增，7 行删除
+- 分支：feature/data-open-platform-discovery
+- 提交：a2f6409
+
+---
+
+**最后更新**: 2026-04-03（修复图表斜向排列问题）
 
 ---
 
