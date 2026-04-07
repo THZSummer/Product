@@ -208,7 +208,7 @@ journey
 ### 4.1 需求分层
 
 ```mermaid
-graph TB
+graph LR
     subgraph Must_Have[必备需求 - 没有无法使用]
         M1[数据注册]
         M2[数据审批]
@@ -233,9 +233,7 @@ graph TB
         C4[SDK 支持]
     end
     
-    M1 & M2 & M3 & M4 & M5 & M6 -.- Must_Have
-    S1 & S2 & S3 & S4 & S5 -.- Should_Have
-    C1 & C2 & C3 & C4 -.- Could_Have
+    Must_Have -.-> Should_Have -.-> Could_Have
     
     style Must_Have fill:#e1f5e1,stroke:#2e7d32,stroke-width:2px
     style Should_Have fill:#fff3cd,stroke:#f57c00,stroke-width:2px
