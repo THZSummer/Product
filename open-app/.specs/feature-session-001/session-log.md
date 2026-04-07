@@ -873,7 +873,65 @@ docs: 删除反向依赖说明
 
 ---
 
-**最后更新**: 2026-04-03（删除反向依赖说明）
+### [XX:XX] 用户
+Called the Read tool with the following input: {"filePath":"/home/usb/workspace/Product/open-app/.specs/feature-session-001/discovery-report.md","offset":69,"limit":20}
+
+### [XX:XX] 用户
+优化图的机构，现在的结构很怪异
+
+### [XX:XX] AI
+明白！将优化 2.1 现状痛点的 mermaid 图结构：
+- 使用 TB（从上到下）布局，替代 LR（从左到右）
+- 将核心问题单独作为 subgraph，用红色高亮
+- 展示 XX 平台和三方平台都受能力封闭问题影响
+- 核心问题之间建立因果关系
+
+### [XX:XX] AI 行动
+
+**修改内容**:
+
+| 章节 | 修改内容 |
+|------|---------|
+| 2.1 现状痛点 | 重新设计 mermaid 图结构，更清晰直观 |
+
+**优化要点**:
+- 布局：TB（从上到下）替代 LR（从左到右）
+- 结构：XX 平台、三方平台、核心问题三个 subgraph
+- 关系：能力封闭导致其他问题（因果关系）
+- 样式：核心问题用红色高亮（#ffcccc）
+
+### [XX:XX] AI 行动
+
+**Git 提交**:
+```bash
+git add .specs/feature-session-001/discovery-report.md
+git commit -m "design: 优化 2.1 现状痛点图表结构"
+git push origin feature/data-open-platform-discovery
+```
+
+**提交信息**:
+```
+design: 优化 2.1 现状痛点图表结构
+
+- 重新设计 mermaid 图结构，更清晰直观
+- 使用 TB（从上到下）布局，替代 LR（从左到右）
+- 将核心问题单独作为一个 subgraph，用红色高亮
+- 展示 XX 平台和三方平台都受能力封闭问题影响
+- 核心问题之间建立因果关系（能力封闭导致其他问题）
+```
+
+### [XX:XX] AI
+✅ 图表结构优化完成！已提交并推送远端。
+
+**修改总结**:
+- 1 个章节已更新
+- 23 行新增，13 行删除
+- 分支：feature/data-open-platform-discovery
+- 提交：4c90f47
+
+---
+
+**最后更新**: 2026-04-03（优化现状痛点图表结构）
 
 ---
 
