@@ -931,7 +931,68 @@ design: 优化 2.1 现状痛点图表结构
 
 ---
 
-**最后更新**: 2026-04-03（优化现状痛点图表结构）
+### [XX:XX] 用户
+Called the Read tool with the following input: {"filePath":"/home/usb/workspace/Product/open-app/.specs/feature-session-001/discovery-report.md","offset":70,"limit":16}
+
+### [XX:XX] 用户
+能否以数据生产者（XX 通讯平台）、数据开放平台、数据消费者（三方平台）的思路优化下；直接把 XX 通讯平台和三方平台放到一起很奇怪
+
+### [XX:XX] AI
+明白！将按数据流架构重新设计 2.1 现状痛点图表：
+- 数据生产者：XX 通讯平台（IM/Meeting/CloudBox 等）
+- 数据消费者：三方平台 A、三方平台 B
+- 核心问题：能力封闭导致数据无法流出和获取
+- 样式：生产者和消费者用蓝色背景，问题用红色背景
+
+### [XX:XX] AI 行动
+
+**修改内容**:
+
+| 章节 | 修改内容 |
+|------|---------|
+| 2.1 现状痛点 | 按数据生产者→数据开放平台→数据消费者的架构思路重组图表 |
+
+**设计原则**:
+- 图表结构反映真实的数据流架构
+- 避免将生产者和消费者混为一个 subgraph
+- 使用不同背景色区分角色和问题
+
+### [XX:XX] AI 行动
+
+**Git 提交**:
+```bash
+git add .specs/feature-session-001/discovery-report.md
+git commit -m "design: 按数据流架构重新设计 2.1 现状痛点图表"
+git push origin feature/data-open-platform-discovery
+```
+
+**提交信息**:
+```
+design: 按数据流架构重新设计 2.1 现状痛点图表
+
+- 按照数据生产者→数据开放平台→数据消费者的架构思路重组
+- 数据生产者：XX 通讯平台（IM/Meeting/CloudBox 等）
+- 数据消费者：三方平台 A、三方平台 B
+- 核心问题：能力封闭导致数据无法流出和获取
+- 样式：生产者和消费者用蓝色背景，问题用红色背景
+
+设计原则：
+- 图表结构反映真实的数据流架构
+- 避免将生产者和消费者混为一个 subgraph
+```
+
+### [XX:XX] AI
+✅ 图表按数据流架构重新设计完成！已提交并推送远端。
+
+**修改总结**:
+- 1 个章节已更新
+- 10 行新增，11 行删除
+- 分支：feature/data-open-platform-discovery
+- 提交：f3a550e
+
+---
+
+**最后更新**: 2026-04-03（按数据流架构重新设计图表）
 
 ---
 
