@@ -208,34 +208,40 @@ journey
 ### 4.1 需求分层
 
 ```mermaid
-graph TB
-    subgraph Must_Have[必备需求 - 没有无法使用]
-        M1[数据注册能力]
-        M2[数据审批能力]
-        M3[数据订阅能力]
-        M4[数据消费能力<br/>API 查询/事件订阅]
-        M5[应用管理<br/>创建应用/获取 AK/SK]
-        M6[基础权限控制]
+graph LR
+    subgraph Must_Have[必备需求]
+        direction TB
+        M1[数据注册]
+        M2[数据审批]
+        M3[数据订阅]
+        M4[数据消费<br/>API/事件]
+        M5[应用管理<br/>AK/SK]
+        M6[权限控制]
     end
     
-    subgraph Should_Have[期望需求 - 显著提升体验]
-        S1[数据目录/市场]
-        S2[数据敏感度分级]
+    subgraph Should_Have[期望需求]
+        direction TB
+        S1[数据目录]
+        S2[敏感度分级]
         S3[审计日志]
         S4[用量统计]
         S5[数据资产清单]
     end
     
-    subgraph Could_Have[惊喜需求 - 超出预期]
-        C1[数据价值可视化]
-        C2[自动化数据同步]
+    subgraph Could_Have[惊喜需求]
+        direction TB
+        C1[价值可视化]
+        C2[自动化同步]
         C3[开发者门户]
         C4[SDK 支持]
     end
     
-    M1 & M2 & M3 & M4 & M5 & M6 --> Must_Have
-    S1 & S2 & S3 & S4 & S5 --> Should_Have
-    C1 & C2 & C3 & C4 --> Could_Have
+    Must_Have -.-> Should_Have
+    Should_Have -.-> Could_Have
+    
+    style Must_Have fill:#e1f5e1
+    style Should_Have fill:#fff3cd
+    style Could_Have fill:#f3e5f5
 ```
 
 ### 4.2 需求清单
