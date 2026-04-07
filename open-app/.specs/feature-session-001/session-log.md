@@ -1173,7 +1173,74 @@ design: 使用&语法实现 subgraph 内水平排列
 
 ---
 
-**最后更新**: 2026-04-03（使用&语法实现水平排列）
+### [XX:XX] 用户
+Called the Read tool with the following input: {"filePath":"/home/usb/workspace/Product/open-app/.specs/feature-session-001/discovery-report.md","offset":28,"limit":8}
+
+### [XX:XX] 用户
+参考这里呢，这里是水平对齐的
+
+### [XX:XX] 用户
+Called the Read tool with the following input: {"filePath":"/home/usb/workspace/Product/open-app/.specs/feature-session-001/discovery-report.md","offset":212,"limit":12}
+
+### [XX:XX] 用户
+效果不对
+
+### [XX:XX] AI
+明白！查看 1.1 章节的写法，发现正确的语法是：
+- subgraph 内节点垂直排列（每个节点单独一行）
+- 底部使用 & 语法连接节点
+- 这样渲染出来 subgraph 内节点是水平对齐的
+
+### [XX:XX] AI 行动
+
+**修改内容**:
+
+| 章节 | 修改内容 |
+|------|---------|
+| 4.1 需求分层 | 参考 1.1 章节语法，节点垂直排列 + 底部&连接 |
+
+**正确语法**:
+```
+subgraph Must_Have[必备需求]
+    M1[数据注册]
+    M2[数据审批]
+    ...
+end
+
+M1 & M2 & M3... --> Must_Have
+```
+
+### [XX:XX] AI 行动
+
+**Git 提交**:
+```bash
+git add .specs/feature-session-001/discovery-report.md
+git commit -m "design: 参考 1.1 章节语法修改 4.1 图表布局"
+git push origin feature/data-open-platform-discovery
+```
+
+**提交信息**:
+```
+design: 参考 1.1 章节语法修改 4.1 图表布局
+
+- subgraph 内节点垂直排列（每个节点单独一行）
+- 底部使用 & 语法连接节点到 subgraph
+- 这样渲染出来 subgraph 内节点是水平对齐的
+- 参考 1.1 章节典型数据域的写法
+```
+
+### [XX:XX] AI
+✅ 图表语法修正完成！已提交并推送远端。
+
+**修改总结**:
+- 1 个章节已更新
+- 19 行新增，3 行删除
+- 分支：feature/data-open-platform-discovery
+- 提交：6e179dc
+
+---
+
+**最后更新**: 2026-04-03（参考 1.1 章节语法修正图表）
 
 ---
 
