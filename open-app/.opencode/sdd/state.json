@@ -158,7 +158,7 @@
       "files": {
         "discovery": ".sdd/specs-tree-root/specs-tree-data-open-platform/discovery-report.md",
         "discoveryAnalysis": ".sdd/specs-tree-root/specs-tree-data-open-platform/discovery-analysis.md",
-        "sessionLog": ".sdd/specs-tree-root/specs-tree-data-open-platform/session-log.md",
+        "sessionLog": ".sdd/specs-tree-root/specs-tree-data-open-platform/discovery-session-log.md",
         "spec": ".sdd/specs-tree-root/specs-tree-data-open-platform/spec.md",
         "plan": ".sdd/specs-tree-root/specs-tree-data-open-platform/plan.md",
         "tasks": ".sdd/specs-tree-root/specs-tree-data-open-platform/tasks.md"
