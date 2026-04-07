@@ -233,10 +233,6 @@ graph TB
         C4[SDK 支持]
     end
     
-    M1 & M2 & M3 & M4 & M5 & M6 --> Must_Have
-    S1 & S2 & S3 & S4 & S5 --> Should_Have
-    C1 & C2 & C3 & C4 --> Could_Have
-    
     Must_Have --> Should_Have --> Could_Have
     
     style Must_Have fill:#e1f5e1
