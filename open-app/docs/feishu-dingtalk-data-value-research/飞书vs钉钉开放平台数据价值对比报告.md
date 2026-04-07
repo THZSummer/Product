@@ -186,7 +186,7 @@ radarChart
 
 ```mermaid
 graph TB
-    subgraph 飞书生态
+    subgraph feishuEco ["飞书生态"]
         F1[2500+ API] --> F2[多维表格]
         F2 --> F3[Aily 智能体]
         F3 --> F4[MCP 协议]
@@ -194,7 +194,7 @@ graph TB
         F5 --> F6[开发者工具链]
     end
     
-    subgraph 钉钉生态
+    subgraph dingtalkEco ["钉钉生态"]
         D1[RESTful API] --> D2[宜搭平台]
         D2 --> D3[1000 万 + 应用]
         D3 --> D4[300 万 + 企业]
