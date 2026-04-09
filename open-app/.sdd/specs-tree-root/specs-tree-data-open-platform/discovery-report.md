@@ -151,10 +151,20 @@ graph TB
         U3_Need[获取 XX 平台数据<br/>增强自身业务]
     end
     
+    subgraph 通道 Owner
+        U4[API/事件技术负责人<br/>如：IM 接口负责人]
+        U4_Resp[审批通道技术可行性<br/>确保接口稳定性]
+    end
+    
     U1 --> U1_Desc & U1_Motive & U1_Concern
     U2 --> U2_Resp & U2_Scope
     U3 --> U3_Type & U3_Need
+    U4 --> U4_Resp
 ```
+
+**新增角色**：通道 Owner（API/事件技术负责人）
+- 职责：审批通道技术可行性，确保接口稳定性
+- 参与场景：权限审批流程（与数据 Owner 共同审批）
 
 ### 3.2 典型场景
 
@@ -249,12 +259,14 @@ graph LR
 | 需求编号 | 需求描述 | 验收标准 |
 |---------|---------|---------|
 | **MH-01** | 数据 Owner 能够注册数据 | 支持填写数据描述、字段定义、开放形式、敏感度级别 |
-| **MH-02** | 平台管理员能够审批数据注册 | 支持审批通过/驳回，记录审批意见 |
+| **MH-02** | 平台管理员能够审批数据 | 支持审批通过/驳回，记录审批意见 |
 | **MH-03** | 三方平台能够创建应用 | 创建应用后获取 AK/SK |
 | **MH-04** | 三方平台能够订阅数据 | 选择数据后提交订阅申请 |
 | **MH-05** | 三方平台能够通过 API 消费数据 | 使用 AK/SK 调用 API 获取数据 |
 | **MH-06** | 支持事件订阅形式 | 数据变更时推送给订阅方 |
-| **MH-07** | 基础权限控制 | 未授权应用无法访问数据 |
+| **MH-07** | 双重权限控制 | 应用需同时拥有通道权限 + 数据对象权限才能消费 |
+| **MH-08** | 动态审批流程 | 根据数据敏感度自动生成审批链（数据 Owner+ 通道 Owner+ 平台管理员） |
+| **MH-09** | 权限审计日志 | 以通道为入口记录调用日志，关联应用和数据对象信息 |
 
 #### Should Have（期望）
 
@@ -262,13 +274,15 @@ graph LR
 |---------|---------|---------|
 | **SH-01** | 数据目录/市场 | 浏览可订阅的数据列表，支持搜索和分类 |
 | **SH-02** | 数据敏感度分级 | 支持定义和管理数据敏感度级别（数据对象级别），支持基于敏感度动态审批 |
-| **SH-03** | 审计日志 | 记录所有数据访问行为 |
+| **SH-03** | 我的权限清单 | 应用可查看已拥有的通道 + 数据对象组合权限 |
 | **SH-04** | 用量统计 | 展示数据被调用的次数、调用方等 |
 | **SH-05** | 数据资产清单 | 统一记录 XX 平台有哪些数据对象 |
 | **SH-06** | 数据字典/数据地图 | 提供数据含义、关系、使用建议（数据来源、加工逻辑、更新频率、推荐使用场景） |
 | **SH-07** | 场景分类目录 | 按业务场景分类展示数据（如：HR 场景、客服场景、AI 场景） |
 | **SH-08** | 案例库 | 收集并分享成功案例，提供场景化引导 |
 | **SH-09** | 技术咨询支持 | 快速响应、专业解答，有专门支持人员平等服务所有消费方 |
+| **SH-10** | 权限回收通知 | 权限回收时提前通知应用方 |
+| **SH-11** | AK/SK 重置无感 | 权限与应用 ID 绑定，AK/SK 更新不影响权限 |
 
 #### Could Have（惊喜）
 
@@ -292,18 +306,19 @@ sequenceDiagram
     participant Owner as 数据 Owner
     participant Platform as 数据开放平台
     participant Admin as 平台管理员
-    participant Consumer as 三方平台
+    participant Consumer as 三方平台应用
     
     rect rgb(200, 230, 255)
         note right of Owner: 阶段 1：数据注册
-        Owner->>Platform: 注册数据
+        Owner->>Platform: 注册数据对象
         note right of Platform: 填写数据描述、字段定义、<br/>开放形式、敏感度级别
     end
     
     rect rgb(255, 230, 200)
         note right of Admin: 阶段 2：审批上架
         note right of Admin: 根据敏感度级别<br/>动态生成审批链
-        Admin->>Admin: 业务负责人审批
+        Admin->>Admin: 数据 Owner 审批
+        Admin->>Admin: 通道 Owner 审批
         Admin->>Admin: 上级/CTO 审批（L3+）
         Admin->>Admin: 安全合规审批（L3+）
         Admin->>Admin: 平台技术审批
@@ -312,20 +327,27 @@ sequenceDiagram
     end
     
     rect rgb(230, 255, 200)
-        note right of Consumer: 阶段 3：订阅消费
-        Consumer->>Platform: 创建应用
-        Platform->>Consumer: 颁发 AK/SK
-        Consumer->>Platform: 订阅数据
-        Platform->>Admin: 审批订阅
+        note right of Consumer: 阶段 3：权限申请
+        Consumer->>Platform: 创建应用获取 AK/SK
+        Consumer->>Platform: 申请通道 + 数据对象权限
+        Platform->>Admin: 生成审批链
+        Admin->>Admin: 数据 Owner+ 通道 Owner 审批
         Admin->>Platform: 审批通过
-        Consumer->>Platform: 调用 API 消费数据
-        Platform->>Consumer: 返回数据
+        Platform->>Consumer: 授予双重权限
     end
     
     rect rgb(255, 200, 230)
-        note right of Platform: 阶段 4：审计监控
+        note right of Consumer: 阶段 4：消费数据
+        Consumer->>Platform: 调用 API 消费数据
+        note right of Platform: 验证：通道权限 + 数据对象权限
+        Platform->>Consumer: 返回数据
         Platform->>Platform: 记录审计日志
+    end
+    
+    rect rgb(200, 255, 230)
+        note right of Owner: 阶段 5：运营监控
         Platform->>Owner: 展示用量统计
+        Platform->>Owner: 价值反馈
     end
 ```
 
@@ -663,12 +685,164 @@ graph TB
 
 ### 6.3 权限控制
 
-| 控制维度 | 说明 |
-|---------|------|
-| **应用级权限** | 三方平台需创建应用，获取 AK/SK |
-| **数据级权限** | 不同敏感度数据有不同的访问权限 |
-| **用户级权限** | 消费个人数据时可能需要用户 OAuth 授权 |
-| **场景级权限** | 限制数据使用场景（如：仅限内部使用） |
+#### 6.3.1 双重权限模型
+
+**核心设计原则**：消费权限 = 通道权限 ⊗ 数据对象权限
+
+```mermaid
+graph TB
+    subgraph 应用 Application[开放平台的应用<br/>拥有 AK/SK]
+    end
+    
+    subgraph 通道权限 ChannelPerm[通道权限]
+        C1[REST API 通道]
+        C2[Webhook 事件]
+        C3[消息队列]
+    end
+    
+    subgraph 数据权限 DataPerm[数据对象权限]
+        D1[员工信息对象]
+        D2[群组对象]
+        D3[文件对象]
+    end
+    
+    subgraph 消费权限 AccessPerm[消费权限]
+        P1[API + 员工信息]
+        P2[Webhook + 群组]
+        P3[MQ + 文件]
+    end
+    
+    Application -->|申请 | ChannelPerm
+    Application -->|申请 | DataPerm
+    ChannelPerm & DataPerm -->|组合 | AccessPerm
+    
+    style Application fill:#e3f2fd
+    style ChannelPerm fill:#fff3cd
+    style DataPerm fill:#e1f5e1
+    style AccessPerm fill:#f3e5f5
+```
+
+**权限模型说明**：
+| 维度 | 说明 |
+|------|------|
+| **通道权限** | REST API、Webhook、消息队列等消费通道的访问权限 |
+| **数据对象权限** | 员工信息、群组、文件等业务逻辑对象的访问权限 |
+| **组合规则** | 应用需同时拥有通道权限 + 数据对象权限才能消费数据 |
+
+**示例**：
+- 客服应用申请"REST API 通道 + 员工信息对象"权限 → 可同时拥有两个权限后才能调用 API 查询员工信息
+- 工单应用申请"Webhook 事件 + 群组对象"权限 → 可同时拥有两个权限后才能订阅群组变更事件
+
+#### 6.3.2 权限主体与有效期
+
+| 维度 | 设计决策 |
+|------|---------|
+| **权限主体** | 开放平台的应用（Application），不是平台，不是终端用户 |
+| **权限绑定** | 权限与应用 ID 绑定，AK/SK 仅是凭证代号 |
+| **有效期** | 永久有效，除非主动回收 |
+| **应用隔离** | 每个应用之间权限隔离，无共享/继承 |
+
+**AK/SK 重置场景**：
+- 权限与应用 ID 绑定，AK/SK 更新不影响权限
+- 代号会变，但本质还是那个应用
+
+**数据 Owner 变更场景**：
+- 已授权权限继续保留
+- 针对稳定的岗位，不针对不稳定的人
+- 新 Owner 继承该岗位的管理职责
+
+#### 6.3.3 权限审批流程
+
+**核心原则**：一次申请 = 一次审批（动态生成审批链）
+
+```mermaid
+sequenceDiagram
+    participant App as 应用方
+    participant Platform as 数据开放平台
+    participant DO as 数据 Owner
+    participant CO as 通道 Owner
+    participant Admin as 平台管理员
+    participant CTO as 上级/CTO
+    participant Security as 安全合规
+    
+    App->>Platform: 申请通道 + 数据对象权限
+    Platform->>Platform: 根据敏感度动态生成审批链
+    
+    rect rgb(230, 255, 200)
+        note right of Platform: L1-L2 级数据审批链
+        Platform->>DO: 数据 Owner 审批
+        DO->>CO: 通道 Owner 审批
+        CO->>Admin: 平台管理员审批
+        Admin->>Platform: 审批通过
+    end
+    
+    rect rgb(255, 230, 200)
+        note right of Platform: L3-L4 级数据审批链
+        Platform->>DO: 数据 Owner 审批
+        DO->>CTO: 上级/CTO 审批
+        CTO->>Security: 安全合规审批
+        Security->>CO: 通道 Owner 审批
+        CO->>Admin: 平台管理员审批
+        Admin->>Platform: 审批通过
+    end
+    
+    Platform->>App: 审批结果通知
+```
+
+**审批角色**：
+| 角色 | 职责 | 参与场景 |
+|------|------|---------|
+| 数据 Owner | 审批数据开放业务合理性 | 所有场景 |
+| 通道 Owner | 审批通道技术可行性 | 所有场景 |
+| 平台管理员 | 审批技术规范性 | 所有场景 |
+| 上级/CTO | 审批高敏感度数据 | L3-L4 级 |
+| 安全合规 | 审批安全合规性 | L3-L4 级 |
+
+#### 6.3.4 权限回收与变更
+
+**回收触发场景**（低频谨慎）：
+- 应用主动放弃权限
+- 数据 Owner 主动回收（数据不再开放）
+- 通道 Owner 主动回收（通道下线/变更）
+- 平台管理员强制回收（违规使用）
+- 数据敏感度升级（需重新审批）
+- 应用违规使用或 AK/SK 泄露
+
+**回收通知机制**：
+- 必须通知应用方，而且要提前告知
+- 给应用方缓冲时间调整业务逻辑
+
+**变更处理策略**：
+- 根据变更程度决定
+- 逻辑数据对象层面，变动频率低
+- 大部分情况下已授权权限继续有效
+
+#### 6.3.5 审计与监控
+
+**审计日志记录**：
+- 以通道为入口触发记录（API 调用日志、事件推送日志）
+- 关联权限信息（哪个应用、使用了哪个数据对象）
+- 不单独记录"权限使用日志"
+
+**审计用途**：
+- 安全审计（追踪数据泄露、违规使用）
+- 使用量统计（计算数据价值）
+- 性能优化（识别慢查询、高频调用）
+- 问题排查（故障定位、根因分析）
+- 合规要求（满足监管审计要求）
+
+**实时监控**：
+- 长期目标：完善的系统需要实时监控和告警
+- MVP 阶段：暂不考虑，优先保证核心功能
+- 分阶段实施
+
+#### 6.3.6 权限可见性
+
+| 功能 | 设计决策 |
+|------|---------|
+| **我的权限清单** | 需要展示（通道 + 数据对象组合清单） |
+| **可申请的权限目录** | 需要展示（所有可开放的数据对象和通道） |
+| **申请进度可视化** | 非刚需，不需要展示详情 |
 
 ---
 
@@ -887,7 +1061,8 @@ graph TB
 | v1.14 | 2026-04-07 | 优化：删除 5.3.6 重复流程，优化 5.1 说明 | AI Assistant |
 | v1.15 | 2026-04-07 | 优化：将 6.1.2 文本流程图转换为 mermaid | AI Assistant |
 | v1.16 | 2026-04-07 | 更新：基于竞品赋能调研结果，更新 7/10/11 章 | AI Assistant |
+| v1.17 | 2026-04-09 | 新增：阶段三权限关系挖掘 - 双重权限模型、动态审批链、权限可见性 | AI Assistant |
 
 ---
 
-**最后更新**: 2026-04-07（基于竞品调研结果更新报告）
+**最后更新**: 2026-04-09（阶段三权限关系需求挖掘完成）
