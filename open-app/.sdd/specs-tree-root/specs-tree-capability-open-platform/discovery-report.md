@@ -16,61 +16,41 @@
 **能力开放平台**是 open-app 体系下的基础能力平台，作为开放平台的基础设施层，提供统一的连接能力（API、事件等）和管理能力（权限、审批等）。它不仅支撑数据开放平台等上层业务应用，也直接服务于企业内三方平台的业务集成，构建完整的企业内部能力生态。
 
 ```mermaid
-flowchart TB
-    subgraph XXComm[XX 通讯平台<br/>XX Communication Platform]
-        direction TB
-        
-        subgraph OtherBiz[XX 通讯平台内其它业务平台<br/>能力/数据供给方]
-            Biz1[IM 业务模块]
-            Biz2[云盘业务模块]
-            Biz3[会议业务模块]
-            BizN[...]
+graph TB
+    subgraph XX["XX 通讯平台"]
+        subgraph OtherBiz["其他业务平台"]
+            Biz_IM[IM 模块]
+            Biz_Cloud[云盘模块]
         end
 
-        subgraph OpenPlatform[开放平台<br/>Open Platform]
-            direction TB
-            
-            subgraph CapPlatform[能力开放平台<br/>Capability Platform<br/>基础设施/阶段 1]
-                direction TB
-                PC[平台本身能力<br/>应用/成员/AKSK]
-                Pub[公共连接能力<br/>API/事件/连接器]
-                
-                style CapPlatform fill:#e1f5e1,stroke:#000,stroke-width: 2px
+        subgraph OP["开放平台"]
+            subgraph CP["能力开放平台\n(基础设施/阶段 1)"]
+                CP_Node[能力节点\nAPI/事件/权限]
             end
             
-            subgraph DataPlatform[XX(如数据) 开放平台<br/>Data Open Platform<br/>上层业务应用/阶段 2]
-                direction TB
-                D1[数据管理/治理]
-                D2[数据订阅/分发]
-                
-                style DataPlatform fill:#e8f5e9
+            subgraph DP["XX(如数据) 开放平台\n(上层应用/阶段 2)"]
+                DP_Node[数据节点\n管理/分发]
             end
             
-            %% 内部依赖关系
-            DataPlatform -.->|复用 API/事件/权限| CapPlatform
-            PC -.->|支撑 | DataPlatform
-            Pub -.->|支撑 | DataPlatform
+            CP_Node -->|支撑| DP_Node
         end
         
-        %% 业务平台与开放平台关系
-        OtherBiz -.->|特有连接能力嵌入| CapPlatform
-        OtherBiz -.->|数据注册/治理| DataPlatform
+        %% 业务 -> 开放平台
+        OtherBiz -.->|嵌入特有连接| CP
+        OtherBiz -.->|注册数据/治理| DP
     end
-    
-    subgraph ThirdParty[企业内其它三方平台<br/>能力消费方]
-        ExtSys1[内部自研系统 A]
-        ExtSys2[内部自研系统 B]
-        ExtSys3[AI 应用]
-        
-        style ThirdParty fill:#e3f2fd
+
+    subgraph TP["企业内其它三方平台\n(能力消费方)"]
+        TP_Apps[三方应用]
     end
-    
+
     %% 消费关系
-    CapPlatform ==>|开放 API/事件/连接器 | ExtSys1 & ExtSys2
-    DataPlatform ==>|开放数据服务 | ExtSys3
+    CP_Node ==>|开放 API/事件| TP_Apps
+    DP_Node ==>|开放数据服务| TP_Apps
 
-    style XXComm fill:#f9f9f9,stroke:#333,stroke-dasharray: 5 5
-    style OpenPlatform fill:#fff,stroke:#000,stroke-width: 2px
+    style CP fill:#e1f5e1
+    style DP fill:#e8f5e9
+    style TP fill:#e3f2fd
 ```
 
 > 💡 **关系解读**：
