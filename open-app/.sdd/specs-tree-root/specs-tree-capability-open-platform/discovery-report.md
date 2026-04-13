@@ -18,39 +18,37 @@
 ```mermaid
 graph TB
     subgraph XX["XX 通讯平台"]
-        subgraph OtherBiz["其他业务平台"]
-            Biz_IM[IM 模块]
-            Biz_Cloud[云盘模块]
+        subgraph Biz["XX 通讯平台内其它业务平台"]
+            Biz_IM[IM 业务模块]
+            Biz_Cloud[云盘业务模块]
+            Biz_Meet[会议业务模块]
         end
 
-        subgraph OP["开放平台"]
-            subgraph CP["能力开放平台\n(基础设施/阶段 1)"]
-                CP_Node[能力节点\nAPI/事件/权限]
+        subgraph Open["开放平台"]
+            subgraph Cap["能力开放平台\n(基础设施/阶段 1)"]
+                Cap_Node[能力节点: API/事件/权限]
             end
             
-            subgraph DP["XX(如数据) 开放平台\n(上层应用/阶段 2)"]
-                DP_Node[数据节点\n管理/分发]
+            subgraph Data["XX(如数据) 开放平台\n(上层应用/阶段 2)"]
+                Data_Node[数据节点: 管理/分发]
             end
             
-            CP_Node -->|支撑| DP_Node
+            %% 内部依赖
+            Cap_Node -->|支撑| Data_Node
         end
         
         %% 业务 -> 开放平台
-        OtherBiz -.->|嵌入特有连接| CP
-        OtherBiz -.->|注册数据/治理| DP
+        Biz -.->|嵌入特有连接| Cap
+        Biz -.->|注册数据/治理| Data
     end
 
-    subgraph TP["企业内其它三方平台\n(能力消费方)"]
-        TP_Apps[三方应用]
+    subgraph Third["企业内其它三方平台\n(能力消费方)"]
+        Apps[三方应用]
     end
 
     %% 消费关系
-    CP_Node ==>|开放 API/事件| TP_Apps
-    DP_Node ==>|开放数据服务| TP_Apps
-
-    style CP fill:#e1f5e1
-    style DP fill:#e8f5e9
-    style TP fill:#e3f2fd
+    Cap ==>|开放 API/事件| Apps
+    Data ==>|开放数据服务| Apps
 ```
 
 > 💡 **关系解读**：
