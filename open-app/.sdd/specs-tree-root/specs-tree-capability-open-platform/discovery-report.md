@@ -705,21 +705,37 @@ XX 通讯平台开放平台现有能力清单如下：
 - **复用关系**：各业务场景（API、事件、数据等）使用统一权限设计，将各自场景的业务逻辑设计进去
 
 **架构关系**：
-```
-能力开放平台（基础）
-├── 统一权限管理 ←────────────┐
-├── 统一审批管理 ←──┐         │
-├── API 管理        │         │
-└── 事件/回调管理   │         │
-                    │         │
-        ┌───────────┘         │
-        ↓                     ↓
-┌───────────────┐   ┌─────────────────┐
-│ API 权限      │   │ 数据对象权限    │
-│ (API 场景)    │   │ (数据开放场景)  │
-└───────────────┘   └─────────────────┘
-        ↓                     ↓
-    各业务场景使用统一权限设计，融入各自业务逻辑
+```mermaid
+flowchart TB
+    subgraph CapPlatform["能力开放平台（基础设施）"]
+        direction TB
+        Perm[统一权限管理]
+        Approval[统一审批管理]
+        API[API 管理]
+        Event[事件/回调管理]
+        
+        Perm -.->|提供鉴权模型| API & Event
+        Approval -.->|提供审批流| API & Event
+    end
+    
+    subgraph BizScenes["业务场景权限"]
+        direction LR
+        SceneAPI[API 权限<br/>(API 场景)]
+        SceneEvent[事件权限<br/>(事件场景)]
+        SceneData[数据对象权限<br/>(数据开放场景)]
+    end
+    
+    %% 连接关系
+    API ==> SceneAPI
+    Event ==> SceneEvent
+    Perm -.->|权限分配| SceneData
+    
+    Note["各业务场景使用统一权限设计<br/>融入各自业务逻辑"]
+    SceneAPI & SceneEvent & SceneData ~~~ Note
+
+    style CapPlatform fill:#e1f5e1
+    style BizScenes fill:#e3f2fd
+    style Note fill:#fff3cd,stroke-dasharray: 5 5
 ```
 
 ---
