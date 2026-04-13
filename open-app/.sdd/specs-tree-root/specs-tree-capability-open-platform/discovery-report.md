@@ -13,27 +13,71 @@
 
 ### 1.1 核心定位
 
-**能力开放平台**是 open-app 体系下的基础能力平台，聚焦 XX 通讯平台的能力开放管理，提供统一的能力管理框架（API、事件、回调、连接器等）和基础设施（权限管理、审批管理等），供数据开放平台等上层应用复用，构建完整的企业内部能力生态。
+**能力开放平台**是 open-app 体系下的基础能力平台，作为开放平台的基础设施层，提供统一的连接能力（API、事件等）和管理能力（权限、审批等）。它不仅支撑数据开放平台等上层业务应用，也直接服务于企业内三方平台的业务集成，构建完整的企业内部能力生态。
 
 ```mermaid
 flowchart TB
-    subgraph 能力开放平台生态
-        A[XX 通讯平台<br/>能力供给方]
-        B[能力开放平台<br/>基础能力平台<br/>权限/审批/API/事件]
-        C[三方平台<br/>能力消费方]
-        D[数据开放平台<br/>上层业务应用]
+    subgraph XXComm[XX 通讯平台<br/>XX Communication Platform]
+        direction TB
+        
+        subgraph OtherBiz[XX 通讯平台内其它业务平台<br/>能力/数据供给方]
+            Biz1[IM 业务模块]
+            Biz2[云盘业务模块]
+            Biz3[会议业务模块]
+            BizN[...]
+        end
+
+        subgraph OpenPlatform[开放平台<br/>Open Platform]
+            direction TB
+            
+            subgraph CapPlatform[能力开放平台<br/>Capability Platform<br/>基础设施/阶段 1]
+                direction TB
+                PC[平台本身能力<br/>应用/成员/AKSK]
+                Pub[公共连接能力<br/>API/事件/连接器]
+                
+                style CapPlatform fill:#e1f5e1,stroke:#000,stroke-width: 2px
+            end
+            
+            subgraph DataPlatform[XX(如数据) 开放平台<br/>Data Open Platform<br/>上层业务应用/阶段 2]
+                direction TB
+                D1[数据管理/治理]
+                D2[数据订阅/分发]
+                
+                style DataPlatform fill:#e8f5e9
+            end
+            
+            %% 内部依赖关系
+            DataPlatform -.->|复用 API/事件/权限| CapPlatform
+            PC -.->|支撑 | DataPlatform
+            Pub -.->|支撑 | DataPlatform
+        end
+        
+        %% 业务平台与开放平台关系
+        OtherBiz -.->|特有连接能力嵌入| CapPlatform
+        OtherBiz -.->|数据注册/治理| DataPlatform
     end
     
-    A -->|能力注册 | B
-    B -->|能力开放 | C
-    C -->|订阅消费 | B
-    D -->|依赖复用 | B
+    subgraph ThirdParty[企业内其它三方平台<br/>能力消费方]
+        ExtSys1[内部自研系统 A]
+        ExtSys2[内部自研系统 B]
+        ExtSys3[AI 应用]
+        
+        style ThirdParty fill:#e3f2fd
+    end
     
-    style B fill:#e1f5e1
-    style D fill:#fff3cd
+    %% 消费关系
+    CapPlatform ==>|开放 API/事件/连接器 | ExtSys1 & ExtSys2
+    DataPlatform ==>|开放数据服务 | ExtSys3
+
+    style XXComm fill:#f9f9f9,stroke:#333,stroke-dasharray: 5 5
+    style OpenPlatform fill:#fff,stroke:#000,stroke-width: 2px
 ```
 
-> 💡 **关键定位**：能力开放平台是基础设施，数据开放平台等上层应用依赖能力开放平台的能力（API/事件通道、权限管理、审批管理等）
+> 💡 **关系解读**：
+> 1.  **包含关系**：能力开放平台和数据开放平台都是开放平台的一部分；XX 通讯平台包含开放平台和其他业务平台。
+> 2.  **层级关系**：能力开放平台是**基础设施**（阶段 1），为数据开放平台（阶段 2）提供底层支撑（API 通道、权限、审批）。
+> 3.  **供给关系**：XX 通讯平台内的业务模块（如 IM、云盘）提供原始能力/数据。特有连接能力嵌入能力开放平台；数据/治理走数据开放平台。
+> 4.  **消费关系**：企业内三方平台（如 AI 应用、客服系统）作为消费者，既可以直接通过能力开放平台调用 API/事件，也可以通过数据开放平台获取高阶数据服务。
 
 ### 1.2 核心问题
 
