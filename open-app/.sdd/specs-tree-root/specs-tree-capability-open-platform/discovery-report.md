@@ -21,7 +21,6 @@ graph TB
         subgraph Biz["XX 通讯平台内其它业务平台"]
             Biz_IM[IM 业务模块]
             Biz_Cloud[云盘业务模块]
-            Biz_Meet[会议业务模块]
         end
 
         subgraph Open["开放平台"]
@@ -49,6 +48,10 @@ graph TB
     %% 消费关系
     Cap ==>|开放 API/事件| Apps
     Data ==>|开放数据服务| Apps
+
+    style Cap fill:#e1f5e1
+    style Data fill:#e8f5e9
+    style Third fill:#e3f2fd
 ```
 
 > 💡 **关系解读**：
