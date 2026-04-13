@@ -373,42 +373,63 @@ sequenceDiagram
 ### 5.2 能力消费形式
 
 ```mermaid
-graph TB
+flowchart TB
     subgraph 消费形式
-        F1[API 调用<br/>消费方主动调用]
-        F2[事件订阅<br/>能力变更实时推送]
-        F3[回调通知<br/>异步回调]
-        F4[连接器<br/>标准化集成]
+        direction TB
+        F1[API 调用]
+        F2[事件订阅]
+        F3[回调通知]
+        F4[连接器]
     end
     
     subgraph 技术实现
-        F1 --> T1[RESTful API]
-        F2 --> T2[企业内部消息平台]
-        F3 --> T3[Webhook]
-        F4 --> T4[标准化连接器]
+        direction TB
+        T1[RESTful API]
+        T2[企业内部消息平台]
+        T3[Webhook]
+        T4[标准化连接器]
     end
     
     subgraph 复用策略
-        T2 --> R1[✅ 复用内部消息平台]
-        T1 --> R2[✅ 复用现有 API 网关]
+        direction TB
+        R1[✅ 复用内部消息平台]
+        R2[✅ 复用现有 API 网关]
     end
+    
+    F1 --> T1
+    F2 --> T2
+    F3 --> T3
+    F4 --> T4
+    T2 --> R1
+    T1 --> R2
 ```
+
+**消费形式说明**：
+| 形式 | 说明 | 技术实现 |
+|------|------|---------|
+| API 调用 | 消费方主动调用 | RESTful API，复用现有 API 网关 |
+| 事件订阅 | 能力变更实时推送 | 企业内部消息平台 |
+| 回调通知 | 异步回调 | Webhook |
+| 连接器 | 标准化集成 | 标准化连接器 |
 
 ### 5.3 能力归属与治理
 
 ```mermaid
-graph TB
+flowchart TB
     subgraph 能力类型
+        direction TB
         T1[公共连接能力<br/>API/事件/连接器]
         T2[特有连接能力<br/>IM/云盘/会议等]
     end
     
     subgraph 建设主体
+        direction TB
         B1[能力开放平台<br/>自建]
         B2[业务模块<br/>建设后嵌入]
     end
     
     subgraph 审批主体
+        direction TB
         A1[能力开放平台<br/>审批公共能力]
         A2[业务模块 Owner<br/>审批特有业务能力]
     end
@@ -418,7 +439,8 @@ graph TB
     T1 --> A1
     T2 --> A2
     
-    note right of A2: 核心原则：<br/>属于谁的业务谁审批<br/>开放平台不做中间平台
+    A2 -.->|核心原则 | P[属于谁的业务谁审批<br/>开放平台不做中间平台]
+    style P fill:#fff3cd,stroke:#f57c00,stroke-dasharray: 5 5
 ```
 
 | 维度 | 设计决策 |
@@ -431,8 +453,9 @@ graph TB
 ### 5.4 与数据开放平台的关系
 
 ```mermaid
-graph TB
+flowchart TB
     subgraph CapabilityPlatform[能力开放平台]
+        direction TB
         C1[API 管理]
         C2[事件管理]
         C3[权限管理]
@@ -442,16 +465,19 @@ graph TB
     end
     
     subgraph DataPlatform[数据开放平台<br/>能力开放的特例]
+        direction TB
         D1[数据注册]
         D2[数据审批]
         D3[数据订阅]
         D4[数据消费]
     end
     
-    CapabilityPlatform -->|能力开放是基础 | DataPlatform
+    CapabilityPlatform ==>|能力开放是基础 | DataPlatform
     C3 -.->|权限模型复用 | DataPlatform
     
-    note right of CapabilityPlatform: 能力开放不特意<br/>体现数据开放的东西
+    CP_Note[能力开放不特意<br/>体现数据开放的东西]
+    CapabilityPlatform -.- CP_Note
+    style CP_Note fill:#e3f2fd,stroke:#1976d2,stroke-dasharray: 5 5
 ```
 
 | 维度 | 关系说明 |
