@@ -533,81 +533,91 @@ flowchart TB
 flowchart TB
     subgraph 能力类型
         direction TB
-        T1[公共连接能力<br/>API/事件/连接器]
-        T2[特有连接能力<br/>IM/云盘/会议等]
+        T1[公共连接能力<br/>API/事件/回调/连接器]
+        T2[特有连接能力<br/>IM 卡片/云盘/邮件等]
     end
     
     subgraph 建设主体
         direction TB
-        B1[能力开放平台<br/>自建]
-        B2[业务模块<br/>建设后嵌入]
+        B1[能力开放平台<br/>自建公共能力]
+        B2[业务模块<br/>建设特有能力后嵌入]
     end
     
-    subgraph 审批主体
+    subgraph 治理主体
         direction TB
-        A1[能力开放平台<br/>审批公共能力]
-        A2[业务模块 Owner<br/>审批特有业务能力]
+        G[业务 Owner（审批责任人）<br/>谁的业务谁审批<br/>开放平台不做中间平台]
     end
     
     T1 --> B1
     T2 --> B2
-    T1 --> A1
-    T2 --> A2
+    T1 --> G
+    T2 --> G
     
-    A2 -.->|核心原则 | P[属于谁的业务谁审批<br/>开放平台不做中间平台]
-    style P fill:#fff3cd,stroke:#f57c00,stroke-dasharray: 5 5
+    style G fill:#fff3cd,stroke:#f57c00
 ```
 
 | 维度 | 设计决策 |
 |------|---------|
-| **审批原则** | 不论公共能力、特有能力，属于谁的业务都由谁去审 |
+| **归属原则** | 公共连接能力由开放平台建设，特有连接能力由业务模块建设后嵌入 |
+| **治理原则** | 谁的业务谁审批，治理属于业务 Owner（审批责任人），无需区分平台与模块 |
 | **平台定位** | 开放平台不做中间平台，避免多重依赖 |
-| **特有能力嵌入** | 业务模块建设后嵌入开放平台统一管理 |
 | **审批流程** | 全流程线上审批，留痕可追溯 |
 
 ### 5.4 与数据开放平台的关系
 
 ```mermaid
-flowchart TB
-    subgraph CapabilityPlatform[能力开放平台<br/>基础设施/阶段 1]
+graph TB
+    subgraph Open["开放平台"]
         direction TB
-        subgraph Base[平台本身能力（公共底座）]
-            C1[权限管理]
-            C2[审批管理]
+        
+        subgraph Cap["能力开放平台（基础设施/阶段 1）"]
+            direction TB
+            subgraph Base["平台本身能力（公共底座）"]
+                B1[权限管理]
+                B2[审批管理]
+                B3[应用管理]
+                B4[成员管理]
+                B5[AKSK 管理]
+                B6[嵌入能力]
+            end
+            subgraph Conn["连接能力"]
+                C1[API 管理]
+                C2[事件管理]
+                C3[回调管理]
+                C4[连接器管理]
+            end
+            Base -.->|被依赖 | Conn
         end
-        subgraph Conn[连接能力]
-            C3[API 管理]
-            C4[事件管理]
-            C5[回调管理]
-            C6[连接器管理]
+        
+        subgraph Data["数据开放平台（上层应用/阶段 2）"]
+            direction TB
+            D1[数据对象管理<br/>业务层]
+            D2[数据注册/审批<br/>复用能力平台通道]
+            D3[数据订阅/消费<br/>复用能力平台通道]
+            D4[数据治理<br/>业务层]
         end
-        Base -.->|被依赖 | Conn
     end
     
-    subgraph DataPlatform[数据开放平台<br/>上层应用/阶段 2]
-        direction TB
-        D1[数据对象管理<br/>业务层]
-        D2[数据注册/审批<br/>复用能力平台]
-        D3[数据订阅/消费<br/>复用能力平台]
-        D4[数据治理<br/>业务层]
+    subgraph BizScene["业务场景权限（各自融合）"]
+        S1[API 权限<br/>能力平台场景]
+        S2[事件权限<br/>能力平台场景]
+        S3[数据对象权限<br/>数据平台场景]
     end
     
-    subgraph 业务场景权限
-        S1[API 权限<br/>API 场景]
-        S2[事件权限<br/>事件场景]
-        S3[数据对象权限<br/>数据开放场景]
-    end
+    %% 依赖关系
+    Conn ==>|提供 API/事件通道 | Data
+    B1 -.->|统一权限模型 | S1 & S2 & S3
+    B2 -.->|统一审批流 | S1 & S2 & S3
     
-    CapabilityPlatform ==>|基础能力 | DataPlatform
-    C1 -.->|统一权限管理 | S1 & S2 & S3
-    C2 -.->|统一审批管理 | S1 & S2 & S3
+    Note["各业务场景使用统一权限设计<br/>融入各自业务逻辑"]
+    S1 & S2 & S3 ~~~ Note
     
-    CP_Note[各业务场景使用统一权限设计<br/>融入各自业务逻辑]
-    S1 & S2 & S3 -.- CP_Note
-    style CP_Note fill:#e3f2fd,stroke:#1976d2,stroke-dasharray: 5 5
-    style CapabilityPlatform fill:#e1f5e1
-    style DataPlatform fill:#fff3cd
-    style Base fill:#fff3cd
+    style Cap fill:#e1f5e1,stroke:#2e7d32,stroke-width:2px
+    style Data fill:#fff3cd,stroke:#f9a825,stroke-width:2px
+    style Base fill:#fff9c4,stroke:#f9a825
+    style Conn fill:#c8e6c9,stroke:#2e7d32
+    style BizScene fill:#e3f2fd,stroke:#1976d2
+    style Note fill:#e3f2fd,stroke:#1976d2,stroke-dasharray: 5 5
 ```
 
 | 维度 | 关系说明 |
