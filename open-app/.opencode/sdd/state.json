@@ -152,7 +152,7 @@
       "name": "数据开放平台",
       "state": "specified",
       "createdAt": "2026-04-07T00:00:00+08:00",
-      "updatedAt": "2026-04-07T17:35:00+08:00",
+    "updatedAt": "2026-04-14T00:00:00+08:00",
       "author": "Summer",
       "priority": "P0",
       "files": {
@@ -165,6 +165,22 @@
       },
       "discoveryCompletedAt": "2026-04-07T17:30:00+08:00",
       "specifiedAt": "2026-04-07T17:35:00+08:00"
+    },
+    "CAP-OPEN-001": {
+      "identifier": "CAP-OPEN-001",
+      "name": "能力开放平台",
+      "state": "specified",
+      "createdAt": "2026-04-14T00:00:00+08:00",
+      "updatedAt": "2026-04-14T00:00:00+08:00",
+      "author": "Summer",
+      "priority": "P0",
+      "files": {
+        "discovery": ".sdd/specs-tree-root/specs-tree-capability-open-platform/discovery-report.md",
+        "discoveryAnalysis": ".sdd/specs-tree-root/specs-tree-capability-open-platform/discovery-analysis.md",
+        "spec": ".sdd/specs-tree-root/specs-tree-capability-open-platform/spec.md"
+      },
+      "discoveryCompletedAt": "2026-04-13T00:00:00+08:00",
+      "specifiedAt": "2026-04-14T00:00:00+08:00"
     }
   },
   "metadata": {
