@@ -565,59 +565,46 @@ flowchart TB
 
 ### 5.4 与数据开放平台的关系
 
+> 💡 **说明**：整体关系见 §1.1 核心定位，本图聚焦能力开放平台内部结构如何支撑数据开放平台。
+
 ```mermaid
-graph TB
-    subgraph Open["开放平台"]
+flowchart LR
+    subgraph Cap["能力开放平台（基础设施/阶段 1）"]
         direction TB
-        
-        subgraph Cap["能力开放平台（基础设施/阶段 1）"]
-            direction TB
-            subgraph Base["平台本身能力（公共底座）"]
-                B1[权限管理]
-                B2[审批管理]
-                B3[应用管理]
-                B4[成员管理]
-                B5[AKSK 管理]
-                B6[嵌入能力]
-            end
-            subgraph Conn["连接能力"]
-                C1[API 管理]
-                C2[事件管理]
-                C3[回调管理]
-                C4[连接器管理]
-            end
-            Base -.->|被依赖 | Conn
+        subgraph Base["平台本身能力（公共底座）"]
+            B1[权限管理]
+            B2[审批管理]
+            B3[应用管理]
+            B4[成员管理]
+            B5[AKSK 管理]
+            B6[嵌入能力]
         end
-        
-        subgraph Data["数据开放平台（上层应用/阶段 2）"]
-            direction TB
-            D1[数据对象管理<br/>业务层]
-            D2[数据注册/审批<br/>复用能力平台通道]
-            D3[数据订阅/消费<br/>复用能力平台通道]
-            D4[数据治理<br/>业务层]
+        subgraph Conn["连接能力"]
+            C1[API 管理]
+            C2[事件管理]
+            C3[回调管理]
+            C4[连接器管理]
         end
+        Base -.->|被依赖 | Conn
     end
     
-    subgraph BizScene["业务场景权限（各自融合）"]
-        S1[API 权限<br/>能力平台场景]
-        S2[事件权限<br/>能力平台场景]
-        S3[数据对象权限<br/>数据平台场景]
+    subgraph Data["数据开放平台（上层应用/阶段 2）"]
+        direction TB
+        D1[数据对象管理<br/>业务层]
+        D2[数据注册/审批]
+        D3[数据订阅/消费]
+        D4[数据治理<br/>业务层]
     end
     
     %% 依赖关系
     Conn ==>|提供 API/事件通道 | Data
-    B1 -.->|统一权限模型 | S1 & S2 & S3
-    B2 -.->|统一审批流 | S1 & S2 & S3
-    
-    Note["各业务场景使用统一权限设计<br/>融入各自业务逻辑"]
-    S1 & S2 & S3 ~~~ Note
+    B1 -.->|统一权限模型 | Data
+    B2 -.->|统一审批流 | Data
     
     style Cap fill:#e1f5e1,stroke:#2e7d32,stroke-width:2px
     style Data fill:#fff3cd,stroke:#f9a825,stroke-width:2px
     style Base fill:#fff9c4,stroke:#f9a825
     style Conn fill:#c8e6c9,stroke:#2e7d32
-    style BizScene fill:#e3f2fd,stroke:#1976d2
-    style Note fill:#e3f2fd,stroke:#1976d2,stroke-dasharray: 5 5
 ```
 
 | 维度 | 关系说明 |
