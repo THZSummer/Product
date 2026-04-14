@@ -207,8 +207,8 @@ graph TB
 
 | ID | 需求 | 目标值 |
 |----|------|--------|
-| NFR-001 | 权限鉴权响应时间 | P99 < 50ms（含缓存命中场景） |
-| NFR-002 | API 目录查询响应时间 | P99 < 200ms |
+| NFR-001 | 权限数据查询响应时间 | P99 < 50ms（供网关/消费方查询权限分配情况） |
+| NFR-002 | API/事件目录查询响应时间 | P99 < 200ms |
 | NFR-003 | 事件分发延迟 | P99 < 1s（从发布到消费方接收） |
 | NFR-004 | 系统可用性 | ≥ 99.9% |
 
@@ -263,7 +263,7 @@ graph TB
             Future["（未来：回调/连接器）"]
         end
         
-        subgraph Permission["权限管理服务\n(统一 Scope/RBAC 模型)"]
+        subgraph Permission["权限管理服务\n(权限资源创建与关联)"]
         end
         
         subgraph Approval["审批管理服务\n(动态审批流配置引擎)"]
@@ -298,40 +298,31 @@ graph TB
 
 ```mermaid
 classDiagram
-    class Scope {
+    class Permission {
         +string id (UUID)
-        +string identifier "api:im:message:read"
-        +string name
-        +string description
-        +enum resource_type "api|event|callback|connector"
-        +string resource_id
+        +string resource_id "关联资源 ID"
+        +enum resource_type "api|event"
+        +string resource_name "资源名称"
         +datetime created_at
-        +datetime updated_at
     }
     
-    class Role {
-        +string id (UUID)
-        +string name
-        +string description
-        +Scope[] scopes
-        +datetime created_at
-        +datetime updated_at
+    class AppType {
+        +enum type "business|personal"
+    }
+    
+    class CredentialType {
+        +enum type "app_a|app_b|open_app"
     }
     
     class AppPermission {
         +string id (UUID)
         +string app_id
-        +string scope_id
-        +string role_id
-        +string granted_by
+        +string permission_id
+        +string granted_by "审批单 ID"
         +datetime granted_at
-        +datetime expires_at
-        +enum status "active|revoked|expired"
     }
     
-    Scope "1" -- "0..*" Role : referenced by
-    Scope "1" -- "0..*" AppPermission : via scope_id
-    Role "1" -- "0..*" AppPermission : via role_id
+    Permission "1" -- "0..*" AppPermission : granted to
 ```
 
 #### 5.2.2 审批模型
@@ -341,46 +332,29 @@ classDiagram
     class ApprovalFlow {
         +string id (UUID)
         +string name
-        +enum trigger_type "capability_register|capability_subscribe"
-        +Condition[] conditions
-        +ApprovalNode[] nodes
+        +enum trigger_type "api_register|event_register|permission_apply"
+        +string conditions "JSON"
         +datetime created_at
-        +datetime updated_at
-    }
-    
-    class ApprovalNode {
-        +string id (UUID)
-        +string flow_id
-        +int order
-        +enum approver_type "user|role|capability_owner"
-        +string approver_id
-        +enum approval_type "serial|parallel"
-        +int timeout_hours
     }
     
     class ApprovalRecord {
         +string id (UUID)
         +string flow_id
-        +enum subject_type "capability|subscription"
         +string subject_id
         +string requester_id
         +enum status "pending|approved|rejected|cancelled"
-        +string current_node_id
         +datetime created_at
-        +datetime completed_at
     }
     
     class ApprovalAction {
         +string id (UUID)
         +string record_id
-        +string node_id
         +string approver_id
-        +enum action "approve|reject"
+        +enum action "approve|reject|revoke"
         +string comment
         +datetime created_at
     }
     
-    ApprovalFlow "1" *-- "1..*" ApprovalNode : contains
     ApprovalFlow "1" -- "0..*" ApprovalRecord : triggers
     ApprovalRecord "1" *-- "0..*" ApprovalAction : records
 ```
@@ -392,32 +366,32 @@ classDiagram
     class ApiGroup {
         +string id (UUID)
         +string name
-        +string description
-        +string owner_id
+        +string parent_id
         +datetime created_at
-        +datetime updated_at
     }
     
     class ApiDefinition {
         +string id (UUID)
         +string group_id
         +string name
-        +string description
         +string path
-        +enum method "GET|POST|PUT|DELETE|PATCH"
-        +string version
-        +enum status "draft|pending|published|deprecated|archived"
-        +Scope[] scopes
-        +JSON request_schema
-        +JSON response_schema
-        +string documentation
+        +enum method "GET|POST|PUT|DELETE"
+        +string doc_link
+        +enum[] app_types "business|personal"
+        +enum[] credential_types "app_a|app_b|open_app"
         +string owner_id
         +datetime created_at
-        +datetime updated_at
-        +datetime published_at
+    }
+    
+    class ApiSubscription {
+        +string id (UUID)
+        +string api_id
+        +string app_id
+        +datetime subscribed_at
     }
     
     ApiGroup "1" *-- "0..*" ApiDefinition : contains
+    ApiDefinition "1" -- "0..*" ApiSubscription : subscribed by
 ```
 
 #### 5.2.4 事件管理模型
@@ -427,30 +401,25 @@ classDiagram
     class EventDefinition {
         +string id (UUID)
         +string name
-        +string description
         +string topic
-        +enum status "draft|pending|published|deprecated|archived"
-        +JSON schema
-        +JSON sample_payload
-        +string trigger_description
-        +Scope[] scopes
+        +string doc_link
+        +string[] channels "websocket|webhook|mq"
+        +enum[] credential_types "app_a|app_b"
+        +bool app_isolation "按应用隔离"
         +string owner_id
         +datetime created_at
-        +datetime updated_at
-        +datetime published_at
     }
     
     class EventSubscription {
         +string id (UUID)
         +string event_id
         +string app_id
-        +enum status "pending|active|revoked"
-        +string approval_record_id
-        +datetime created_at
-        +datetime activated_at
+        +string channel_type "websocket|webhook"
+        +string channel_config "url/token"
+        +datetime subscribed_at
     }
     
-    EventDefinition "1" -- "0..*" EventSubscription : has
+    EventDefinition "1" -- "0..*" EventSubscription : subscribed by
 ```
 
 ### 5.3 API 接口设计（管理面）
@@ -459,25 +428,19 @@ classDiagram
 
 | 方法 | 路径 | 描述 | 权限 |
 |------|------|------|------|
-| POST | `/api/v1/admin/scopes` | 创建 Scope | 平台管理方 |
-| GET | `/api/v1/admin/scopes` | 查询 Scope 列表 | 平台管理方 |
-| GET | `/api/v1/admin/scopes/{id}` | 查询 Scope 详情 | 平台管理方 |
-| PUT | `/api/v1/admin/scopes/{id}` | 更新 Scope | 平台管理方 |
-| DELETE | `/api/v1/admin/scopes/{id}` | 删除 Scope | 平台管理方 |
-| POST | `/api/v1/admin/permissions/grant` | 分配权限给应用 | 平台管理方/审批流 |
-| POST | `/api/v1/admin/permissions/revoke` | 撤销应用权限 | 平台管理方/审批流 |
-| POST | `/api/v1/auth/check` | 鉴权检查（供网关调用） | 内部服务 |
+| POST | `/api/v1/permissions` | 创建权限资源（关联到 API/事件） | 平台管理方 |
+| GET | `/api/v1/permissions` | 查询权限资源列表 | 平台管理方 |
+| POST | `/api/v1/permissions/grant` | 分配权限给应用（审批通过后调用） | 平台管理方 |
+| POST | `/api/v1/permissions/revoke` | 撤销应用权限 | 平台管理方 |
+| GET | `/api/v1/permissions/apps/{id}` | 查询某应用的已授权列表 | 消费方/提供方 |
 
 #### 5.3.2 审批管理 API
 
 | 方法 | 路径 | 描述 | 权限 |
 |------|------|------|------|
 | POST | `/api/v1/admin/approval-flows` | 创建审批流程模板 | 平台管理方 |
-| GET | `/api/v1/admin/approval-flows` | 查询审批流程列表 | 平台管理方 |
-| PUT | `/api/v1/admin/approval-flows/{id}` | 更新审批流程 | 平台管理方 |
-| POST | `/api/v1/approvals` | 发起审批 | 系统自动/用户 |
 | GET | `/api/v1/approvals/{id}` | 查询审批详情 | 相关方 |
-| POST | `/api/v1/approvals/{id}/actions` | 执行审批操作 | 审批人 |
+| POST | `/api/v1/approvals/{id}/actions` | 执行审批操作（同意/驳回/撤销） | 审批人 |
 | GET | `/api/v1/approvals/pending` | 查询待审批列表 | 当前用户 |
 
 #### 5.3.3 API 管理 API
@@ -485,13 +448,12 @@ classDiagram
 | 方法 | 路径 | 描述 | 权限 |
 |------|------|------|------|
 | POST | `/api/v1/api-groups` | 创建 API 分组 | 能力提供方 |
-| GET | `/api/v1/api-groups` | 查询 API 分组列表 | 所有用户 |
+| GET | `/api/v1/api-groups` | 查询 API 分组列表（树形） | 所有用户 |
 | POST | `/api/v1/apis` | 注册 API | 能力提供方 |
 | GET | `/api/v1/apis` | 查询 API 列表（目录） | 所有用户 |
-| GET | `/api/v1/apis/{id}` | 查询 API 详情 | 所有用户 |
 | PUT | `/api/v1/apis/{id}` | 更新 API | 能力提供方 |
-| POST | `/api/v1/apis/{id}/publish` | 发布 API | 能力提供方（审批后） |
-| POST | `/api/v1/apis/{id}/deprecate` | 废弃 API | 能力提供方 |
+| POST | `/api/v1/apis/{id}/subscribe` | 订阅 API | 能力消费方 |
+| POST | `/api/v1/apis/{id}/unsubscribe` | 取消订阅 API | 能力消费方 |
 
 #### 5.3.4 事件管理 API
 
@@ -499,19 +461,16 @@ classDiagram
 |------|------|------|------|
 | POST | `/api/v1/events` | 注册事件 | 能力提供方 |
 | GET | `/api/v1/events` | 查询事件列表（目录） | 所有用户 |
-| GET | `/api/v1/events/{id}` | 查询事件详情 | 所有用户 |
 | PUT | `/api/v1/events/{id}` | 更新事件 | 能力提供方 |
-| POST | `/api/v1/events/{id}/publish` | 发布事件 | 能力提供方（审批后） |
-| POST | `/api/v1/event-subscriptions` | 申请事件订阅 | 能力消费方 |
-| GET | `/api/v1/event-subscriptions` | 查询订阅列表 | 消费方/提供方 |
-| POST | `/api/v1/event-subscriptions/{id}/revoke` | 取消订阅 | 消费方 |
+| POST | `/api/v1/events/{id}/subscribe` | 订阅事件（配置通道/凭证） | 能力消费方 |
+| POST | `/api/v1/events/{id}/unsubscribe` | 取消订阅事件 | 能力消费方 |
 
 ### 5.4 第三方依赖
 
 | 依赖 | 用途 | 集成方式 |
 |------|------|---------|
 | 应用管理系统 | 应用身份（AppID）、应用生命周期管理 | API 集成，复用现有接口 |
-| AKSK 管理系统 | 应用凭证（AccessKey/SecretKey） | API 集成，复用现有接口 |
+| 凭证管理系统 | 应用凭证（AKSK、应用类凭证 A/B、开放应用凭证等） | API 集成，复用现有接口 |
 | 成员管理系统 | 用户身份、组织架构 | API 集成，复用现有接口 |
 | 内部消息平台 | 事件分发、审批通知 | API 集成，调用消息发送接口 |
 | 操作日志系统 | 审计日志记录 | API 集成，写入审计日志 |
@@ -524,36 +483,35 @@ classDiagram
 
 | ID | 场景 | 处理策略 |
 |----|------|---------|
-| EC-001 | 消费方调用未授权的 API | 返回 403 Forbidden，错误码 `PERMISSION_DENIED`，提示申请权限 |
-| EC-002 | 应用 AK/SK 已过期或被吊销 | 返回 401 Unauthorized，错误码 `CREDENTIAL_INVALID` |
-| EC-003 | 权限分配后被撤销 | 下次鉴权时生效，已建立的连接不受影响（最终一致性） |
-| EC-004 | 多个权限冲突（如 Role 和 Scope 同时分配） | 取并集，任一授权即允许访问 |
+| EC-001 | 消费方申请已不存在的权限资源 | 提示权限资源已失效，引导重新浏览目录 |
+| EC-002 | 权限分配后被撤销 | 消费方将无法继续通过该权限调用能力（需由消费网关/通道执行） |
+| EC-003 | 同一应用重复申请同一权限 | 幂等处理，返回已有授权记录 |
 
 ### 6.2 审批相关
 
 | ID | 场景 | 处理策略 |
 |----|------|---------|
-| EC-005 | 审批人不在系统中（已离职） | 自动转交给审批人的上级或角色替代者 |
-| EC-006 | 审批超时未处理 | 发送超时提醒，超时后可配置自动通过/拒绝/转交 |
-| EC-007 | 消费方在审批期间撤销申请 | 审批流程终止，状态标记为 `cancelled` |
-| EC-008 | 能力提供方在审批期间下架能力 | 审批继续，通过后权限生效但能力不可见（需重新上架） |
+| EC-004 | 审批人不在系统中（已离职） | 自动转交给审批人的上级或角色替代者 |
+| EC-005 | 审批超时未处理 | 发送超时提醒，超时后可配置自动通过/拒绝/转交 |
+| EC-006 | 消费方在审批期间撤销申请 | 审批流程终止，状态标记为 `cancelled` |
+| EC-007 | 审批通过后被撤销 | 系统自动触发权限回收流程，通知相关方 |
 
 ### 6.3 API/事件管理相关
 
 | ID | 场景 | 处理策略 |
 |----|------|---------|
-| EC-009 | 已发布的 API 有消费方正在使用 | 不允许直接删除，需先标记为 Deprecated，等待消费方迁移 |
-| EC-010 | API 路径变更（Breaking Change） | 需创建新版本（v2），旧版本保持兼容 |
-| EC-011 | 事件 Topic 命名冲突 | 系统校验 Topic 唯一性，冲突时拒绝注册 |
-| EC-012 | 消费方订阅已废弃的事件 | 提示事件已废弃，推荐替代事件（如有） |
+| EC-008 | 事件 Topic 命名冲突 | 系统校验 Topic 唯一性，冲突时拒绝注册 |
+| EC-009 | 消费方配置了不支持的通道类型 | 校验配置：WebSocket 仅限个人应用，业务应用配置时拒绝 |
+| EC-010 | API/事件注册信息变更 | 变更后需重新审批，审批期间原配置继续生效 |
+| EC-011 | 消费方订阅配置错误（如 WebHook URL 无效） | 订阅创建时进行连通性检查或格式校验，提示错误 |
 
 ### 6.4 并发与一致性
 
 | ID | 场景 | 处理策略 |
 |----|------|---------|
-| EC-013 | 并发权限分配（同一应用、同一 Scope） | 幂等处理，重复分配返回已有记录 |
-| EC-014 | 并发审批（同一审批单、多个审批人） | 基于审批流配置（串行需等待，并行可并行处理） |
-| EC-015 | 权限缓存与数据库不一致 | 缓存设置合理 TTL，支持主动失效 |
+| EC-012 | 并发权限分配（同一应用、同一资源） | 幂等处理，重复分配返回已有记录 |
+| EC-013 | 并发审批（同一审批单、多个审批人） | 基于审批流配置（串行需等待，并行可并行处理） |
+| EC-014 | 事件通道切换期间的消息丢失 | 建议消费方在切换通道时保持双通道监听一小段时间，或系统提供缓冲队列 |
 
 ---
 
@@ -564,7 +522,6 @@ classDiagram
 | OQ-001 | 事件分发使用哪种消息中间件？ | 事件管理模块 | 复用企业内部消息平台，待确认具体平台 | ⏳ 待确认 |
 | OQ-002 | API 网关是否在本阶段实现？ | 能力消费 | 已有代码涉及内部逻辑，建议人工开发，本阶段仅定义接口规范 | ⏳ 待确认 |
 | OQ-003 | 审批流程是否需要集成现有 OA 系统？ | 审批管理模块 | 若现有 OA 支持 API 集成则可对接，否则自建轻量审批引擎 | ⏳ 待确认 |
-| OQ-004 | 权限模型的 Scope 格式是否遵循特定规范？ | 权限管理模块 | 建议采用 `module:resource:action` 格式，待业务方确认 | ⏳ 待确认 |
 | OQ-005 | 与数据开放平台的接口契约如何定义？ | 跨平台集成 | 在数据开放平台规范中定义，本阶段保持权限模型可扩展 | ⏳ 待确认 |
 
 ---
@@ -575,12 +532,15 @@ classDiagram
 
 | 术语 | 定义 |
 |------|------|
-| **能力 (Capability)** | 可开放的业务功能，包括 API、事件、回调、连接器等 |
+| **权限资源 (Permission Resource)** | 需要权限管控的对象（如特定的 API、事件），系统基于此创建权限 |
+| **能力 (Capability)** | 可开放的业务功能，包括 API、事件等 |
 | **能力提供方 (Provider)** | 拥有业务能力并注册到开放平台的业务模块负责人 |
 | **能力消费方 (Consumer)** | 使用开放平台能力的三方平台/应用 |
+| **应用类型 (App Type)** | 应用的分类：业务应用（组织/项目级）、个人应用（个人级） |
+| **凭证类型 (Credential Type)** | 身份验证方式：应用类凭证 A、应用类凭证 B、开放应用凭证等 |
+| **通道类型 (Channel Type)** | 事件消费的传输方式：企业内部消息队列、WebSocket、WebHook |
 | **平台管理方 (Admin)** | 开放平台的运营/研发人员 |
-| **Scope** | 细粒度的权限标识符，格式如 `api:im:message:read` |
-| **AK/SK** | Access Key / Secret Key，应用身份凭证 |
+| **AK/SK** | Access Key / Secret Key，应用身份凭证之一 |
 | **Topic** | 事件的主题标识，用于事件订阅和分发 |
 
 ### 8.2 与数据开放平台的关系
@@ -621,6 +581,7 @@ classDiagram
 | v1.9 | 2026-04-14 | **范围调整**：G1 移除鉴权（属 NG1 网关能力）；用户故事 US-01~08 范围调整（移除统计、管理模型等） | AI Assistant |
 | v1.10 | 2026-04-14 | **用户故事更新**：新增 US-06（事件消费配置）；明确 US-04（目录跳转文档）、US-06（WebSocket 仅限个人应用） | AI Assistant |
 | v1.11 | 2026-04-14 | **目标完善**：G4 增加按应用隔离消费；G3/G4 移除打标签；统一核心流程为注册、订阅、取消订阅 | AI Assistant |
+| v1.12 | 2026-04-14 | **全章对齐**：基于最新 Goals/User Stories 全面更新第 3-8 章。移除版本/状态/鉴权/标签管理，重写数据模型与接口设计，新增订阅/事件通道配置功能，更新术语表 | AI Assistant |
 
 ---
 
