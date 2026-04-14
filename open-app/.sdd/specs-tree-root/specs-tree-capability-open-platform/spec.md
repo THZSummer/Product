@@ -50,12 +50,15 @@ graph TB
 
     Cap -->|支撑| Data
     Biz -.->|提供能力| Cap
-    Cap ==>|开放能力| Apps
+    Cap ==>|开放 API/事件等| Apps
+    Data ==>|开放数据服务| Apps
 
     style Cap fill:#e1f5e1,stroke:#2e7d32,stroke-width:2px
     style Data fill:#fff3cd,stroke:#f9a825
     style Third fill:#e3f2fd
 ```
+
+> 💡 **说明**：能力开放平台和数据开放平台**均面向企业内三方平台**开放能力，区别在于开放的内容类型不同（API/事件 vs 数据服务）。能力开放平台同时为数据开放平台提供底层支撑。
 
 ### 1.4 Goals
 
