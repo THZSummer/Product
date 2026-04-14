@@ -7,9 +7,21 @@
 ├── README.md              # 本文件 - SDD 工作空间说明
 ├── ROADMAP.md             # 版本路线图
 ├── config.json            # SDD 配置（可选）
-└── specs-tree-root/                # 规范文件目录
+└── specs-tree-root/       # 规范文件目录
     ├── README.md          # 目录说明
-    └── [feature]/         # Feature 目录
+    ├── specs-tree-capability-open-platform/  # 能力开放平台
+    │   ├── README.md      # 目录导航
+    │   ├── discovery-report.md
+    │   ├── discovery-analysis.md
+    │   ├── discovery-session-log.md
+    │   └── state.json
+    └── specs-tree-data-open-platform/  # 数据开放平台
+        ├── README.md      # 目录导航
+        ├── discovery-report.md
+        ├── discovery-analysis.md
+        ├── discovery-session-log.md
+        ├── spec.md
+        └── state.json
 ```
 
 ## 快速开始

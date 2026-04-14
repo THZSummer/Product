@@ -6,27 +6,27 @@
   "agent": {
     "sdd": {
       "description": "SDD Master Coordinator - 智能路由助手",
-      "model": "bailian/qwen3.5-plus",
+      "model": "bailian/qwen3.6-plus",
       "prompt": "{file:.opencode/agents/sdd.md}"
     },
     "sdd-help": {
       "description": "SDD Help Assistant - 使用指南",
-      "model": "bailian/qwen3.5-plus",
+      "model": "bailian/qwen3.6-plus",
       "prompt": "{file:.opencode/agents/sdd-help.md}"
     },
     "sdd-1-spec": {
       "description": "SDD 规范编写专家 (阶段 1/6)",
-      "model": "bailian/qwen3.5-plus",
+      "model": "bailian/qwen3.6-plus",
       "prompt": "{file:.opencode/agents/sdd-1-spec.md}"
     },
     "sdd-2-plan": {
       "description": "SDD 技术规划专家 (阶段 2/6)",
-      "model": "bailian/qwen3.5-plus",
+      "model": "bailian/qwen3.6-plus",
       "prompt": "{file:.opencode/agents/sdd-2-plan.md}"
     },
     "sdd-3-tasks": {
       "description": "SDD 任务分解专家 (阶段 3/6)",
-      "model": "bailian/qwen3.5-plus",
+      "model": "bailian/qwen3.6-plus",
       "prompt": "{file:.opencode/agents/sdd-3-tasks.md}"
     },
     "sdd-4-build": {
@@ -46,17 +46,17 @@
     },
     "sdd-spec": {
       "description": "SDD 规范编写 (短名)",
-      "model": "bailian/qwen3.5-plus",
+      "model": "bailian/qwen3.6-plus",
       "prompt": "{file:.opencode/agents/sdd-spec.md}"
     },
     "sdd-plan": {
       "description": "SDD 技术规划 (短名)",
-      "model": "bailian/qwen3.5-plus",
+      "model": "bailian/qwen3.6-plus",
       "prompt": "{file:.opencode/agents/sdd-plan.md}"
     },
     "sdd-tasks": {
       "description": "SDD 任务分解 (短名)",
-      "model": "bailian/qwen3.5-plus",
+      "model": "bailian/qwen3.6-plus",
       "prompt": "{file:.opencode/agents/sdd-tasks.md}"
     },
     "sdd-build": {
@@ -76,22 +76,22 @@
     },
     "sdd-roadmap": {
       "description": "SDD Roadmap 规划专家 - 多版本路线图规划",
-      "model": "bailian/qwen3.5-plus",
+      "model": "bailian/qwen3.6-plus",
       "prompt": "{file:.opencode/agents/sdd-roadmap.md}"
     },
     "sdd-0-discovery": {
       "description": "SDD 需求挖掘专家 (阶段 0/6)",
-      "model": "bailian/qwen3.5-plus",
+      "model": "bailian/qwen3.6-plus",
       "prompt": "{file:.opencode/agents/sdd-discovery.md}"
     },
     "sdd-discovery": {
       "description": "SDD 需求挖掘 (短名)",
-      "model": "bailian/qwen3.5-plus",
+      "model": "bailian/qwen3.6-plus",
       "prompt": "{file:.opencode/agents/sdd-discovery.md}"
     },
     "sdd-docs": {
       "description": "SDD 目录导航生成器 - 扫描目录结构生成 README 导航",
-      "model": "bailian/qwen3.5-plus",
+      "model": "bailian/qwen3.6-plus",
       "prompt": "{file:.opencode/agents/sdd-docs.md}"
     }
   },
