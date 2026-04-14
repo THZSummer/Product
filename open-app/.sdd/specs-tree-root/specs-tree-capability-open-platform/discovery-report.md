@@ -196,7 +196,7 @@ flowchart TB
                     E3[AKSK 管理]
                     E4[权限管理]
                     E5[审批管理]
-                    E9[嵌入能力]
+                    E9[嵌入能力<br/>支撑特有连接能力接入]
                 end
                 subgraph Aux[辅助能力]
                     direction LR
@@ -228,8 +228,7 @@ flowchart TB
             end
             
             %% 依赖关系
-            Pub -.->|依赖 | PC
-            Spec -.->|嵌入 | E9
+            CC -.->|依赖 | PC
             
             style E9 fill:#dcedc8,stroke:#558b2f
             
