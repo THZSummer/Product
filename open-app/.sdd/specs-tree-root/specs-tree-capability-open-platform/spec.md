@@ -30,12 +30,31 @@ XX 通讯平台内部拥有丰富的业务能力（IM、云盘、邮件等），
 
 ### 1.3 定位
 
-```
-XX 通讯平台
-├── 其它业务平台（IM、云盘等）
-└── 开放平台
-    ├── 能力开放平台 ← 本 Feature（基础设施/阶段 1）
-    └── 数据开放平台（上层应用/阶段 2，依赖能力开放平台）
+```mermaid
+graph TB
+    subgraph XX["XX 通讯平台"]
+        subgraph Biz["其它业务平台"]
+            Biz_IM[IM 业务]
+            Biz_Cloud[云盘业务]
+        end
+        
+        subgraph Open["开放平台"]
+            Cap["能力开放平台\n(本 Feature · 阶段 1)"]
+            Data["数据开放平台\n(阶段 2)"]
+        end
+    end
+
+    subgraph Third["企业内三方平台"]
+        Apps[三方应用]
+    end
+
+    Cap -->|支撑| Data
+    Biz -.->|提供能力| Cap
+    Cap ==>|开放能力| Apps
+
+    style Cap fill:#e1f5e1,stroke:#2e7d32,stroke-width:2px
+    style Data fill:#fff3cd,stroke:#f9a825
+    style Third fill:#e3f2fd
 ```
 
 ### 1.4 Goals
@@ -313,165 +332,206 @@ XX 通讯平台
 
 ### 5.1 架构设计
 
-```
-┌─────────────────────────────────────────────────────┐
-│                    能力开放平台                        │
-├─────────────────────────────────────────────────────┤
-│  ┌───────────┐  ┌───────────┐  ┌──────────────────┐ │
-│  │ API 管理   │  │ 事件管理   │  │ （未来：回调/连接器）│ │
-│  │ 模块      │  │ 模块      │  │                  │ │
-│  └─────┬─────┘  └─────┬─────┘  └────────┬─────────┘ │
-│        │              │                 │           │
-│  ┌─────┴──────────────┴─────────────────┴─────┐     │
-│  │           权限管理服务                       │     │
-│  │   (统一 Scope/RBAC 模型)                    │     │
-│  └────────────────────┬───────────────────────┘     │
-│  ┌────────────────────┴───────────────────────┐     │
-│  │           审批管理服务                       │     │
-│  │   (动态审批流配置引擎)                       │     │
-│  └────────────────────┬───────────────────────┘     │
-└───────────────────────┼─────────────────────────────┘
-                        │
-           ┌────────────┼────────────┐
-           │            │            │
-    ┌──────┴──────┐ ┌───┴────┐ ┌────┴──────┐
-    │ 应用管理     │ │ 成员管理│ │ AKSK 管理  │
-    │ (现有系统)   │ │(现有)   │ │ (现有)    │
-    └─────────────┘ └────────┘ └───────────┘
+```mermaid
+graph TB
+    subgraph Platform["能力开放平台"]
+        direction TB
+        
+        subgraph Capability["连接能力层"]
+            direction LR
+            API["API 管理模块"]
+            Event["事件管理模块"]
+            Future["（未来：回调/连接器）"]
+        end
+        
+        subgraph Permission["权限管理服务\n(统一 Scope/RBAC 模型)"]
+        end
+        
+        subgraph Approval["审批管理服务\n(动态审批流配置引擎)"]
+        end
+        
+        Capability --> Permission
+        Capability --> Approval
+        Permission --> Approval
+    end
+    
+    subgraph Existing["现有系统（外部依赖）"]
+        direction LR
+        AppMgr["应用管理系统"]
+        MemberMgr["成员管理系统"]
+        AKSK["AKSK 管理系统"]
+    end
+    
+    Platform --> Existing
+    Permission -.->|复用| AppMgr
+    Approval -.->|复用| MemberMgr
+    Capability -.->|鉴权依赖| AKSK
+
+    style Capability fill:#c8e6c9,stroke:#2e7d32
+    style Permission fill:#fff9c4,stroke:#f9a825
+    style Approval fill:#fff9c4,stroke:#f9a825
+    style Existing fill:#e3f2fd,stroke:#1565c0
 ```
 
 ### 5.2 数据模型
 
 #### 5.2.1 权限模型
 
-```
-Scope
-├── id: string (UUID)
-├── identifier: string (e.g., "api:im:message:read")
-├── name: string (显示名称)
-├── description: string
-├── resource_type: enum ("api" | "event" | "callback" | "connector")
-├── resource_id: string (关联的资源 ID)
-├── created_at: datetime
-└── updated_at: datetime
-
-Role
-├── id: string (UUID)
-├── name: string
-├── description: string
-├── scopes: Scope[] (关联的 Scope 列表)
-├── created_at: datetime
-└── updated_at: datetime
-
-AppPermission
-├── id: string (UUID)
-├── app_id: string (应用 ID)
-├── scope_id: string (Scope ID，与 Role 二选一)
-├── role_id: string (Role ID，与 Scope 二选一)
-├── granted_by: string (授权人/审批单 ID)
-├── granted_at: datetime
-├── expires_at: datetime (可选，过期时间)
-└── status: enum ("active" | "revoked" | "expired")
+```mermaid
+classDiagram
+    class Scope {
+        +string id (UUID)
+        +string identifier "api:im:message:read"
+        +string name
+        +string description
+        +enum resource_type "api|event|callback|connector"
+        +string resource_id
+        +datetime created_at
+        +datetime updated_at
+    }
+    
+    class Role {
+        +string id (UUID)
+        +string name
+        +string description
+        +Scope[] scopes
+        +datetime created_at
+        +datetime updated_at
+    }
+    
+    class AppPermission {
+        +string id (UUID)
+        +string app_id
+        +string scope_id
+        +string role_id
+        +string granted_by
+        +datetime granted_at
+        +datetime expires_at
+        +enum status "active|revoked|expired"
+    }
+    
+    Scope "1" -- "0..*" Role : referenced by
+    Scope "1" -- "0..*" AppPermission : via scope_id
+    Role "1" -- "0..*" AppPermission : via role_id
 ```
 
 #### 5.2.2 审批模型
 
-```
-ApprovalFlow
-├── id: string (UUID)
-├── name: string (流程名称)
-├── trigger_type: enum ("capability_register" | "capability_subscribe")
-├── conditions: Condition[] (触发条件)
-├── nodes: ApprovalNode[] (审批节点，有序)
-├── created_at: datetime
-└── updated_at: datetime
-
-ApprovalNode
-├── id: string (UUID)
-├── flow_id: string (关联的审批流 ID)
-├── order: int (节点顺序)
-├── approver_type: enum ("user" | "role" | "capability_owner")
-├── approver_id: string (审批人/角色 ID)
-├── approval_type: enum ("serial" | "parallel")
-└── timeout_hours: int (超时时间)
-
-ApprovalRecord
-├── id: string (UUID)
-├── flow_id: string
-├── subject_type: enum ("capability" | "subscription")
-├── subject_id: string
-├── requester_id: string (申请人)
-├── status: enum ("pending" | "approved" | "rejected" | "cancelled")
-├── current_node_id: string (当前节点)
-├── created_at: datetime
-└── completed_at: datetime
-
-ApprovalAction
-├── id: string (UUID)
-├── record_id: string (关联的审批记录)
-├── node_id: string (审批节点)
-├── approver_id: string (审批人)
-├── action: enum ("approve" | "reject")
-├── comment: string (审批意见)
-├── created_at: datetime
+```mermaid
+classDiagram
+    class ApprovalFlow {
+        +string id (UUID)
+        +string name
+        +enum trigger_type "capability_register|capability_subscribe"
+        +Condition[] conditions
+        +ApprovalNode[] nodes
+        +datetime created_at
+        +datetime updated_at
+    }
+    
+    class ApprovalNode {
+        +string id (UUID)
+        +string flow_id
+        +int order
+        +enum approver_type "user|role|capability_owner"
+        +string approver_id
+        +enum approval_type "serial|parallel"
+        +int timeout_hours
+    }
+    
+    class ApprovalRecord {
+        +string id (UUID)
+        +string flow_id
+        +enum subject_type "capability|subscription"
+        +string subject_id
+        +string requester_id
+        +enum status "pending|approved|rejected|cancelled"
+        +string current_node_id
+        +datetime created_at
+        +datetime completed_at
+    }
+    
+    class ApprovalAction {
+        +string id (UUID)
+        +string record_id
+        +string node_id
+        +string approver_id
+        +enum action "approve|reject"
+        +string comment
+        +datetime created_at
+    }
+    
+    ApprovalFlow "1" *-- "1..*" ApprovalNode : contains
+    ApprovalFlow "1" -- "0..*" ApprovalRecord : triggers
+    ApprovalRecord "1" *-- "0..*" ApprovalAction : records
 ```
 
 #### 5.2.3 API 管理模型
 
-```
-ApiGroup
-├── id: string (UUID)
-├── name: string (分组名称)
-├── description: string
-├── owner_id: string (提供方 ID)
-├── created_at: datetime
-└── updated_at: datetime
-
-ApiDefinition
-├── id: string (UUID)
-├── group_id: string (关联的分组 ID)
-├── name: string (API 名称)
-├── description: string
-├── path: string (API 路径)
-├── method: enum ("GET" | "POST" | "PUT" | "DELETE" | "PATCH")
-├── version: string (版本号)
-├── status: enum ("draft" | "pending" | "published" | "deprecated" | "archived")
-├── scopes: Scope[] (关联的权限)
-├── request_schema: JSON (请求参数定义)
-├── response_schema: JSON (响应定义)
-├── documentation: string (API 文档)
-├── owner_id: string (提供方 ID)
-├── created_at: datetime
-├── updated_at: datetime
-└── published_at: datetime
+```mermaid
+classDiagram
+    class ApiGroup {
+        +string id (UUID)
+        +string name
+        +string description
+        +string owner_id
+        +datetime created_at
+        +datetime updated_at
+    }
+    
+    class ApiDefinition {
+        +string id (UUID)
+        +string group_id
+        +string name
+        +string description
+        +string path
+        +enum method "GET|POST|PUT|DELETE|PATCH"
+        +string version
+        +enum status "draft|pending|published|deprecated|archived"
+        +Scope[] scopes
+        +JSON request_schema
+        +JSON response_schema
+        +string documentation
+        +string owner_id
+        +datetime created_at
+        +datetime updated_at
+        +datetime published_at
+    }
+    
+    ApiGroup "1" *-- "0..*" ApiDefinition : contains
 ```
 
 #### 5.2.4 事件管理模型
 
-```
-EventDefinition
-├── id: string (UUID)
-├── name: string (事件名称)
-├── description: string
-├── topic: string (事件 Topic)
-├── status: enum ("draft" | "pending" | "published" | "deprecated" | "archived")
-├── schema: JSON (事件数据结构)
-├── sample_payload: JSON (事件示例)
-├── trigger_description: string (触发条件说明)
-├── scopes: Scope[] (关联的权限)
-├── owner_id: string (提供方 ID)
-├── created_at: datetime
-├── updated_at: datetime
-└── published_at: datetime
-
-EventSubscription
-├── id: string (UUID)
-├── event_id: string (关联的事件 ID)
-├── app_id: string (消费方应用 ID)
-├── status: enum ("pending" | "active" | "revoked")
-├── approval_record_id: string (关联的审批记录)
-├── created_at: datetime
-└── activated_at: datetime
+```mermaid
+classDiagram
+    class EventDefinition {
+        +string id (UUID)
+        +string name
+        +string description
+        +string topic
+        +enum status "draft|pending|published|deprecated|archived"
+        +JSON schema
+        +JSON sample_payload
+        +string trigger_description
+        +Scope[] scopes
+        +string owner_id
+        +datetime created_at
+        +datetime updated_at
+        +datetime published_at
+    }
+    
+    class EventSubscription {
+        +string id (UUID)
+        +string event_id
+        +string app_id
+        +enum status "pending|active|revoked"
+        +string approval_record_id
+        +datetime created_at
+        +datetime activated_at
+    }
+    
+    EventDefinition "1" -- "0..*" EventSubscription : has
 ```
 
 ### 5.3 API 接口设计（管理面）
