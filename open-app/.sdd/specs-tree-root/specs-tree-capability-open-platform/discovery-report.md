@@ -231,25 +231,29 @@ flowchart TB
     end
     
     %% 颜色区分建设策略
-    style E1 fill:#fff9c4,stroke:#f9a825  %% 沿用现有
-    style E2 fill:#fff9c4,stroke:#f9a825  %% 沿用现有
-    style E3 fill:#fff9c4,stroke:#f9a825  %% 沿用现有
-    style E6 fill:#fff9c4,stroke:#f9a825  %% 沿用现有
-    style E7 fill:#fff9c4,stroke:#f9a825  %% 沿用现有
-    style E8 fill:#fff9c4,stroke:#f9a825  %% 沿用现有
-    style S1 fill:#fff9c4,stroke:#f9a825  %% 沿用现有
+    %% 🟡 沿用现有
+    style E1 fill:#fff9c4,stroke:#f9a825
+    style E2 fill:#fff9c4,stroke:#f9a825
+    style E3 fill:#fff9c4,stroke:#f9a825
+    style E6 fill:#fff9c4,stroke:#f9a825
+    style E7 fill:#fff9c4,stroke:#f9a825
+    style E8 fill:#fff9c4,stroke:#f9a825
+    style S1 fill:#fff9c4,stroke:#f9a825
     
-    style E4 fill:#c8e6c9,stroke:#2e7d32  %% 重新构建
-    style E5 fill:#c8e6c9,stroke:#2e7d32  %% 重新构建
-    style E9 fill:#c8e6c9,stroke:#2e7d32  %% 重新构建
-    style R1 fill:#c8e6c9,stroke:#2e7d32  %% 重新构建
-    style R2 fill:#c8e6c9,stroke:#2e7d32  %% 重新构建
-    style R3 fill:#c8e6c9,stroke:#2e7d32  %% 重新构建
+    %% 🟢 重新构建
+    style E4 fill:#c8e6c9,stroke:#2e7d32
+    style E5 fill:#c8e6c9,stroke:#2e7d32
+    style E9 fill:#c8e6c9,stroke:#2e7d32
+    style R1 fill:#c8e6c9,stroke:#2e7d32
+    style R2 fill:#c8e6c9,stroke:#2e7d32
+    style R3 fill:#c8e6c9,stroke:#2e7d32
     
-    style R4 fill:#e1bee7,stroke:#7b1fa2  %% 完全新建
+    %% 🟣 完全新建
+    style R4 fill:#e1bee7,stroke:#7b1fa2
     
-    style S2 fill:#bbdefb,stroke:#1565c0  %% 业务模块建设
-    style S3 fill:#bbdefb,stroke:#1565c0  %% 业务模块建设
+    %% 🔵 业务模块建设
+    style S2 fill:#bbdefb,stroke:#1565c0
+    style S3 fill:#bbdefb,stroke:#1565c0
     
     style OP fill:#f5f5f5,stroke:#333,stroke-dasharray: 5 5
     style COP fill:#ffffff,stroke:#000,stroke-width: 2px
