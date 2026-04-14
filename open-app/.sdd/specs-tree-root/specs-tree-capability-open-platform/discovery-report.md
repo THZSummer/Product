@@ -775,33 +775,28 @@ XX 通讯平台开放平台现有能力清单如下：
 flowchart TB
     subgraph CapPlatform["能力开放平台（基础设施）"]
         direction TB
-        Perm[统一权限管理]
-        Approval[统一审批管理]
+        Perm[权限管理]
+        Approval[审批管理]
         API[API 管理]
         Event[事件/回调管理]
-        
-        Perm -.->|提供鉴权模型| API & Event
-        Approval -.->|提供审批流| API & Event
     end
     
     subgraph BizScenes["业务场景权限"]
         direction LR
-        SceneAPI[API 权限<br/>(API 场景)]
-        SceneEvent[事件权限<br/>(事件场景)]
-        SceneData[数据对象权限<br/>(数据开放场景)]
+        SceneAPI[API 权限]
+        SceneEvent[事件权限]
+        SceneData[数据对象权限]
     end
     
-    %% 连接关系
-    API ==> SceneAPI
-    Event ==> SceneEvent
-    Perm -.->|权限分配| SceneData
+    Perm -.->|统一模型 | BizScenes
+    Approval -.->|统一流程 | BizScenes
+    API --> SceneAPI
+    Event --> SceneEvent
     
-    Note["各业务场景使用统一权限设计<br/>融入各自业务逻辑"]
-    SceneAPI & SceneEvent & SceneData ~~~ Note
-
-    style CapPlatform fill:#e1f5e1
-    style BizScenes fill:#e3f2fd
-    style Note fill:#fff3cd,stroke-dasharray: 5 5
+    style CapPlatform fill:#e1f5e1,stroke:#2e7d32
+    style BizScenes fill:#e3f2fd,stroke:#1976d2
+    style Perm fill:#fff9c4,stroke:#f9a825
+    style Approval fill:#fff9c4,stroke:#f9a825
 ```
 
 ---
