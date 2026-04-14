@@ -568,9 +568,9 @@ flowchart TB
 > 💡 **说明**：整体关系见 §1.1 核心定位，本图聚焦能力开放平台内部结构如何支撑数据开放平台。
 
 ```mermaid
-flowchart LR
+flowchart TD
     subgraph Cap["能力开放平台（基础设施/阶段 1）"]
-        direction TB
+        direction LR
         subgraph Base["平台本身能力（公共底座）"]
             B1[权限管理]
             B2[审批管理]
@@ -587,20 +587,17 @@ flowchart LR
         end
         Base -.->|被依赖 | Conn
     end
-    
+
     subgraph Data["数据开放平台（上层应用/阶段 2）"]
-        direction TB
-        D1[数据对象管理<br/>业务层]
+        direction LR
+        D1[数据对象管理]
         D2[数据注册/审批]
         D3[数据订阅/消费]
-        D4[数据治理<br/>业务层]
+        D4[数据治理]
     end
-    
-    %% 依赖关系
-    Conn ==>|提供 API/事件通道 | Data
-    B1 -.->|统一权限模型 | Data
-    B2 -.->|统一审批流 | Data
-    
+
+    Cap ==>|提供通道/权限/审批 | Data
+
     style Cap fill:#e1f5e1,stroke:#2e7d32,stroke-width:2px
     style Data fill:#fff3cd,stroke:#f9a825,stroke-width:2px
     style Base fill:#fff9c4,stroke:#f9a825
